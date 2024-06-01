@@ -23,7 +23,12 @@
         "strictNullChecks": true,
         "strictPropertyInitialization": false,
         "target": "ES2022",
-        "useUnknownInCatchVariables": false
+        "useUnknownInCatchVariables": false,
+        "typeRoots": ["./node_modules/@types", "./src/types"],
+        "paths": {
+            "@services/*": ["src/services/*"],
+            "@models/*": ["src/models/*"]
+        }
     },
     "exclude": ["node_modules"],
     "include": ["src/**/*"]
