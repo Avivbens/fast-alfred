@@ -26,6 +26,8 @@
         "useUnknownInCatchVariables": false,
         "typeRoots": ["./node_modules/@types", "./src/types"],
         "paths": {
+            "@common/*": ["src/common/*"],
+            "@bundler/*": ["src/bundler/*"],
             "@services/*": ["src/services/*"],
             "@models/*": ["src/models/*"]
         }

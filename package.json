@@ -22,9 +22,9 @@
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "bin": {
-        "fast-alfred": "./lib/bundler/fast-alfred.sh",
-        "fast-alfred-build": "./lib/bundler/pack-workflow.esbuild.js",
-        "fast-alfred-pack": "./lib/bundler/alfred-workflow.builder.sh"
+        "fast-alfred": "lib/bundler/scripts/fast-alfred.sh",
+        "fast-alfred-build": "lib/bundler/scripts/build-workflow.esbuild.js",
+        "fast-alfred-pack": "lib/bundler/scripts/alfred-workflow.pack.sh"
     },
     "files": [
         "lib/**/*"
@@ -67,7 +67,8 @@
         "alfred-config": "^0.2.3",
         "conf": "^10.2.0",
         "esbuild": "^0.21.4",
-        "glob": "^10.4.1"
+        "glob": "^10.4.1",
+        "lodash.merge": "^4.6.2"
     },
     "devDependencies": {
         "@commitlint/cli": "^19.2.2",
@@ -81,6 +82,7 @@
         "@total-typescript/ts-reset": "^0.5.1",
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/jest": "^29.5.12",
+        "@types/lodash.merge": "^4.6.9",
         "@typescript-eslint/eslint-plugin": "^7.7.0",
         "@typescript-eslint/parser": "^7.7.0",
         "eslint": "^8.57.0",
