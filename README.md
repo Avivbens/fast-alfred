@@ -1,4 +1,6 @@
-# `fast-alfred` - Your Alfred friendly framework, for developing Alfred workflows in TypeScript/JavaScript.
+# Build Amazing Alfred Workflows! :ninja:
+
+### `fast-alfred` - Your Alfred friendly framework, for developing Alfred workflows in TypeScript/JavaScript.
 
 ## Features
 
