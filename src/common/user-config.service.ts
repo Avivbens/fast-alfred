@@ -2,13 +2,13 @@ import { resolve } from 'node:path'
 import { cwd } from 'node:process'
 import type { FastAlfredConfig } from '@models/fast-alfred-config.model'
 
-export const CONFIG_FILE_NAME = '.fast-alfred.config.js'
+export const CONFIG_FILE_NAME = '.fast-alfred.config.cjs'
 
 const INITIAL_CONFIG = `
 /**
  * @type {import('fast-alfred').FastAlfredConfig}
  */
-export default {}
+module.exports = {}
 `.trim()
 
 const DEFAULT_NOT_FOUND_MESSAGE = `
