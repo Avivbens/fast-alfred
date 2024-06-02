@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/Avivbens/fast-alfred/compare/v1.1.0...v1.1.1) (2024-06-02)
+
+
+### Bug Fixes
+
+* change config file to be commonjs - under `.fast-alfred.config.cjs` ❌ ([44982b4](https://github.com/Avivbens/fast-alfred/commit/44982b4a645d357b6e540b9670d7f0b32d32bc73))
+
 # [1.1.0](https://github.com/Avivbens/fast-alfred/compare/v1.0.0...v1.1.0) (2024-06-02)
 
 
