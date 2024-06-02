@@ -18,7 +18,7 @@ To get started, follow these steps:
 You can use the following command, in order to trigger build for each save :sparkles:
 
 ```bash
-find ./src -type f -name "*.ts" | entr -s "npm run build"
+find ./src -type f -name "*.ts" -o -name "*.sh" | entr -s "npm run build"
 ```
 
 ## Commit Message Guidelines
