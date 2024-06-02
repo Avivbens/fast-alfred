@@ -68,7 +68,9 @@
         "conf": "^10.2.0",
         "esbuild": "^0.21.4",
         "glob": "^10.4.1",
-        "lodash.merge": "^4.6.2"
+        "lodash.merge": "^4.6.2",
+        "plist": "^3.1.0",
+        "semver": "^7.6.2"
     },
     "devDependencies": {
         "@commitlint/cli": "^19.2.2",
@@ -83,6 +85,8 @@
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/jest": "^29.5.12",
         "@types/lodash.merge": "^4.6.9",
+        "@types/node": "^20.14.0",
+        "@types/plist": "^3.0.5",
         "@typescript-eslint/eslint-plugin": "^7.7.0",
         "@typescript-eslint/parser": "^7.7.0",
         "eslint": "^8.57.0",
