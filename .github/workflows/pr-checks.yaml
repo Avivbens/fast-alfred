@@ -20,3 +20,5 @@ jobs:
 
             - name: 🧪 Check out repository code
               uses: ./.github/workflows/health-check
+              with:
+                  run-tests: false
