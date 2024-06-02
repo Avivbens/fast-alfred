@@ -21,12 +21,17 @@
     ],
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "bin": {
+        "fast-alfred": "lib/bundler/scripts/fast-alfred.sh",
+        "fast-alfred-build": "lib/bundler/scripts/build-workflow.esbuild.js",
+        "fast-alfred-pack": "lib/bundler/scripts/alfred-workflow.pack.sh"
+    },
     "files": [
         "lib/**/*"
     ],
     "scripts": {
         "prebuild": "rm -rf ./lib",
-        "build": "tsc -p ./src/tsconfig.json",
+        "build": "./scripts/build.sh",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "lint": "eslint \"{src,test}/**/*.ts\"",
         "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
@@ -58,6 +63,15 @@
             "^.+\\.(t|j)s$": "ts-jest"
         }
     },
+    "dependencies": {
+        "alfred-config": "^0.2.3",
+        "conf": "^10.2.0",
+        "esbuild": "^0.21.4",
+        "glob": "^10.4.1",
+        "lodash.merge": "^4.6.2",
+        "plist": "^3.1.0",
+        "semver": "^7.6.2"
+    },
     "devDependencies": {
         "@commitlint/cli": "^19.2.2",
         "@commitlint/config-conventional": "^19.2.2",
@@ -70,6 +84,9 @@
         "@total-typescript/ts-reset": "^0.5.1",
         "@trivago/prettier-plugin-sort-imports": "^4.3.0",
         "@types/jest": "^29.5.12",
+        "@types/lodash.merge": "^4.6.9",
+        "@types/node": "^20.14.0",
+        "@types/plist": "^3.0.5",
         "@typescript-eslint/eslint-plugin": "^7.7.0",
         "@typescript-eslint/parser": "^7.7.0",
         "eslint": "^8.57.0",
@@ -91,6 +108,7 @@
         "ts-jest": "^29.1.2",
         "ts-loader": "^9.2.3",
         "ts-node": "^10.9.1",
+        "tsc-alias": "^1.8.10",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.4.5"
     },

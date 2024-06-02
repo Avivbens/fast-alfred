@@ -13,6 +13,14 @@ To get started, follow these steps:
 1. Submit a pull request against the `master` branch
 1. Ask for a review
 
+### Consistent Development Environment :ninja:
+
+You can use the following command, in order to trigger build for each save :sparkles:
+
+```bash
+find ./src -type f -name "*.ts" -o -name "*.sh" | entr -s "npm run build"
+```
+
 ## Commit Message Guidelines
 
 We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification. Make sure your commit messages follow the format below:
