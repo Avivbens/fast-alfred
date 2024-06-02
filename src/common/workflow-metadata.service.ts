@@ -4,6 +4,7 @@ import { cwd } from 'node:process'
 import type { PlistValue } from 'plist'
 import { build, parse } from 'plist'
 import type { WorkflowMetadata } from '@models/workflow-metadata.model'
+import { readConfigFile } from './user-config.service'
 
 const WORKFLOW_METADATA_FILE = 'info.plist'
 
@@ -21,11 +22,21 @@ export async function readWorkflowMetadata(): Promise<WorkflowMetadata> {
     }
 }
 
-export async function writeWorkflowMetadata(metadata: WorkflowMetadata) {
+export async function writeWorkflowMetadata(
+    metadata: WorkflowMetadata,
+    { ignoreConfigFile = false } = { ignoreConfigFile: false },
+) {
     try {
+        const { workflowMetadata } = await readConfigFile()
+
         const filePath = resolve(cwd(), WORKFLOW_METADATA_FILE)
 
-        const plistData = build(metadata as never as PlistValue, { allowEmpty: true, pretty: true })
+        const dataToWrite = {
+            ...metadata,
+            ...(ignoreConfigFile ? {} : workflowMetadata ?? {}),
+        }
+
+        const plistData = build(dataToWrite as never as PlistValue, { allowEmpty: true, pretty: true })
 
         await writeFile(filePath, plistData)
     } catch (error) {
