@@ -1,6 +1,6 @@
 export interface WorkflowMetadata {
     description: string
-    category: string
+    category: Category
     connections: { [key: string]: Connection[] }
     version: string
     userconfigurationconfig: UserConfigurationConfig[]
@@ -13,6 +13,8 @@ export interface WorkflowMetadata {
     name: string
     webaddress: string
 }
+
+export type Category = 'Tools' | 'Internet' | 'Productivity' | 'Uncategorised'
 
 export interface Connection {
     destinationuid: string
