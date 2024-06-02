@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/Avivbens/fast-alfred/compare/v1.0.0...v1.1.0) (2024-06-02)
+
+
+### Features
+
+* support `workflowMetadata` configuration to update `info.plist` on new release 🥷 ([f8478ba](https://github.com/Avivbens/fast-alfred/commit/f8478ba4888e05263d97ecf682e709f6a101b8fc))
+
 # 1.0.0 (2024-06-02)
 
 
