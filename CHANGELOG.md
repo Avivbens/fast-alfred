@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/Avivbens/fast-alfred/compare/v1.2.0...v1.2.1) (2024-06-03)
+
+### Bug Fixes
+
+-   **configuration:** support `tabSize` option ([17b237b](https://github.com/Avivbens/fast-alfred/commit/17b237b15d968b4d9947e4a39d5c74492e85ef9e))
+
 # [1.2.0](https://github.com/Avivbens/fast-alfred/compare/v1.1.3...v1.2.0) (2024-06-03)
 
 ### Features

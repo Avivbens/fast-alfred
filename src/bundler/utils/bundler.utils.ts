@@ -4,7 +4,7 @@ import { copyFile, mkdir, rm } from 'node:fs/promises'
 import { basename, resolve } from 'node:path'
 import { cwd } from 'node:process'
 import { readConfigFile } from '@common/user-config.service'
-import { BUNDLER_DEFAULTS } from '../constants/bundler-defaults.config'
+import { BUNDLER_DEFAULTS } from '../constants/bundler-options-defaults.config'
 import type { BundlerOptions } from '../models/bundler-options.model'
 
 /**

@@ -1,9 +1,10 @@
-#!/usr/bin/env node
 import * as esbuild from 'esbuild'
-import { ALL_FRAMEWORK_ASSETS, DEFAULT_BANNERS } from '../constants/bundler-defaults.config'
+import { execPromise } from '@common/utils'
+import { readWorkflowPackageJson } from '@common/workflow-package-json.service'
+import { ALL_FRAMEWORK_ASSETS, DEFAULT_BANNERS, PACK_ENTITIES } from '../constants/bundler-options-defaults.config'
 import { buildOptions, cleanTarget, copyAssets } from '../utils/bundler.utils'
 
-;(async () => {
+export async function buildWorkflow() {
     const options = await buildOptions()
     const {
         assets,
@@ -34,4 +35,16 @@ import { buildOptions, cleanTarget, copyAssets } from '../utils/bundler.utils'
     })
 
     await copyAssets(assetsDir, ALL_ASSETS)
-})()
+}
+
+export async function packWorkflow() {
+    const { name } = await readWorkflowPackageJson()
+    const { targetDir } = await buildOptions()
+
+    if (!name || !targetDir) {
+        throw new Error('Missing workflow name or targetDir!')
+    }
+
+    const zipCommand = `zip -9 -r "${targetDir}/${name}.alfredworkflow" ${PACK_ENTITIES.join(' ')}`
+    await execPromise(zipCommand)
+}
