@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/Avivbens/fast-alfred/compare/v1.1.2...v1.1.3) (2024-06-03)
+
+
+### Bug Fixes
+
+* `pack` script get `targetDir` from config file, if exists 🏗️ ([8353241](https://github.com/Avivbens/fast-alfred/commit/83532412dc36d0625234fca071f2a00d9b314799))
+
 ## [1.1.2](https://github.com/Avivbens/fast-alfred/compare/v1.1.1...v1.1.2) (2024-06-03)
 
 
