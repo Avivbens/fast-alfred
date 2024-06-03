@@ -1,3 +1,9 @@
+# [1.3.0](https://github.com/Avivbens/fast-alfred/compare/v1.2.1...v1.3.0) (2024-06-03)
+
+### Features
+
+-   support `fast-alfred` CLI 🚀 ([ac9811a](https://github.com/Avivbens/fast-alfred/commit/ac9811a3f947881e5d15c9e932f891cfa1f0de5e))
+
 ## [1.2.1](https://github.com/Avivbens/fast-alfred/compare/v1.2.0...v1.2.1) (2024-06-03)
 
 ### Bug Fixes
