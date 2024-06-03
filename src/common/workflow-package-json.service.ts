@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { cwd } from 'node:process'
-import { DEFAULT_TAB_SIZE } from '@bundler/constants/fast-alfred-options-defaults.config'
+import { DEFAULT_TAB_SIZE } from './constants'
 import { readConfigFile } from './user-config.service'
 
 const PACKAGE_JSON_FILE = 'package.json'
@@ -10,7 +10,9 @@ const PACKAGE_JSON_LOCK_FILE = 'package-lock.json'
 type Options = { lockfile: boolean }
 const DEFAULT_OPTIONS: Options = { lockfile: false }
 
-export async function readWorkflowPackageJson({ lockfile = false }: Options = DEFAULT_OPTIONS): Promise<object> {
+export async function readWorkflowPackageJson({ lockfile = false }: Options = DEFAULT_OPTIONS): Promise<
+    Record<string, any>
+> {
     try {
         const filePath = resolve(cwd(), lockfile ? PACKAGE_JSON_LOCK_FILE : PACKAGE_JSON_FILE)
 
@@ -24,7 +26,10 @@ export async function readWorkflowPackageJson({ lockfile = false }: Options = DE
     }
 }
 
-export async function writeWorkflowPackageJson(data: object, { lockfile = false }: Options = DEFAULT_OPTIONS) {
+export async function writeWorkflowPackageJson(
+    data: Record<string, any>,
+    { lockfile = false }: Options = DEFAULT_OPTIONS,
+) {
     try {
         const { tabSize } = await readConfigFile()
 

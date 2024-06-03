@@ -3,11 +3,11 @@ import Conf from 'conf'
 import { argv } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
-import { AlfredInfoService } from '@services/alfred-info.service'
-import { CacheConfigService } from '@services/cache-config.service'
-import { EnvService } from '@services/env.service'
-import { IconService } from '@services/icon.service'
 import { ERROR_MESSAGE } from './client.config'
+import { AlfredInfoService } from './services/alfred-info.service'
+import { CacheConfigService } from './services/cache-config.service'
+import { EnvService } from './services/env.service'
+import { IconService } from './services/icon.service'
 
 export class FastAlfred {
     public readonly alfredInfo: AlfredInfoService = new AlfredInfoService()
