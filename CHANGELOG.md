@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/Avivbens/fast-alfred/compare/v1.1.3...v1.2.0) (2024-06-03)
+
+
+### Features
+
+* **bundler:** support update `package.json` version too 🚀 ([46b4172](https://github.com/Avivbens/fast-alfred/commit/46b4172b2535d5ed7886f9328d18938edf9f8e6d))
+
 ## [1.1.3](https://github.com/Avivbens/fast-alfred/compare/v1.1.2...v1.1.3) (2024-06-03)
 
 
