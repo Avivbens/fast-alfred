@@ -7,4 +7,12 @@ export interface FastAlfredConfig {
         WorkflowMetadata,
         'readme' | 'createdby' | 'name' | 'category' | 'description' | 'webaddress'
     >
+
+    /**
+     * @description
+     * The number of spaces to use for indentation.
+     *
+     * @default 2
+     */
+    tabSize?: number
 }

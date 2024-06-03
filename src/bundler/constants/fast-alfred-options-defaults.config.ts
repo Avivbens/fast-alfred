@@ -35,3 +35,5 @@ globalThis.__filename = _private_url.fileURLToPath(import.meta.url);
 globalThis.__dirname = _private_path.dirname(__filename);
 `,
 } as const
+
+export const DEFAULT_TAB_SIZE = 2
