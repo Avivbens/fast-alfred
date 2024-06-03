@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/Avivbens/fast-alfred/compare/v1.1.1...v1.1.2) (2024-06-03)
+
+
+### Bug Fixes
+
+* better error handling and logs for reading configuration file 📂 ([3efc192](https://github.com/Avivbens/fast-alfred/commit/3efc1924971a4acbe03527a4ba718353219b5367))
+
 ## [1.1.1](https://github.com/Avivbens/fast-alfred/compare/v1.1.0...v1.1.1) (2024-06-02)
 
 
