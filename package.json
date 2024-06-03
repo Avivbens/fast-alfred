@@ -22,9 +22,7 @@
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
     "bin": {
-        "fast-alfred": "lib/bundler/scripts/fast-alfred.sh",
-        "fast-alfred-build": "lib/bundler/scripts/build-workflow.esbuild.js",
-        "fast-alfred-pack": "lib/bundler/scripts/alfred-workflow.pack.sh"
+        "fast-alfred": "lib/bin/index.js"
     },
     "files": [
         "lib/**/*"
@@ -64,11 +62,15 @@
         }
     },
     "dependencies": {
+        "@nestjs/common": "^10.3.9",
+        "@nestjs/core": "^10.3.9",
         "alfred-config": "^0.2.3",
         "conf": "^10.2.0",
         "esbuild": "^0.21.4",
         "glob": "^10.4.1",
         "lodash.merge": "^4.6.2",
+        "nest-commander": "^3.13.0",
+        "ora": "^5.4.1",
         "plist": "^3.1.0",
         "semver": "^7.6.2"
     },

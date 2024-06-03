@@ -13,6 +13,7 @@
         "module": "Node16",
         "noFallthroughCasesInSwitch": false,
         "noImplicitAny": true,
+        "resolveJsonModule": true,
         "outDir": "./lib",
         "removeComments": false,
         "rootDir": "./src",
@@ -28,7 +29,6 @@
         "paths": {
             "@common/*": ["src/common/*"],
             "@bundler/*": ["src/bundler/*"],
-            "@services/*": ["src/services/*"],
             "@models/*": ["src/models/*"]
         }
     },

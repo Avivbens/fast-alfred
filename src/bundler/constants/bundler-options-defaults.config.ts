@@ -36,4 +36,4 @@ globalThis.__dirname = _private_path.dirname(__filename);
 `,
 } as const
 
-export const DEFAULT_TAB_SIZE = 2
+export const PACK_ENTITIES = ['*.png ', '*.plist', 'README.md', 'esbuild/**', 'package.json'] as const
