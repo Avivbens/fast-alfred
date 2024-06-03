@@ -1,10 +1,6 @@
 ---
-prev:
-    text: 'Troubleshooting'
-    link: '/app/troubleshooting/index'
-next:
-    text: 'Empty Glob'
-    link: 'app/troubleshooting/empty-glob.md'
+prev: true
+next: true
 ---
 
 # Missing Configuration File

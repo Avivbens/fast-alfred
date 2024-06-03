@@ -8,8 +8,16 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
         collapsed: false,
         items: [
             {
-                text: 'Bundler Options',
+                text: 'Bundler Options 🏗️',
                 link: 'bundler-options',
+            },
+            {
+                text: 'Workflow Metadata 🥷',
+                link: 'workflow-metadata',
+            },
+            {
+                text: 'Versioning 🔄',
+                link: 'versioning',
             },
         ],
     },
@@ -26,6 +34,10 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
             {
                 text: 'Empty Glob',
                 link: 'empty-glob',
+            },
+            {
+                text: 'No Target Version 🎯',
+                link: 'no-target-version',
             },
         ],
     },

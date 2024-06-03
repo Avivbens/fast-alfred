@@ -21,8 +21,6 @@ It provides you with a convenient way to manage your workflow, apply proper vers
 
 ## The Hard Time When Developing Alfred Workflows In Node.js
 
-<!-- TODO - link to reference -->
-
 According to [Alfred's official community](https://www.alfredforum.com/topic/21366-nodejs-workflows-deployment/?do=findComment&comment=110924),
 it is not a best-practice to include any external dependencies at installation time,
 so all of your code and its dependencies should be included in the workflow file.

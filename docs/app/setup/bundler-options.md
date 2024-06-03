@@ -1,11 +1,9 @@
 ---
 prev: false
-# next:
-#     text: 'Missing Configuration File'
-#     link: '/app/troubleshooting/missing-config-file'
+next: true
 ---
 
-# Bundler Options
+# Bundler Options 🏗️
 
 `fast-alfred` bundles the files based on the configuration file from the root of your project.
 

@@ -1,10 +1,6 @@
 ---
-prev:
-    text: 'Missing Configuration File'
-    link: '/app/troubleshooting/missing-config-file.md'
-# next:
-#     text: 'Not Found'
-#     link: '/app/troubleshooting/not-found'
+prev: true
+next: true
 ---
 
 # Empty Glob
@@ -25,7 +21,7 @@ Note that the default glob pattern refers to TypeScript files, but you can chang
 <!-- TODO - include link to official API docs -->
 
 ::: tip TIP ⚡️
-You can find the default configuration options in the [API Reference](/api/fast-alfred/fast-alfred-config).
+You can find the default configuration options in the [API Reference](/app/setup/bundler-options#productionscripts).
 :::
 
 You can change the default production files to be in a different directories, by adding the following configuration to your `.fast-alfred.config.cjs` file.
