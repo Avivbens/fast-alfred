@@ -14,7 +14,7 @@ named `.fast-alfred.config.cjs`.
 
 # Available Options
 
-::: tip Note :bulb:
+::: tip Note :zap:
 `fast-alfred` has a default configuration that should work for most of the workflows.
 :::
 
@@ -80,12 +80,10 @@ module.exports = {
 By default, `fast-alfred` would place all the output files under the `esbuild` directory.
 You can change that by setting the `targetDir` property.
 
-<!-- TODO - add a link to CI CD -->
-
 ::: warning CI / CD Usage :rotating_light:
 
-If you're using the `fast-alfred` CI / CD template, updating the `targetDir` property should be handled automatically.
-Make sure `pack` script works correctly.
+If you're using the [`fast-alfred` CI / CD template](/app/ci/github-actions), updating the `targetDir` property should be handled automatically.
+Make sure `npx fast-alfred pack` script works correctly.
 :::
 
 ##### Example

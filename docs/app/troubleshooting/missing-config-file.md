@@ -15,10 +15,8 @@ Taking default values!
 
 ## Solution
 
-<!-- TODO - include link to official API docs -->
-
-::: tip TIP ⚡️
-You can find the default configuration options in the [API Reference](/api/fast-alfred/fast-alfred-config).
+::: tip TIP :zap:
+You can find the default configuration options in both [Bundler Options](/app/setup/bundler-options) and [Workflow Metadata](/app/setup/workflow-metadata).
 :::
 
 Simply add a `.fast-alfred.config.cjs` file at the root of your project.

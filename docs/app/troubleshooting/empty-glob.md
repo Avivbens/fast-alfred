@@ -18,9 +18,7 @@ Note that the default glob pattern refers to TypeScript files, but you can chang
 
 ## Solution
 
-<!-- TODO - include link to official API docs -->
-
-::: tip TIP ⚡️
+::: tip TIP :zap:
 You can find the default configuration options in the [API Reference](/app/setup/bundler-options#productionscripts).
 :::
 

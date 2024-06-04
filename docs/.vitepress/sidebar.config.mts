@@ -8,6 +8,10 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
         collapsed: false,
         items: [
             {
+                text: 'Node.js Runtime 🚀',
+                link: 'runtime-explain',
+            },
+            {
                 text: 'Bundler Options 🏗️',
                 link: 'bundler-options',
             },
@@ -20,6 +24,26 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
                 link: 'versioning',
             },
         ],
+    },
+    {
+        text: 'CI / CD 🐙',
+        base: '/app/ci/',
+        collapsed: false,
+        items: [
+            {
+                text: 'GitHub Actions 🤖',
+                link: 'github-actions',
+            },
+            {
+                text: 'Semantic Release 🚀',
+                link: 'semantic-release',
+            },
+        ],
+    },
+    {
+        text: 'Client',
+        base: '/app/client/',
+        link: 'client',
     },
     {
         text: 'Troubleshooting',

@@ -1,8 +1,8 @@
 ---
 prev: false
 next:
-    text: 'Install Command'
-    link: '/app/commands/install'
+    text: 'Node.js Runtime 🚀'
+    link: '/app/setup/runtime-explain'
 ---
 
 # Quick Start
@@ -13,7 +13,30 @@ next:
 npm install fast-alfred
 ```
 
-## The Reason
+### Configuration
+
+Create a `.fast-alfred.config.cjs` file in the root of your project and add the following configuration:
+
+```javascript
+/**
+ * @type {import('fast-alfred').FastAlfredConfig}
+ */
+module.exports = {}
+```
+
+### Build Your First Workflow
+
+1. Create a Workflow via Alfred UI, or use an existing one
+1. Open the Workflow directory, copy relevant files
+1. Create a new directory for your Workflow
+ <!-- TODO link -->
+1. Use `fast-alfred` client utilities to manage your Workflow
+1. Call your scripts using [`fast-alfred` runtime](./setup/runtime-explain)
+
+<br>
+<hr>
+
+# The Reason
 
 `fast-alfred` lets you think about the functionality, rather than the boilerplate.
 

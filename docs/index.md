@@ -17,9 +17,17 @@ hero:
           link: /app/troubleshooting/index
 features:
     - title: Node.js Runtime
-      link: '/app/setup/bundler-options'
+      link: '/app/setup/runtime-explain'
       details: A convenient shell file to run your Alfred workflow with Node.js.
       icon: '🚀'
+    - title: Powerful Client
+      link: '/app/client/client'
+      details: A powerful client to manage and optimize your Alfred workflow.
+      icon: '🕹️'
+    - title: GitHub Actions
+      link: '/app/ci/github-actions'
+      details: A CI/CD template to automate your workflow deployment.
+      icon: '🐙'
     - title: Bundle Management
       link: '/app/setup/bundler-options'
       details: Automatically bundle your workflow into a `.alfredworkflow` file.
