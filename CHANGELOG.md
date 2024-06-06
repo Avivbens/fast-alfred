@@ -1,3 +1,11 @@
+## [1.3.1](https://github.com/Avivbens/fast-alfred/compare/v1.3.0...v1.3.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* `icons` client types ([c021c5c](https://github.com/Avivbens/fast-alfred/commit/c021c5c5df719fdfda93f7a26ccbf3080fd86eb6))
+* remove unused code, add types for `CacheService` ([ac44bf8](https://github.com/Avivbens/fast-alfred/commit/ac44bf8166920b77ed08f4397ec99a8b07d2da1d))
+
 # [1.3.0](https://github.com/Avivbens/fast-alfred/compare/v1.2.1...v1.3.0) (2024-06-03)
 
 ### Features
