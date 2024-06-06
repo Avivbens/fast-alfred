@@ -13,7 +13,7 @@ next:
 npm install fast-alfred
 ```
 
-### Configuration
+## Configuration
 
 Create a `.fast-alfred.config.cjs` file in the root of your project and add the following configuration:
 
@@ -24,7 +24,7 @@ Create a `.fast-alfred.config.cjs` file in the root of your project and add the 
 module.exports = {}
 ```
 
-### Build Your First Workflow
+## Build Your First Workflow
 
 1. Create a Workflow via Alfred UI, or use an existing one
 1. Open the Workflow directory, copy relevant files (icons, `info.plist`, `prefs.plist`, etc) to your project
