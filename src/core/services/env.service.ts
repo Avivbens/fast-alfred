@@ -2,6 +2,13 @@
 import { env } from 'node:process'
 import type { GetEnvOptions } from '@models/get-env-options.model'
 
+/**
+ * @description
+ * Get Environment variables
+ *
+ * All Workflow user configuration would be injected in here
+ */
+
 export class EnvService {
     getEnv<T = unknown>(key: string): T | undefined
     getEnv<T = unknown>(key: string, options: GetEnvOptions<T>): T

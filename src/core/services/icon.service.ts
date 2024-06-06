@@ -12,7 +12,7 @@ const ICONS = {
 
 /**
  * @description
- * This service responsible to get icons from the system
+ * Get icons from the system
  *
  * You can use it to get the icon path for a specific icon
  *

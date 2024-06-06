@@ -1,5 +1,11 @@
 import { env } from 'node:process'
 
+/**
+ * @description
+ * Service to get Alfred's environment variables
+ *
+ * You can find all Alfred & Workflow metadata in here
+ */
 export class AlfredInfoService {
     private getEnv(key: string): string | undefined {
         return env[`alfred_${key}`]
