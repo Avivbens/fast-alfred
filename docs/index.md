@@ -5,9 +5,9 @@ layout: home
 hero:
     name: 'Fast Alfred'
     tagline: 'Your Alfred friendly framework, for developing Alfred workflows in TypeScript/JavaScript.'
-    # image:
-    #     src: /logos/logo-full-no-bg.png
-    #     alt: shell-config logo
+    image:
+        src: /logos/logo-full-horizontal-no-bg.png
+        alt: shell-config logo
     actions:
         - theme: brand
           text: Quick Start
