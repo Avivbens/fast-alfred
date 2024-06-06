@@ -14,7 +14,7 @@ hero:
           link: /app/quick-start
         - theme: alt
           text: Troubleshooting
-          link: /app/troubleshooting/index
+          link: /app/troubleshooting/missing-config-file
         - theme: alt
           text: Examples
           link: /app/examples

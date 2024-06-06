@@ -1,6 +1,8 @@
 ---
-prev: true
-next: true
+prev: false
+next:
+    text: 'Empty Glob'
+    link: '/app/troubleshooting/empty-glob'
 ---
 
 # Missing Configuration File

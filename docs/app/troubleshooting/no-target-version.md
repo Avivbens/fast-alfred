@@ -1,5 +1,8 @@
 ---
-prev: true
+prev:
+    text: 'Empty Glob'
+    link: '/app/troubleshooting/empty-glob'
+
 next: false
 ---
 

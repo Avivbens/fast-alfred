@@ -1,6 +1,10 @@
 ---
-prev: true
-next: true
+prev:
+    text: 'Missing Configuration File'
+    link: '/app/troubleshooting/missing-config-file'
+next:
+    text: 'No Target Version'
+    link: '/app/troubleshooting/no-target-version'
 ---
 
 # Empty Glob

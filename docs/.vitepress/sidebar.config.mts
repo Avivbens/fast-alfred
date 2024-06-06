@@ -48,7 +48,6 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
     {
         text: 'Troubleshooting',
         base: 'app/troubleshooting/',
-        link: 'index',
         collapsed: false,
         items: [
             {
