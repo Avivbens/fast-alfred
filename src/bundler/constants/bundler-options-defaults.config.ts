@@ -36,4 +36,5 @@ globalThis.__dirname = _private_path.dirname(__filename);
 `,
 } as const
 
-export const PACK_ENTITIES = ['*.png ', '*.plist', 'README.md', 'esbuild/**', 'package.json'] as const
+export const PACK_ENTITIES = (targetDir: string) =>
+    ['*.png ', '*.plist', 'README.md', `${targetDir}/**`, 'package.json'] as const
