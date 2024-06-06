@@ -4,8 +4,6 @@
 
 **`fast-alfred` - Your Alfred friendly framework**, for developing Alfred workflows in TypeScript/JavaScript.
 
-**Turn your new Mac into a useful working station in minutes**
-
 <br>
 
 [![npm](https://img.shields.io/npm/v/fast-alfred)](https://www.npmjs.com/package/fast-alfred)
