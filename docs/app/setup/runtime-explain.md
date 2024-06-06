@@ -9,6 +9,11 @@ next: true
 
 The main advantage of this approach is that your Node.js script would be executed in an environment that is aware of the Alfred workflow, and it will be able to interact with it, as well as having caching and other features.
 
+::: warning NOTE :rotating_light:
+In order to use `fast-alfred` runtime, you have to configure your package as ESM module.
+Add `"type": "module"` to your `package.json` file.
+:::
+
 ## How It Works
 
 At build time, an additional asset, named `run-node.sh` would be attached to the workflow, under the `assets` directory.
