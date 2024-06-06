@@ -1,3 +1,11 @@
+## [1.3.3](https://github.com/Avivbens/fast-alfred/compare/v1.3.2...v1.3.3) (2024-06-06)
+
+
+### Bug Fixes
+
+* **bundler:** pack issues when `targetDir` changed ([6e6e5e2](https://github.com/Avivbens/fast-alfred/commit/6e6e5e2d02f6a1c1702cd15c367a40fa3b4929aa))
+* suppprt `isDebug` for `alfredInfo` ([f18740b](https://github.com/Avivbens/fast-alfred/commit/f18740b297a031976fe94c7872716ad2eee8d0cd))
+
 ## [1.3.2](https://github.com/Avivbens/fast-alfred/compare/v1.3.1...v1.3.2) (2024-06-06)
 
 
