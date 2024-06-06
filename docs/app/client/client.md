@@ -1,0 +1,125 @@
+---
+prev: false
+next: false
+---
+
+# `fast-alfred` Client
+
+`fast-alfred` provides a lean and optimized client to interact with the Alfred workflow system.
+
+### Intro
+
+Your script should look like that:
+
+```typescript
+import { FastAlfred } from 'fast-alfred'
+
+;(() => {
+    const alfredClient = new FastAlfred()
+
+    // ... Rest of your script
+})()
+```
+
+# Available Options
+
+::: tip Note :zap:
+`fast-alfred` client should contain all JSDocs types and descriptions, so you can use your IDE to explore the available options.
+:::
+
+See the available options below:
+
+## `output`
+
+Outputs the script filter object to interact with Alfred.
+Allows you to show a list of items in Alfred, with all Alfred interaction options.
+
+## `log`
+
+Logs errors for debugging purposes.
+
+## `matches`
+
+Searches for a query in a list of items. The search can be case sensitive or not, default is false.
+
+## `inputMatches`
+
+Searches for a query in the workflow input. The search can be case sensitive or not, default is false.
+
+::: info NOTE 📝
+This function has the same behavior as `matches`, but it searches in the input.
+:::
+
+## `error`
+
+Shows an error message in Alfred UI.
+
+## `alfredInfo`
+
+Service to get Alfred's environment variables. You can find all Alfred & Workflow metadata in here.
+
+## `userConfig`
+
+Get and set dedicated configuration for the Workflow.
+You can use it to store and retrieve data saved about the user.
+
+## `icons`
+
+Get icons from the system.
+You can use it to get the icon path for a specific icon.
+
+#### Example
+
+```typescript
+alfredClient.output({
+    items: [
+        {
+            title: 'Some Error',
+            icon: {
+                path: alfredClient.icons.getIcon('error'), // Get the error icon
+            },
+        },
+    ],
+})
+```
+
+## `config`
+
+Get and set dedicated configuration for the Workflow.
+You can use it to store and retrieve data saved about the user.
+
+## `env`
+
+Get Environment variables.
+All Workflow user configuration would be injected in here.
+
+::: info NOTE 📝
+When inserting data into the `Configure Workflow...` on Alfred UI, it will be available in the `env` service.
+:::
+
+#### Example
+
+```typescript
+const someVariable: number = alfredClient.env.getEnv(Variables.SOME_VARIABLE, { defaultValue: 10, parser: Number })
+```
+
+## `cache`
+
+Get and set dedicated cache for your Workflow. You can leverage it to optimize your Workflow performance.
+Use the `setWithTTL` in order to set a cache with a time to live.
+
+::: info NOTE 📝
+The TTL is in milliseconds, so you can set it to 1000 for 1 second, 60000 for 1 minute, and so on
+:::
+
+#### Example
+
+```typescript
+const data: SomeType[] = alfredClient.cache.get<SomeType[]>(SOME_DATA_KEY) ?? (await fetchData())
+
+alfredClient.cache.setWithTTL(SOME_DATA_KEY, data, { maxAge: CACHE_TTL })
+```
+
+## `input: string`
+
+Get the input passed into the script filter (by `$1` or `{query}`).

@@ -1,19 +1,38 @@
+const generateIcon = (name: string) =>
+    `/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/${name}.icns` as const
+
+const ICONS = {
+    info: generateIcon('ToolbarInfo'),
+    warning: generateIcon('AlertCautionIcon'),
+    error: generateIcon('AlertStopIcon'),
+    alert: generateIcon('Actions'),
+    like: generateIcon('ToolbarFavoritesIcon'),
+    delete: generateIcon('ToolbarDeleteIcon'),
+} as const
+
+/**
+ * @description
+ * Get icons from the system
+ *
+ * You can use it to get the icon path for a specific icon
+ *
+ * @example
+ * ```typescript
+ *     alfredClient.output({
+ *      items: [
+ *          {
+ *              title: 'Some Error',
+ *              icon: {
+ *                  path: alfredClient.icons.getIcon('error'),
+ *              },
+ *          },
+ *      ],
+ *  })
+ * ```
+ */
 export class IconService {
-    private readonly ICONS = {
-        info: this.generateIcon('ToolbarInfo'),
-        warning: this.generateIcon('AlertCautionIcon'),
-        error: this.generateIcon('AlertStopIcon'),
-        alert: this.generateIcon('Actions'),
-        like: this.generateIcon('ToolbarFavoritesIcon'),
-        delete: this.generateIcon('ToolbarDeleteIcon'),
-    }
-
-    private generateIcon(name: string): string {
-        return `/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/${name}.icns`
-    }
-
-    public getIcon(name: keyof typeof this.ICONS): string {
-        const icon = this.ICONS[name]
+    public getIcon(name: keyof typeof ICONS): string {
+        const icon = ICONS[name]
         if (!icon) {
             throw new Error(`Icon ${name} not found`)
         }

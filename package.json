@@ -1,7 +1,7 @@
 {
     "name": "fast-alfred",
     "version": "1.3.0",
-    "description": "description",
+    "description": "Your Alfred friendly framework, for developing Alfred workflows in TypeScript/JavaScript.",
     "keywords": [],
     "homepage": "https://github.com/Avivbens/fast-alfred",
     "repository": {
@@ -30,6 +30,9 @@
     "scripts": {
         "prebuild": "rm -rf ./lib",
         "build": "./scripts/build.sh",
+        "docs:build": "vitepress build docs",
+        "docs:dev": "vitepress dev docs",
+        "docs:preview": "vitepress preview docs",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "lint": "eslint \"{src,test}/**/*.ts\"",
         "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
@@ -112,7 +115,8 @@
         "ts-node": "^10.9.1",
         "tsc-alias": "^1.8.10",
         "tsconfig-paths": "^4.2.0",
-        "typescript": "^5.4.5"
+        "typescript": "^5.4.5",
+        "vitepress": "^1.2.2"
     },
     "engines": {
         "node": ">=18.0.0"

@@ -10,15 +10,71 @@ import { EnvService } from './services/env.service'
 import { IconService } from './services/icon.service'
 
 export class FastAlfred {
+    /**
+     * @description
+     * Service to get Alfred's environment variables
+     *
+     * You can find all Alfred & Workflow metadata in here
+     */
     public readonly alfredInfo: AlfredInfoService = new AlfredInfoService()
     public readonly userConfig: AlfredConfigService = new AlfredConfigService({})
+
+    /**
+     * @description
+     * Get icons from the system
+     *
+     * You can use it to get the icon path for a specific icon
+     *
+     * @example
+     * ```typescript
+     *  alfredClient.output({
+     *   items: [
+     *       {
+     *           title: 'Some Error',
+     *           icon: {
+     *               path: alfredClient.icons.getIcon('error'),
+     *           },
+     *       },
+     *   ],
+     *  })
+     * ```
+     */
     public readonly icons: IconService = new IconService()
+
+    /**
+     * @description
+     * Get and set dedicated configuration for the Workflow
+     *
+     * You can use it to store and retrieve data saved about the user
+     */
     public readonly config: Conf = new Conf({})
+
+    /**
+     * @description
+     * Get Environment variables
+     *
+     * All Workflow user configuration would be injected in here
+     */
     public readonly env = new EnvService()
+
+    /**
+     * @description
+     * Get and set dedicated cache for your Workflow
+     *
+     * You can leverage it to optimize your Workflow performance
+     *
+     * @note
+     * Use the `setWithTTL` in order to set a cache with a time to live
+     */
     public readonly cache: CacheConfigService = new CacheConfigService({
         configName: 'FastAlfred',
         version: this.alfredInfo.alfredVersion() ?? '',
     })
+
+    /**
+     * @description
+     * Get the input passed into the script filter (by `$1` or `{query}`)
+     */
     public readonly input: string = argv[2]
 
     /**
