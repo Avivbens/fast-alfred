@@ -83,6 +83,7 @@ You can change that by setting the `targetDir` property.
 ::: warning CI / CD Usage :rotating_light:
 
 If you're using the [`fast-alfred` CI / CD template](/app/ci/github-actions), updating the `targetDir` property should be handled automatically.
+The only thing you should update is the [`.releaserc` asset path](/app/ci/semantic-release).
 Make sure `npx fast-alfred pack` script works correctly.
 :::
 

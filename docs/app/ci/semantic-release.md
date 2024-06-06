@@ -25,6 +25,8 @@ It is very recommended to use tools for commit message enforcement like [`commit
 
 ::: warning NOTE :warning:
 Fill in the upper case placeholders with your own values, such as `REPO_NAME`, `WORKFLOW_NAME`, etc.
+
+**In case you've changed the `targetDir` over the [bundler options](/app/setup/bundler-options#targetdir), you should change the `@semantic-release/github` asset path accordingly.**
 :::
 
 Create a `.releaserc` file in the root of your project and add the following configuration:
