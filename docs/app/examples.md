@@ -12,3 +12,7 @@ In here, you can find a list of real-life Workflows examples that demonstrate ho
 ## [Search Bookmarks 👀](https://github.com/Avivbens/alfred-search-bookmark?tab=readme-ov-file#readme)
 
 Search browser bookmarks in all your Chrome profiles.
+
+## [Open WhatsApp 📇](https://github.com/Avivbens/alfred-open-whatsapp?tab=readme-ov-file#readme)
+
+Search contacts and open a chat with them over WhatsApp native.
