@@ -47,6 +47,10 @@ export class AlfredInfoService {
         return this.getEnv('workflow_cache')
     }
 
+    public isDebug(): boolean {
+        return this.getEnv('debug') === '1'
+    }
+
     public preferences(): string | undefined {
         return this.getEnv('preferences')
     }
