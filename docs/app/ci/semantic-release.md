@@ -14,7 +14,7 @@ At the end of this process, you'd be able to publish your Workflow into GitHub R
 ## Installation
 
 ```bash
-npm install semantic-release @semantic-release/{changelog,commit-analyzer,exec,git,github,release-notes-generator}
+npm install -D semantic-release @semantic-release/{changelog,commit-analyzer,exec,git,github,release-notes-generator}
 ```
 
 ::: tip TIP :zap:
