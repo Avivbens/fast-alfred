@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/Avivbens/fast-alfred/compare/v1.3.1...v1.3.2) (2024-06-06)
+
+
+### Bug Fixes
+
+* readme with details ([18f8e90](https://github.com/Avivbens/fast-alfred/commit/18f8e907227557b82872bf8ce7dcfe87f6ce8088))
+
 ## [1.3.1](https://github.com/Avivbens/fast-alfred/compare/v1.3.0...v1.3.1) (2024-06-06)
 
 
