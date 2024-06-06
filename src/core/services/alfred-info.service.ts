@@ -1,4 +1,4 @@
-import { env } from 'process'
+import { env } from 'node:process'
 
 export class AlfredInfoService {
     private getEnv(key: string): string | undefined {
