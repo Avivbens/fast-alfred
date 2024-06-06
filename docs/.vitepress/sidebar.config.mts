@@ -3,7 +3,7 @@ import { DefaultTheme } from 'vitepress'
 export const SIDEBAR: DefaultTheme.Sidebar = [
     {
         text: 'Setup',
-        base: '/app/setup/',
+        base: 'app/setup/',
         link: '../quick-start',
         collapsed: false,
         items: [
@@ -27,7 +27,7 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
     },
     {
         text: 'CI / CD 🐙',
-        base: '/app/ci/',
+        base: 'app/ci/',
         collapsed: false,
         items: [
             {
@@ -42,12 +42,12 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
     },
     {
         text: 'Client',
-        base: '/app/client/',
+        base: 'app/client/',
         link: 'client',
     },
     {
         text: 'Troubleshooting',
-        base: '/app/troubleshooting/',
+        base: 'app/troubleshooting/',
         link: 'index',
         collapsed: false,
         items: [
@@ -64,5 +64,10 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
                 link: 'no-target-version',
             },
         ],
+    },
+    {
+        text: 'Examples 💡',
+        base: 'app/',
+        link: 'examples',
     },
 ]

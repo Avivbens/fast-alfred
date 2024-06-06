@@ -17,6 +17,10 @@ At the end of this process, you'd be able to publish your Workflow into GitHub R
 npm install semantic-release @semantic-release/{changelog,commit-analyzer,exec,git,github,release-notes-generator}
 ```
 
+::: tip TIP :zap:
+It is very recommended to use tools for commit message enforcement like [`commitlint`](https://github.com/conventional-changelog/commitlint?tab=readme-ov-file#readme)
+:::
+
 ## Setup
 
 ::: warning Note :warning:

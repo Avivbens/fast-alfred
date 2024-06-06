@@ -15,6 +15,9 @@ hero:
         - theme: alt
           text: Troubleshooting
           link: /app/troubleshooting/index
+        - theme: alt
+          text: Examples
+          link: /app/examples
 features:
     - title: Node.js Runtime
       link: '/app/setup/runtime-explain'
