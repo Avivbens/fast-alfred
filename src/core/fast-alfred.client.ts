@@ -27,15 +27,15 @@ export class FastAlfred {
      *
      * @example
      * ```typescript
-     *     alfredClient.output({
-     *      items: [
-     *          {
-     *              title: 'Some Error',
-     *              icon: {
-     *                  path: alfredClient.icons.getIcon('error'),
-     *              },
-     *          },
-     *      ],
+     *  alfredClient.output({
+     *   items: [
+     *       {
+     *           title: 'Some Error',
+     *           icon: {
+     *               path: alfredClient.icons.getIcon('error'),
+     *           },
+     *       },
+     *   ],
      *  })
      * ```
      */

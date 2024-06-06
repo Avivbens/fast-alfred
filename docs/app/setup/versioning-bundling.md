@@ -3,7 +3,7 @@ prev: true
 next: false
 ---
 
-# Versioning :package:
+# Versioning & Bundling :package:
 
 `fast-alfred` provides a way to manage your workflow version automatically.
 
@@ -11,7 +11,7 @@ In order to sync the version across `package.json` and `info.plist`, just pass i
 `fast-alfred` the version you want to use:
 
 ```bash
-npx fast-alfred -t 1.2.3 # This will set the version to 1.2.3
+npx fast-alfred -t 1.2.3 # Set the version to 1.2.3, creating a .alfredworkflow file
 ```
 
 ## Versioning By Commits Using `semantic-release` :arrows_counterclockwise:

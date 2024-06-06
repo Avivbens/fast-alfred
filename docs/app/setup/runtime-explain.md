@@ -21,5 +21,9 @@ The code below is an example of how to trigger your Node.js script in an Alfred 
 :::
 
 ```bash
-./esbuild/assets/run-node.sh esbuild/bookmarks.js "$1"
+./esbuild/assets/run-node.sh esbuild/your-script-under-main.js "$1"
 ```
+
+#### DEMO
+
+![Runtime Example](/runtime-example.jpeg)

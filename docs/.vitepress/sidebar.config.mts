@@ -20,8 +20,8 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
                 link: 'workflow-metadata',
             },
             {
-                text: 'Versioning 🔄',
-                link: 'versioning',
+                text: 'Versioning & Bundling 📦',
+                link: 'versioning-bundling',
             },
         ],
     },

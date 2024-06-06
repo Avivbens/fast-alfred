@@ -27,10 +27,21 @@ module.exports = {}
 ### Build Your First Workflow
 
 1. Create a Workflow via Alfred UI, or use an existing one
-1. Open the Workflow directory, copy relevant files
-1. Create a new directory for your Workflow
- <!-- TODO link -->
-1. Use `fast-alfred` client utilities to manage your Workflow
+1. Open the Workflow directory, copy relevant files (icons, `info.plist`, `prefs.plist`, etc) to your project
+1. Create a source directory for your Workflow scripts
+
+```bash
+mkdir -p src/main
+```
+
+::: warning Caution :warning:
+By default, your production scripts should be located under `src/main`.
+You can import every external script from this directory regularly.
+See more [here](./setup/bundler-options#productionscripts)
+:::
+
+4. Use [`fast-alfred` client](./client/client.md) utilities to manage your Workflow
+1. Follow the [bundling guidelines](./setup/versioning-bundling) to bundle your scripts
 1. Call your scripts using [`fast-alfred` runtime](./setup/runtime-explain)
 
 <br>

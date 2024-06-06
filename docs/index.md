@@ -28,7 +28,11 @@ features:
       link: '/app/ci/github-actions'
       details: A CI/CD template to automate your workflow deployment.
       icon: '🐙'
-    - title: Bundle Management
+    - title: Version Management & Bundling
+      link: '/app/setup/versioning-bundling'
+      details: Automatically manage your workflow version, both in `package.json` and `info.plist`.
+      icon: '💯'
+    - title: Bundler Options
       link: '/app/setup/bundler-options'
       details: Automatically bundle your workflow into a `.alfredworkflow` file.
       icon: '👨‍💻'
@@ -36,8 +40,4 @@ features:
       link: 'app/setup/workflow-metadata'
       details: Automatically generate Alfred workflow metadata.
       icon: '🔨'
-    - title: Version Management
-      link: '/app/setup/versioning'
-      details: Automatically manage your workflow version, both in `package.json` and `info.plist`.
-      icon: '💯'
 ---

@@ -9,6 +9,8 @@ next: false
 
 `fast-alfred` CI / CD template recommends you work with [`semantic-release`](https://github.com/semantic-release/semantic-release).
 
+At the end of this process, you'd be able to publish your Workflow into GitHub Releases, with a versioning system based on your commits.
+
 ## Installation
 
 ```bash
