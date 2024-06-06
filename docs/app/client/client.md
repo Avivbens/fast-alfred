@@ -23,7 +23,7 @@ import { FastAlfred } from 'fast-alfred'
 
 # Available Options
 
-::: tip Note :zap:
+::: tip TIP :zap:
 `fast-alfred` client should contain all JSDocs types and descriptions, so you can use your IDE to explore the available options.
 :::
 

@@ -11,7 +11,7 @@ next: true
 
 At the end of this process, you'd be able to publish your Workflow into GitHub Releases.
 
-::: warning Note :warning:
+::: warning NOTE :warning:
 The following example uses `semantic-release` mechanism and all related packages.
 Please follow the [Semantic Release](./semantic-release) guide to set up your project.
 
@@ -19,7 +19,7 @@ Please follow the [Semantic Release](./semantic-release) guide to set up your pr
 
 ## Setup
 
-::: tip Note :zap:
+::: tip TIP :zap:
 Copy these files into your `.github/workflows` folder, at the root of your project.
 You can modify them to fit your needs. The current structure is a suggestion to reduce the maintenance of your CI / CD.
 :::

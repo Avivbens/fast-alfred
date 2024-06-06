@@ -23,7 +23,7 @@ It is very recommended to use tools for commit message enforcement like [`commit
 
 ## Setup
 
-::: warning Note :warning:
+::: warning NOTE :warning:
 Fill in the upper case placeholders with your own values, such as `REPO_NAME`, `WORKFLOW_NAME`, etc.
 :::
 

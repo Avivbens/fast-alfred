@@ -14,7 +14,7 @@ named `.fast-alfred.config.cjs`.
 
 # Available Options
 
-::: tip Note :zap:
+::: tip TIP :zap:
 `fast-alfred` has a default configuration that should work for most of the workflows.
 :::
 
