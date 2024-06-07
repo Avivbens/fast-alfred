@@ -13,6 +13,6 @@ In here, you can find a list of real-life Workflows examples that demonstrate ho
 
 Search browser bookmarks in all your Chrome profiles.
 
-## [Open WhatsApp 📇](https://github.com/Avivbens/alfred-open-whatsapp?tab=readme-ov-file#readme)
+## [Engage Contact](https://github.com/Avivbens/alfred-engage-contact?tab=readme-ov-file#readme)
 
-Search contacts and open a chat with them over WhatsApp native.
+Search contacts and open an app to engage with them.
