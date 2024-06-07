@@ -1,3 +1,16 @@
+# [2.0.0](https://github.com/Avivbens/fast-alfred/compare/v1.3.4...v2.0.0) (2024-06-07)
+
+
+### Bug Fixes
+
+* allow both `cjs` and `esm` formats, by user configuration ([e9f45e9](https://github.com/Avivbens/fast-alfred/commit/e9f45e98ede3bbb862ee01b822cf1853a5f20559))
+
+
+### BREAKING CHANGES
+
+* `includeBanners` property under `bundlerOptions` is no longer available, please use `esmHelpers` instead
+* `fast-alfred` by default supporting the `cjs` format, in case of `esm` - follow the official docs
+
 ## [1.3.4](https://github.com/Avivbens/fast-alfred/compare/v1.3.3...v1.3.4) (2024-06-07)
 
 
