@@ -14,6 +14,25 @@ In order to use `fast-alfred` runtime, you have to configure your package as ESM
 Add `"type": "module"` to your `package.json` file.
 :::
 
+## How It Works
+
+At build time, an additional asset, named `run-node.sh` would be attached to the workflow, under the `assets` directory.
+This script is responsible for executing the bundled Node.js script.
+
+### Example
+
+::: tip TIP :zap:
+The code below is an example of how to trigger your Node.js script in an Alfred Script Filter.
+:::
+
+```bash
+./esbuild/assets/run-node.sh esbuild/your-script-under-main.js "$1"
+```
+
+#### DEMO
+
+![Runtime Example](/runtime-example.jpeg)
+
 ## Local Debugging
 
 Sometimes, we just want to run scripts locally, and put some debugger breakpoints to understand the flow.
@@ -51,22 +70,3 @@ right from your IDE.
 
 **You can place your breakpoints and debug your script from your .ts file.**
 :::
-
-## How It Works
-
-At build time, an additional asset, named `run-node.sh` would be attached to the workflow, under the `assets` directory.
-This script is responsible for executing the bundled Node.js script.
-
-### Example
-
-::: tip TIP :zap:
-The code below is an example of how to trigger your Node.js script in an Alfred Script Filter.
-:::
-
-```bash
-./esbuild/assets/run-node.sh esbuild/your-script-under-main.js "$1"
-```
-
-#### DEMO
-
-![Runtime Example](/runtime-example.jpeg)
