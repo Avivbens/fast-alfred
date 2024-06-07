@@ -2,7 +2,7 @@ import * as esbuild from 'esbuild'
 import { basename } from 'node:path'
 import { execPromise } from '@common/utils'
 import { readWorkflowPackageJson } from '@common/workflow-package-json.service'
-import { ALL_FRAMEWORK_ASSETS, DEFAULT_BANNERS, PACK_ENTITIES } from '../constants/bundler-options-defaults.config'
+import { ALL_FRAMEWORK_ASSETS, ESM_HELPERS, PACK_ENTITIES } from '../constants/bundler-options-defaults.config'
 import { buildOptions, cleanTarget, copyAssets } from '../utils/bundler.utils'
 
 export async function buildWorkflow() {
@@ -10,7 +10,7 @@ export async function buildWorkflow() {
     const {
         assets,
         assetsDir,
-        includeBanners,
+        esmHelpers,
         minify,
         outputFormat,
         overrideEsbuildOptions,
@@ -23,6 +23,10 @@ export async function buildWorkflow() {
 
     await cleanTarget(targetDir)
 
+    const banners = {
+        js: esmHelpers ? ESM_HELPERS : '',
+    }
+
     await esbuild.build({
         platform: 'node',
         entryPoints: productionScripts,
@@ -31,7 +35,7 @@ export async function buildWorkflow() {
         treeShaking,
         minify,
         format: outputFormat,
-        banner: includeBanners ? DEFAULT_BANNERS : undefined,
+        banner: banners,
         ...overrideEsbuildOptions,
     })
 

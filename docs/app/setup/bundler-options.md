@@ -100,10 +100,16 @@ module.exports = {
 }
 ```
 
-## `includeBanners`
+## `esmHelpers`
 
-By default, `fast-alfred` provides you with some compatibilities between CommonJS and ES Modules.
-You can disable this feature by setting the `includeBanners` property to `false`.
+By default, `fast-alfred` aims to be written in the `cjs` Module format.
+If your package is using the `esm` format, AKA, having `"type": "module"` in the `package.json`, you should enable the `esmHelpers` property.
+
+::: warning Warning :warning:
+In case your package is written in `cjs`, enabling this option would break your build.
+
+**Note that you should also set the [`outputFormat` property](#outputformat) to `esm` to output the files in the ES Module format.**
+:::
 
 ##### Example
 
@@ -113,7 +119,30 @@ You can disable this feature by setting the `includeBanners` property to `false`
  */
 module.exports = {
     bundlerOptions: {
-        includeBanners: false, // Disable the compatibility banners
+        esmHelpers: true, // Enable compatibility for CommonJS packages
+    },
+}
+```
+
+## `outputFormat`
+
+By default, `fast-alfred` would output the files in the `cjs` format.
+You can change that by setting the `outputFormat` property.
+
+::: tip TIP :zap:
+If your `package.json` has `"type": "module"`, you should output the files in the `esm` format.
+Otherwise, you should keep it in the `cjs` format.
+:::
+
+##### Example
+
+```javascript
+/**
+ * @type {import('fast-alfred').FastAlfredConfig}
+ */
+module.exports = {
+    bundlerOptions: {
+        outputFormat: 'esm', // Output files in the ES Module format
     },
 }
 ```
@@ -155,24 +184,6 @@ You should only disable tree shaking if you're facing issues with the output bun
 module.exports = {
     bundlerOptions: {
         treeShaking: false, // Disable tree shaking
-    },
-}
-```
-
-## `outputFormat`
-
-By default, `fast-alfred` would output the files in the `cjs` format.
-You can change that by setting the `outputFormat` property.
-
-##### Example
-
-```javascript
-/**
- * @type {import('fast-alfred').FastAlfredConfig}
- */
-module.exports = {
-    bundlerOptions: {
-        outputFormat: 'esm', // Output files in the ES Module format
     },
 }
 ```

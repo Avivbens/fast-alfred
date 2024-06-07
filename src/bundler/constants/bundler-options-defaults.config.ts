@@ -6,7 +6,7 @@ export const BUNDLER_DEFAULTS: Required<BundlerOptions> = {
     assetsDir: 'assets',
     targetDir: 'esbuild',
     productionScripts: ['src/main/*.ts'],
-    includeBanners: true,
+    esmHelpers: false,
     minify: true,
     treeShaking: true,
     outputFormat: 'cjs',
@@ -21,10 +21,10 @@ export const ALL_FRAMEWORK_ASSETS = [
 ]
 
 /**
- * Fix common issues when compiling both `esm` and `cjs` modules.
+ * @description
+ * This code would be included in the bundle, in order to resolve common issues when compiling both `esm` and `cjs` modules.
  */
-export const DEFAULT_BANNERS = {
-    js: `
+export const ESM_HELPERS = `
 import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 import _private_path from 'node:path';
@@ -33,8 +33,7 @@ import _private_url from 'node:url';
 globalThis.require = createRequire(import.meta.url);
 globalThis.__filename = _private_url.fileURLToPath(import.meta.url);
 globalThis.__dirname = _private_path.dirname(__filename);
-`,
-} as const
+` as const
 
 export const PACK_ENTITIES = (targetDir: string) =>
     ['*.png ', '*.plist', 'README.md', `${targetDir}/**`, 'package.json'] as const

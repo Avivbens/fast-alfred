@@ -38,12 +38,12 @@ export interface BundlerOptions {
 
     /**
      * @description
-     * Whether to include JS banners in the bundle.
-     * Headers should resolve common issues when compiling both `esm` and `cjs` modules.
+     * Whether to include JS code in the bundle, that resolve common issues when compiling both `esm` and `cjs` modules.
+     * Most issues would be resolving `require`, `__dirname` and `__filename` variables.
      *
-     * @default true
+     * @default false
      */
-    includeBanners?: boolean
+    esmHelpers?: boolean
 
     /**
      * @description
