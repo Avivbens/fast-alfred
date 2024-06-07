@@ -74,8 +74,20 @@ export class FastAlfred {
     /**
      * @description
      * Get the input passed into the script filter (by `$1` or `{query}`)
+     *
+     * @note
+     * If you're passing multiple inputs, you can use the `inputs` property
      */
     public readonly input: string = argv[2]
+
+    /**
+     * @description
+     * Get all the inputs passed into the script filter
+     *
+     * @note
+     * If you're passing only one input, you can use the `input` property
+     */
+    public readonly inputs: string[] = argv.slice(2)
 
     /**
      * @description

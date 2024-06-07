@@ -123,3 +123,14 @@ alfredClient.cache.setWithTTL(SOME_DATA_KEY, data, { maxAge: CACHE_TTL })
 ## `input: string`
 
 Get the input passed into the script filter (by `$1` or `{query}`).
+
+::: tip TIP :zap:
+In case you have multiple inputs, you can use the `inputs` property to get all of them.
+:::
+
+## `inputs: string[]`
+
+Get multiple inputs passed into the script filter (by `$1`, `$2`, `$3`, etc).
+::: tip TIP :zap:
+In case you have only one input, you can use the `input` property to get it.
+:::
