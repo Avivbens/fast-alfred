@@ -14,6 +14,44 @@ In order to use `fast-alfred` runtime, you have to configure your package as ESM
 Add `"type": "module"` to your `package.json` file.
 :::
 
+## Local Debugging
+
+Sometimes, we just want to run scripts locally, and put some debugger breakpoints to understand the flow.
+
+In case you're using [`typescript` paths](https://www.typescriptlang.org/tsconfig/#paths), you might need to convert them after being built (without `fast-alfred` bundler).
+
+::: warning NOTE :rotating_light:
+You need to install the `tsc-alias` package to convert the paths
+
+```bash
+npm i -D tsc-alias
+```
+
+:::
+
+Your `package.json` should have the following script:
+
+```json
+{
+    "scripts": {
+        "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json"
+    }
+}
+```
+
+Then, you can run the following command:
+
+```bash
+node ./dist/your-script-under-main.js
+```
+
+::: tip TIP :zap:
+The code above is an example of how to trigger your Node.js script in a local environment,
+right from your IDE.
+
+**You can place your breakpoints and debug your script from your .ts file.**
+:::
+
 ## How It Works
 
 At build time, an additional asset, named `run-node.sh` would be attached to the workflow, under the `assets` directory.
