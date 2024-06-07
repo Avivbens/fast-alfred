@@ -55,6 +55,10 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
                 link: 'missing-config-file',
             },
             {
+                text: 'ESM issues',
+                link: 'esm-issues',
+            },
+            {
                 text: 'Empty Glob',
                 link: 'empty-glob',
             },

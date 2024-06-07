@@ -28,8 +28,8 @@ module.exports = {}
 
 1. Create a Workflow via Alfred UI, or use an existing one
 1. Open the Workflow directory, copy relevant files (icons, `info.plist`, `prefs.plist`, etc) to your project
-1. Set `"type": "module"` in your `package.json` file - this is required for
-   using [`fast-alfred` runtime](./setup/runtime-explain)
+1. In case your package declares `"type": "module"` in the `package.json` file, you'll
+   need to set both [`esmHelpers`](./setup/bundler-options#esmhelpers) and [`outputFormat`](./setup/bundler-options#outputformat) in order to use [`fast-alfred` runtime](./setup/runtime-explain)
 1. Create a source directory for your Workflow scripts
 
 ```bash

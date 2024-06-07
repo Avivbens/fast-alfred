@@ -1,8 +1,8 @@
 ---
 prev: false
 next:
-    text: 'Empty Glob'
-    link: '/app/troubleshooting/empty-glob'
+    text: 'ESM issues'
+    link: '/app/troubleshooting/esm-issues'
 ---
 
 # Missing Configuration File

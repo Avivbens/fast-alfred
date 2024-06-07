@@ -1,7 +1,7 @@
 ---
 prev:
-    text: 'Missing Configuration File'
-    link: '/app/troubleshooting/missing-config-file'
+    text: 'ESM issues'
+    link: '/app/troubleshooting/esm-issues'
 next:
     text: 'No Target Version'
     link: '/app/troubleshooting/no-target-version'
