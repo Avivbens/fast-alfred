@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitepress'
 // @ts-expect-error
-import { description } from '../../package.json'
+import { author, description, name } from '../../package.json'
 import { GOOGLE_ANALYTICS_ID, GOOGLE_ANALYTICS_SCRIPT } from './analytics/google-analytics.config'
 import { REPOSITORY_FULLNAME, getDocsBase, remoteDefaultBranch } from './constants/repository.mjs'
 import { NAVBAR } from './navbar.config.mjs'
@@ -38,6 +38,7 @@ export default defineConfig({
         socialLinks: [
             //
             { icon: 'github', link: `https://github.com/${REPOSITORY_FULLNAME}#readme` },
+            { icon: 'npm', link: `https://www.npmjs.com/package/${name}` },
         ],
         search: { provider: 'local' },
         editLink: {
@@ -49,7 +50,7 @@ export default defineConfig({
         },
         footer: {
             message: 'Released under the MIT License',
-            copyright: 'Copyright © 2024-present Aviv Ben Shahar',
+            copyright: `Copyright © 2024-present ${author.name}`,
         },
     },
 })
