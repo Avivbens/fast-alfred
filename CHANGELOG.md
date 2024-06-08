@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/Avivbens/fast-alfred/compare/v2.0.1...v2.1.0) (2024-06-08)
+
+
+### Features
+
+* support more icons, allow non-specified icons ([69ff48a](https://github.com/Avivbens/fast-alfred/commit/69ff48ae07c08a6a7b81d78452e1b959aaeed1fa))
+
 ## [2.0.1](https://github.com/Avivbens/fast-alfred/compare/v2.0.0...v2.0.1) (2024-06-08)
 
 
