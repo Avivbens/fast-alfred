@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/Avivbens/fast-alfred/compare/v2.0.0...v2.0.1) (2024-06-08)
+
+
+### Bug Fixes
+
+* add banners info, add global `fast-alfred` banner ([0f413ed](https://github.com/Avivbens/fast-alfred/commit/0f413edc3c962f4c2a3dfb12115cadba47d76351))
+
 # [2.0.0](https://github.com/Avivbens/fast-alfred/compare/v1.3.4...v2.0.0) (2024-06-07)
 
 
