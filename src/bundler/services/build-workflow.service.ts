@@ -2,7 +2,12 @@ import * as esbuild from 'esbuild'
 import { basename } from 'node:path'
 import { execPromise } from '@common/utils'
 import { readWorkflowPackageJson } from '@common/workflow-package-json.service'
-import { ALL_FRAMEWORK_ASSETS, ESM_HELPERS, PACK_ENTITIES } from '../constants/bundler-options-defaults.config'
+import {
+    ALL_FRAMEWORK_ASSETS,
+    ESM_HELPERS,
+    GLOBAL_BANNER,
+    PACK_ENTITIES,
+} from '../constants/bundler-options-defaults.config'
 import { buildOptions, cleanTarget, copyAssets } from '../utils/bundler.utils'
 
 export async function buildWorkflow() {
@@ -23,8 +28,11 @@ export async function buildWorkflow() {
 
     await cleanTarget(targetDir)
 
+    const jsBanners: string[] = [GLOBAL_BANNER]
+    esmHelpers && jsBanners.push(ESM_HELPERS)
+
     const banners = {
-        js: esmHelpers ? ESM_HELPERS : '',
+        js: jsBanners.join('\n'),
     }
 
     await esbuild.build({
