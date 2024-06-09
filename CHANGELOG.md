@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/Avivbens/fast-alfred/compare/v2.1.0...v2.1.1) (2024-06-09)
+
+
+### Bug Fixes
+
+* improve `AlfredScriptFilter` types and docs 🥷 ([a6cf3db](https://github.com/Avivbens/fast-alfred/commit/a6cf3dbc5af5c7fce2af7004478be78df1065284))
+
 # [2.1.0](https://github.com/Avivbens/fast-alfred/compare/v2.0.1...v2.1.0) (2024-06-08)
 
 
