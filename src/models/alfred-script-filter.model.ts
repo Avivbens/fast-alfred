@@ -20,7 +20,7 @@ export interface AlfredScriptFilter {
      * @description
      * Scripts which take a while to return can cache results so users see data sooner on subsequent runs.
      * The Script Filter presents the results from the previous run when caching is active and hasn't expired.
-     * Because the script won't execute when loading cached data, we recommend this option only be used with "Alfred filters results".
+     * Because the script won't execute when loading cached data, we recommend this option only be used with `"Alfred filters results"`.
      */
     cache?: {
         /**
@@ -42,6 +42,15 @@ export interface AlfredScriptFilter {
      * If set to true, Alfred will not learn from the results.
      */
     skipknowledge?: boolean
+
+    /**
+     * @description
+     * Variables within a `variables` object will be passed out of the script filter and remain accessible throughout the current session as environment variables.
+     *
+     * In addition, they are passed back in when the script reruns within the same session.
+     * This can be used for managing state between runs as the user types input or when the script is set to re-run after an interval.
+     */
+    variables?: Record<any, any>
 
     [key: string]: any
 }
