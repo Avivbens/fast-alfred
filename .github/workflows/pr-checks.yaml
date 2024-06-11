@@ -5,7 +5,10 @@ on:
         branches:
             - master
 
-permissions: write-all
+permissions:
+    contents: read
+    pull-requests: read
+    issues: read
 
 jobs:
     PR-checks:
