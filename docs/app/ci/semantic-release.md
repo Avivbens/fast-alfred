@@ -36,7 +36,7 @@ Create a `.releaserc` file in the root of your project and add the following con
 ```json [.releaserc]
 {
     "$schema": "https://json.schemastore.org/semantic-release.json",
-    "repositoryUrl": "https://github.com/REPO_NAME.git",
+    "repositoryUrl": "https://github.com/REPO_FULL_NAME.git",
     "branches": [
         "+([0-9])?(.{+([0-9]),x}).x",
         "master",
