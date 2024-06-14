@@ -50,7 +50,10 @@ export interface BundlerOptions {
      * Whether to minify the output.
      * Should reduce file size, but prevent proper debugging.
      *
-     * @default true
+     * @note
+     * According to [Alfred's documentation](https://alfred.app/security-and-privacy/#signed-binaries), this option is not recommended.
+     *
+     * @default false
      */
     minify?: boolean
 
