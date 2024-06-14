@@ -149,8 +149,13 @@ module.exports = {
 
 ## `minify`
 
-By default, `fast-alfred` would minify the output files.
-It might be useful to disable this feature for debugging purposes.
+By default, `fast-alfred` would not minify the output files.
+It might be useful to enable this option if you want to reduce the bundle size.
+
+::: tip TIP :zap:
+By official Alfred documentation, you should not minify the output files, so users would be able to read the code.
+See more details [in here](https://alfred.app/security-and-privacy/#signed-binaries).
+:::
 
 ##### Example
 
@@ -160,7 +165,7 @@ It might be useful to disable this feature for debugging purposes.
  */
 module.exports = {
     bundlerOptions: {
-        minify: false, // Disable minification
+        minify: true, // Enable minification
     },
 }
 ```

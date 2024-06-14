@@ -8,7 +8,7 @@ export const BUNDLER_DEFAULTS: Required<BundlerOptions> = {
     targetDir: 'esbuild',
     productionScripts: ['src/main/*.ts'],
     esmHelpers: false,
-    minify: true,
+    minify: false,
     treeShaking: true,
     outputFormat: 'cjs',
     overrideEsbuildOptions: {},
