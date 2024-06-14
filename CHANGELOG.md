@@ -1,3 +1,11 @@
+## [2.1.2](https://github.com/Avivbens/fast-alfred/compare/v2.1.1...v2.1.2) (2024-06-14)
+
+
+### Bug Fixes
+
+* align `run-node` asset to use just Node.js alias, change docs image ([feae219](https://github.com/Avivbens/fast-alfred/commit/feae219cb1923ea65730b20d69f7be3b93660003))
+* set `minify` to `false` by default - according to Alfred community guildlines 🚀 ([57e5007](https://github.com/Avivbens/fast-alfred/commit/57e5007d3bb48ce23f465e5d31e64b39740d1bc3))
+
 ## [2.1.1](https://github.com/Avivbens/fast-alfred/compare/v2.1.0...v2.1.1) (2024-06-09)
 
 
