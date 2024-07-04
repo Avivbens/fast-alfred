@@ -16,7 +16,7 @@ npm install fast-alfred
 ::: tip TIP :zap:
 You can use this [`workflow template`](https://github.com/Avivbens/alfred-workflow-template) to have all `fast-alfred` powers and best-practices out of the box :rocket:
 
-**Change all placeholders, such as `REPO-NAME` or `WORKFLOW_NAME`, to your desired values.**
+**Change all placeholders, such as `REPO-NAME`, `REPO-ORG`, `WORKFLOW_NAME`, `AUTHOR_EMAIL`, `AUTHOR_NAME`, `TODO`, to your desired values.**
 :::
 
 ## Configuration
