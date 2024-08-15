@@ -59,8 +59,8 @@ module.exports = {
 
 ## `rootAssets`
 
-By default, `fast-alfred` would bundle the a few files from the root of the project, like the `package.json` and the `README.md`.
-you can add more assets to be bundled by adding paths into the `rootAssets` property.
+By default, `fast-alfred` would bundle a few files from the root of the project, like the `package.json` and the `README.md`.
+You can add more assets to be bundled at the root, instead of the `assets` directory, by adding paths to the `rootAssets` property.
 
 ##### Example
 
