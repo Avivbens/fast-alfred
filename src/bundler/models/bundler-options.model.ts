@@ -13,6 +13,13 @@ export interface BundlerOptions {
 
     /**
      * @description
+     * Additional assets to be included in the root of the bundle.
+     * Would be located on the workflow root directory.
+     */
+    rootAssets?: string[]
+
+    /**
+     * @description
      * The directory where the assets would be copied to.
      *
      * @default 'assets'

@@ -52,13 +52,13 @@ export async function buildWorkflow() {
 
 export async function packWorkflow() {
     const { name } = await readWorkflowPackageJson()
-    const { targetDir } = await buildOptions()
+    const { targetDir, rootAssets } = await buildOptions()
     const targetDirName = basename(targetDir)
 
     if (!name || !targetDir) {
         throw new Error('Missing workflow name or targetDir!')
     }
 
-    const zipCommand = `zip -9 -r "${targetDir}/${name}.alfredworkflow" ${PACK_ENTITIES(targetDirName).join(' ')}`
+    const zipCommand = `zip -9 -r "${targetDir}/${name}.alfredworkflow" ${PACK_ENTITIES(targetDirName, rootAssets).join(' ')}`
     await execPromise(zipCommand)
 }

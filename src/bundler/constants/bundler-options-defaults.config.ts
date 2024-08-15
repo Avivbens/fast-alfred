@@ -4,6 +4,7 @@ import type { BundlerOptions } from '../models/bundler-options.model'
 
 export const BUNDLER_DEFAULTS: Required<BundlerOptions> = {
     assets: [],
+    rootAssets: [],
     assetsDir: 'assets',
     targetDir: 'esbuild',
     productionScripts: ['src/main/*.ts'],
@@ -53,5 +54,5 @@ globalThis.__dirname = _private_path.dirname(__filename);
  */
 ` as const
 
-export const PACK_ENTITIES = (targetDir: string) =>
-    ['*.png ', '*.plist', 'README.md', `${targetDir}/**`, 'package.json'] as const
+export const PACK_ENTITIES = (targetDir: string, rootAssets: string[]) =>
+    ['*.png ', '*.plist', 'README.md', `${targetDir}/**`, 'package.json'].concat(rootAssets.map((a) => `"${a}"`))
