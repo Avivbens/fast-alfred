@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/Avivbens/fast-alfred/compare/v2.1.2...v2.2.0) (2024-08-15)
+
+
+### Features
+
+* support `rootAssets` option for bundler ([b998da3](https://github.com/Avivbens/fast-alfred/commit/b998da3f305fa637c2016ccf447559c2c77579f8))
+
 ## [2.1.2](https://github.com/Avivbens/fast-alfred/compare/v2.1.1...v2.1.2) (2024-06-14)
 
 
