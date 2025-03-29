@@ -1,3 +1,15 @@
+# [2.3.0](https://github.com/Avivbens/fast-alfred/compare/v2.2.0...v2.3.0) (2025-03-29)
+
+
+### Bug Fixes
+
+* split workflow packing into multiple steps, to allow gather build output from different locations - `fast-alfred` now supports monorepo 🥷 ([4a41f2e](https://github.com/Avivbens/fast-alfred/commit/4a41f2ec6ba5a2ccd7135a94e676540dc993a3dc))
+
+
+### Features
+
+* **cli:** support `--no-package-json` flag to aviod updating the `package.json` & `package-loc.json` files ([09f0d03](https://github.com/Avivbens/fast-alfred/commit/09f0d03d6d34e894f89777af81134c61d24d86fd))
+
 # [2.2.0](https://github.com/Avivbens/fast-alfred/compare/v2.1.2...v2.2.0) (2024-08-15)
 
 
