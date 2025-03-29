@@ -57,8 +57,18 @@ export class PackCommand extends CommandRunner {
         return true
     }
 
+    @Option({
+        name: 'noPackageJson',
+        flags: '--no-package-json',
+        defaultValue: false,
+        description: 'Do not update the package.json & package-lock.json files.',
+    })
+    private noPackageJson(): boolean {
+        return true
+    }
+
     public async run(passedParams: string[], options?: PackCommandOptions): Promise<void> {
-        const { targetVersion, verbose, noPack } = options ?? {}
+        const { targetVersion, verbose, noPack, noPackageJson } = options ?? {}
 
         if (verbose) {
             this.logger.setLogLevel('verbose')
@@ -93,7 +103,7 @@ export class PackCommand extends CommandRunner {
 
         try {
             await this.buildWorkflow()
-            await this.updateWorkflowVersion(parsedTargetVersion)
+            await this.updateWorkflowVersion(parsedTargetVersion, noPackageJson)
 
             if (noPack) {
                 return
@@ -110,9 +120,12 @@ export class PackCommand extends CommandRunner {
         }
     }
 
-    private async updateWorkflowVersion(version: string): Promise<void> {
+    private async updateWorkflowVersion(version: string, noPackageJson: boolean = false): Promise<void> {
         try {
-            const prms = [updateWorkflowMetadataVersion(version), updateWorkflowPackageJsonVersion(version)]
+            const prms = [
+                updateWorkflowMetadataVersion(version),
+                !noPackageJson && updateWorkflowPackageJsonVersion(version),
+            ]
             await Promise.all(prms)
         } catch (error) {
             this.logger.verbose(`Failed to update Alfred Workflow version - ${error.stack}`)
