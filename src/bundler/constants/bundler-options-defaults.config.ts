@@ -54,5 +54,10 @@ globalThis.__dirname = _private_path.dirname(__filename);
  */
 ` as const
 
-export const PACK_ENTITIES = (targetDir: string, rootAssets: string[]) =>
-    ['*.png ', '*.plist', 'README.md', `${targetDir}/**`, 'package.json'].concat(rootAssets.map((a) => `"${a}"`))
+export const WORKFLOW_METADATA_FILES = ['*.png ', '*.plist', 'README.md', 'package.json']
+export const SAFE_ROOT_ASSETS = (rootAssets: string[]) => rootAssets.map((path) => `"${path}"`)
+export const PACK_ENTITIES = (files: string[], flatDirectories: boolean) => {
+    const res = [...files]
+    flatDirectories && res.unshift(`-j`)
+    return res
+}
