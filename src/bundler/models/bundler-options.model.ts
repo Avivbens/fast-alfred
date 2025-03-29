@@ -6,7 +6,7 @@ export interface BundlerOptions {
      * Additional assets to be included in the bundle.
      * Would be located in the `assets` directory.
      *
-     * @default
+     * @note
      * By default, it includes the `run-node.sh` file - in order to call the compiled file (do not use `node` command directly).
      */
     assets?: string[]
