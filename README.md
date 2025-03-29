@@ -9,6 +9,7 @@
 [![npm](https://img.shields.io/npm/v/fast-alfred)](https://www.npmjs.com/package/fast-alfred)
 [![npm](https://img.shields.io/npm/dt/fast-alfred)](https://www.npmjs.com/package/fast-alfred)
 ![GitHub](https://img.shields.io/github/license/avivbens/fast-alfred)
+[![GitHub Stars](https://img.shields.io/github/stars/avivbens/fast-alfred)](https://github.com/avivbens/fast-alfred/stargazers)
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/kcao7snkgx)
 
