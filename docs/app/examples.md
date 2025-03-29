@@ -9,6 +9,11 @@ next: false
 
 In here, you can find a list of real-life Workflows examples that demonstrate how to use `fast-alfred` in various scenarios.
 
+## [`Alfredo 🍝`](https://github.com/Avivbens/alfredo#readme)
+
+A cool collection of workflows, maintained by `Nx`, and powered by `fast-alfred`.  
+Each workflow has its own versioning and dependencies, so you can use them independently.
+
 ## [`Search Bookmarks 👀`](https://github.com/Avivbens/alfred-search-bookmark#readme)
 
 Search browser bookmarks in all your Chrome profiles.
