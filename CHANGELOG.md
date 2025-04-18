@@ -1,3 +1,12 @@
+## [2.3.1](https://github.com/Avivbens/fast-alfred/compare/v2.3.0...v2.3.1) (2025-04-18)
+
+
+### Bug Fixes
+
+* bump up `esbuild` to `v0.25` ([3567972](https://github.com/Avivbens/fast-alfred/commit/3567972b4b72febf4bf25f6ee8694b2e60362030))
+* bump up deps to resolve vulnerabilities ([d4d6e2d](https://github.com/Avivbens/fast-alfred/commit/d4d6e2d8b592375531ad4bc8c4a994ed7d80cd89))
+* run `npm audit fix` - 10 => 4 vulnerabilities ([4577db8](https://github.com/Avivbens/fast-alfred/commit/4577db88b88ff288632ab1b2baa9deaf35c616c5))
+
 # [2.3.0](https://github.com/Avivbens/fast-alfred/compare/v2.2.0...v2.3.0) (2025-03-29)
 
 
