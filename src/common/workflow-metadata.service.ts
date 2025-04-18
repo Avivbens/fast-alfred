@@ -33,7 +33,7 @@ export async function writeWorkflowMetadata(
 
         const dataToWrite = {
             ...metadata,
-            ...(ignoreConfigFile ? {} : workflowMetadata ?? {}),
+            ...(ignoreConfigFile ? {} : (workflowMetadata ?? {})),
         }
 
         const plistData = build(dataToWrite as never as PlistValue, { allowEmpty: true, pretty: true })
