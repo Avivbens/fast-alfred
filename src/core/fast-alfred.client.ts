@@ -101,14 +101,11 @@ export class FastAlfred {
             return null
         }
 
-        const { downloadUrl, latestVersion } = data
-
         const metadata: UpdatesConfigSavedMetadata = {
             config,
+            fetcherResponse: data,
             lastCheck: Date.now(),
             lastSnooze: null,
-            latestVersion: latestVersion,
-            latestDownloadUrl: downloadUrl,
         }
 
         this.cache.setWithTTL(METADATA_CACHE_KEY, metadata, { maxAge: checkInterval * 60 * 1000 })
@@ -142,7 +139,9 @@ export class FastAlfred {
             return scriptFilterOutput
         }
 
-        const { latestVersion, lastSnooze, config } = updatesMetadata
+        const { fetcherResponse, lastSnooze, config } = updatesMetadata
+        const { latestVersion } = fetcherResponse
+
         const currentVersion = this.alfredInfo.workflowVersion()
 
         /**

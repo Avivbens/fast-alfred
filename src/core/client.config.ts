@@ -50,13 +50,14 @@ export const DEFAULT_UPDATES_CONFIG: Required<Omit<UpdatesConfig, 'fetcher'>> = 
 export const UPDATE_ITEM = (metadata: UpdatesConfigSavedMetadata): AlfredListItem => {
     const iconsService = new IconService()
 
-    const { latestVersion, latestDownloadUrl, config } = metadata
+    const { fetcherResponse, config } = metadata
+    const { latestVersion, downloadUrl } = fetcherResponse
     const { snoozeTime } = config
 
     /**
      * Update detected, need to notify the user
      */
-    const updateArgs: UpdateScriptArgs = { latestDownloadUrl }
+    const updateArgs: UpdateScriptArgs = fetcherResponse
     const snoozeArgs: SnoozeScriptArgs = {
         snoozeTime,
         lastSnooze: Date.now(),
@@ -65,7 +66,7 @@ export const UPDATE_ITEM = (metadata: UpdatesConfigSavedMetadata): AlfredListIte
     const updateItem: AlfredListItem = {
         title: `Update available: ${latestVersion}`,
         subtitle: `Click to download the latest version of the workflow.`,
-        valid: Boolean(latestDownloadUrl), // TODO - validate user has experimental helpers for updates
+        valid: Boolean(downloadUrl), // TODO - validate user has experimental helpers for updates
         arg: JSON.stringify(updateArgs),
         icon: {
             path: iconsService.getIcon('sync'),

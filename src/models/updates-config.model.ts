@@ -1,6 +1,41 @@
 export interface UpdatesFetcherResponse {
+    /**
+     * @description
+     * The currently available latest version of the workflow.
+     */
     latestVersion: string
+
+    /**
+     * @description
+     * Direct download URL for the latest version of the workflow.
+     *
+     * If not provided, the workflow updater would not be interactive.
+     * In case no direct download available, the browser will be opened to the download page.
+     */
     downloadUrl?: string
+
+    /**
+     * @description
+     * If true, the download URL will be used for direct download.
+     *
+     * That means the workflow will be downloaded directly without opening a browser,
+     * and automatically installed.
+     *
+     * @default
+     * false
+     */
+    isDirectDownload?: boolean
+
+    /**
+     * @description
+     * If true, the workflow will be automatically installed after download.
+     *
+     * This is only relevant if `isDirectDownload` is true.
+     *
+     * @default
+     * false
+     */
+    autoInstall?: boolean
 }
 
 export type UpdatesFetcher = () => Promise<UpdatesFetcherResponse | null>
@@ -48,6 +83,8 @@ export interface UpdatesConfigSavedMetadata {
      */
     config: Required<UpdatesConfig>
 
+    fetcherResponse: UpdatesFetcherResponse
+
     /**
      * @description
      * Last time the updates were checked, in milliseconds since epoch.
@@ -59,23 +96,9 @@ export interface UpdatesConfigSavedMetadata {
      * Last time the updates were snoozed, in milliseconds since epoch.
      */
     lastSnooze: number | null
-
-    /**
-     * @description
-     * The latest version of the workflow.
-     */
-    latestVersion: string
-
-    /**
-     * @description
-     * The latest download URL of the workflow.
-     */
-    latestDownloadUrl?: string
 }
 
-export interface UpdateScriptArgs {
-    latestDownloadUrl?: string
-}
+export type UpdateScriptArgs = UpdatesFetcherResponse
 
 export interface SnoozeScriptArgs {
     snoozeTime: number
