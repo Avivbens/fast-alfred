@@ -1,6 +1,6 @@
 {
     "name": "fast-alfred",
-    "version": "2.3.1",
+    "version": "2.3.2",
     "description": "Your Alfred friendly framework, for developing Alfred workflows in TypeScript/JavaScript.",
     "keywords": [],
     "homepage": "https://github.com/Avivbens/fast-alfred",

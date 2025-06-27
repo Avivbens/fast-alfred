@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/Avivbens/fast-alfred/compare/v2.3.1...v2.3.2) (2025-06-27)
+
+
+### Bug Fixes
+
+* add `version` output on alfred client error metadata (from `node:os`) ([75a8ec6](https://github.com/Avivbens/fast-alfred/commit/75a8ec6fa9412fec4f8d599dfbe553c4a932f07c))
+
 ## [2.3.1](https://github.com/Avivbens/fast-alfred/compare/v2.3.0...v2.3.1) (2025-04-18)
 
 
