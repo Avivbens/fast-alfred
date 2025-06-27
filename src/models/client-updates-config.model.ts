@@ -40,7 +40,7 @@ export interface UpdatesFetcherResponse {
 
 export type UpdatesFetcher = () => Promise<UpdatesFetcherResponse | null>
 
-export interface UpdatesConfig {
+export interface ClientUpdatesConfig {
     /**
      * @description
      * Function to fetch updates information.
@@ -81,7 +81,7 @@ export interface UpdatesConfigSavedMetadata {
      * @description
      * Configuration policy for updates.
      */
-    config: Required<UpdatesConfig>
+    config: Required<ClientUpdatesConfig>
 
     fetcherResponse: UpdatesFetcherResponse
 

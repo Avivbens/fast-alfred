@@ -2,11 +2,11 @@ import { release, version } from 'node:os'
 import { platform } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type {
+    ClientUpdatesConfig,
     SnoozeScriptArgs,
     UpdateScriptArgs,
-    UpdatesConfig,
     UpdatesConfigSavedMetadata,
-} from '@models/updates-config.model'
+} from '@models/client-updates-config.model'
 import { IconService } from './services/icon.service'
 
 export const ERROR_MESSAGE = ({
@@ -42,7 +42,7 @@ ${version()}
 
 export const METADATA_CACHE_KEY = `__fast-alfred__updates-config-metadata__`
 
-export const DEFAULT_UPDATES_CONFIG: Required<Omit<UpdatesConfig, 'fetcher'>> = {
+export const DEFAULT_UPDATES_CONFIG: Required<Omit<ClientUpdatesConfig, 'fetcher'>> = {
     checkInterval: 60, // 60 minutes
     snoozeTime: 60, // 60 minutes
 }

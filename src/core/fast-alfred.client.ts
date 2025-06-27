@@ -4,7 +4,7 @@ import merge from 'lodash.merge'
 import { argv } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
-import type { UpdatesConfig, UpdatesConfigSavedMetadata } from '@models/updates-config.model'
+import type { ClientUpdatesConfig, UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
 import { DEFAULT_UPDATES_CONFIG, ERROR_MESSAGE, METADATA_CACHE_KEY, UPDATE_ITEM } from './client.config'
 import { AlfredInfoService } from './services/alfred-info.service'
 import { CacheConfigService } from './services/cache-config.service'
@@ -91,7 +91,7 @@ export class FastAlfred {
      */
     public readonly inputs: string[] = argv.slice(2)
 
-    private async fetchUpdatesData(config: Required<UpdatesConfig>): Promise<UpdatesConfigSavedMetadata | null> {
+    private async fetchUpdatesData(config: Required<ClientUpdatesConfig>): Promise<UpdatesConfigSavedMetadata | null> {
         this.log('Fetching updates data...')
         const { checkInterval, fetcher } = config
 
@@ -120,7 +120,7 @@ export class FastAlfred {
      *
      * @experimental
      */
-    public updates(config: UpdatesConfig): void {
+    public updates(config: ClientUpdatesConfig): void {
         const parsedConfig = merge({}, DEFAULT_UPDATES_CONFIG, config)
 
         const savedMetadata = this.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
