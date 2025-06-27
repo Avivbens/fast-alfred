@@ -1,4 +1,4 @@
-import { release } from 'node:os'
+import { release, version } from 'node:os'
 import { platform } from 'node:process'
 
 export const ERROR_MESSAGE = ({
@@ -22,6 +22,8 @@ ${error.stack}
 ${workflowName} - version: ${workflowVersion}
 Alfred ${alfredVersion}
 ${platform} ${release()}
+
+${version()}
 
 ------------------------------
 `.trim()
