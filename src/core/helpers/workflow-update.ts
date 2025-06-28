@@ -6,6 +6,10 @@ import { UpdaterAction } from '@models/client-updates-config.model'
 import { METADATA_CACHE_KEY } from '../client.config'
 import { FastAlfred } from '../fast-alfred.client'
 
+function getDesktopPath(): string {
+    return resolve(homedir(), 'Desktop')
+}
+
 ;(async () => {
     const alfredClient = new FastAlfred()
     alfredClient.log('Running workflow update script...')
@@ -40,9 +44,9 @@ import { FastAlfred } from '../fast-alfred.client'
     const sanitizedVersion = latestVersion.replace(/\//g, '-')
 
     const fileName = `${sanitizedVersion}_update_${Date.now()}.alfredworkflow`
-    const downloadPath = resolve(homedir(), fileName)
+    const downloadPath = resolve(getDesktopPath(), fileName)
 
-    await execPromise(`curl -L ${downloadUrl} -o ${downloadPath}`, { timeout: 10_000 })
+    await execPromise(`curl -L "${downloadUrl}" -o "${downloadPath}"`, { timeout: 10_000 })
 
     if (!autoInstall) {
         return
@@ -51,5 +55,5 @@ import { FastAlfred } from '../fast-alfred.client'
     /**
      * Install the new workflow version
      */
-    await execPromise(`open ${downloadPath}`)
+    await execPromise(`open "${downloadPath}"`)
 })()
