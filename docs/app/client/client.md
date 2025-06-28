@@ -134,3 +134,14 @@ Get multiple inputs passed into the script filter (by `$1`, `$2`, `$3`, etc).
 ::: tip TIP :zap:
 In case you have only one input, you can use the `input` property to get it.
 :::
+
+## `updates`
+
+Configures the automated workflow updates feature. This method should be called in every script filter where you want to enable update checking.
+
+For more details, see the [Automated Workflow Updates](/app/setup/updates.md) documentation.
+
+## `isDebuggerOpen`
+
+A boolean that indicates whether the Alfred debugger is currently open.
+This is useful for changing the behavior of your workflow during debugging (e.g., disabling caching or showing more verbose logging).

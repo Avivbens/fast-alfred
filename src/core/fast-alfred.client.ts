@@ -1,9 +1,11 @@
 import AlfredConfigService from 'alfred-config'
 import Conf from 'conf'
-import { argv } from 'node:process'
+import merge from 'lodash.merge'
+import { argv, env } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
-import { ERROR_MESSAGE } from './client.config'
+import type { ClientUpdatesConfig, UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
+import { DEFAULT_UPDATES_CONFIG, ERROR_MESSAGE, METADATA_CACHE_KEY, UPDATE_ITEM } from './client.config'
 import { AlfredInfoService } from './services/alfred-info.service'
 import { CacheConfigService } from './services/cache-config.service'
 import { EnvService } from './services/env.service'
@@ -59,6 +61,12 @@ export class FastAlfred {
 
     /**
      * @description
+     * Whether the debugger is open or not
+     */
+    public readonly isDebuggerOpen: boolean = env.alfred_debug === '1'
+
+    /**
+     * @description
      * Get and set dedicated cache for your Workflow
      *
      * You can leverage it to optimize your Workflow performance
@@ -89,12 +97,95 @@ export class FastAlfred {
      */
     public readonly inputs: string[] = argv.slice(2)
 
+    private async fetchUpdatesData(config: Required<ClientUpdatesConfig>): Promise<UpdatesConfigSavedMetadata | null> {
+        this.log('Fetching updates data...')
+        const { checkInterval, fetcher } = config
+
+        const data = await fetcher()
+        if (!data) {
+            this.log('No updates data found, exiting.')
+            return null
+        }
+
+        const metadata: UpdatesConfigSavedMetadata = {
+            config,
+            fetcherResponse: data,
+            lastCheck: Date.now(),
+            lastSnooze: null,
+        }
+
+        this.cache.setWithTTL(METADATA_CACHE_KEY, metadata, { maxAge: checkInterval * 60 * 1000 })
+        return metadata
+    }
+
+    /**
+     * @description
+     * Fetch updates data based on the updates policy defined in the configuration.
+     *
+     * @param config - Configuration for the updates
+     *
+     * @experimental
+     */
+    public updates(config: ClientUpdatesConfig): void {
+        const parsedConfig = merge({}, DEFAULT_UPDATES_CONFIG, config)
+
+        const savedMetadata = this.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
+        if (
+            !savedMetadata ||
+            savedMetadata.config.checkInterval !== parsedConfig.checkInterval ||
+            savedMetadata.config.snoozeTime !== parsedConfig.snoozeTime ||
+            this.isDebuggerOpen
+        ) {
+            this.fetchUpdatesData(parsedConfig)
+        }
+    }
+
+    private outputWithUpdate(scriptFilterOutput: AlfredScriptFilter): AlfredScriptFilter {
+        if (!scriptFilterOutput.items) {
+            return scriptFilterOutput
+        }
+
+        const updatesMetadata = this.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
+        if (!updatesMetadata) {
+            return scriptFilterOutput
+        }
+
+        const { fetcherResponse, lastSnooze, config } = updatesMetadata
+        const { latestVersion } = fetcherResponse
+
+        const currentVersion = this.alfredInfo.workflowVersion()
+
+        /**
+         * No available update detected
+         */
+        if (currentVersion === latestVersion) {
+            return scriptFilterOutput
+        }
+
+        /**
+         * Update detected, but snoozed
+         */
+        if (lastSnooze && Math.abs(Date.now() - lastSnooze) < config.snoozeTime * 60 * 1000) {
+            return scriptFilterOutput
+        }
+
+        const updateItem = UPDATE_ITEM(updatesMetadata, this.alfredInfo.workflowVersion())
+
+        /**
+         * Add the update item to the top of the script filter output
+         */
+        scriptFilterOutput.items.unshift(updateItem)
+        return scriptFilterOutput
+    }
+
     /**
      * @description
      * Outputs the script filter object to interacts with Alfred
      */
     public output(scriptFilterOutput: AlfredScriptFilter) {
-        const output = JSON.stringify(scriptFilterOutput, null, '\t')
+        const outputWithUpdate = this.outputWithUpdate(scriptFilterOutput)
+
+        const output = JSON.stringify(outputWithUpdate, null, '\t')
         console.log(output)
     }
 

@@ -3,4 +3,5 @@ export interface PackCommandOptions {
     verbose: boolean
     noPack: boolean
     noPackageJson: boolean
+    dropUpdateHelpers: boolean
 }

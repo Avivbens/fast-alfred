@@ -20,6 +20,12 @@ export const ALL_FRAMEWORK_ASSETS = [
      * FastAlfred run-time
      */
     resolve(__dirname, `../assets/run-node.sh`),
+
+    /**
+     * FastAlfred updates helpers
+     */
+    resolve(__dirname, `../assets/workflow-update.js`),
+    resolve(__dirname, `../assets/snooze.js`),
 ]
 
 export const GLOBAL_BANNER = `/**

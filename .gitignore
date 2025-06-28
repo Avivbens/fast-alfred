@@ -3,3 +3,6 @@ node_modules
 .DS_Store
 coverage
 .eslintcache
+
+# Exclude helpers builds
+/src/bundler/assets/*.js

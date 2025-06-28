@@ -7,6 +7,7 @@ import {
     updateWorkflowMetadataVersion,
     updateWorkflowPackageJsonVersion,
 } from '@bundler/services/update-workflow-version.service'
+import { dropUpdateHelpers, includeUpdatesHelpers } from '@bundler/services/updates-helpers.service'
 import { InjectLogger, LoggerService } from '../../core/logger'
 import { PackCommandOptions } from './models/pack-command-options.model'
 
@@ -67,8 +68,18 @@ export class PackCommand extends CommandRunner {
         return true
     }
 
+    @Option({
+        name: 'dropUpdateHelpers',
+        flags: '--drop-update-helpers',
+        defaultValue: false,
+        description: 'Do not include updates helpers in the workflow, and remove them in case they exist',
+    })
+    private isDropUpdateHelpers(): boolean {
+        return true
+    }
+
     public async run(passedParams: string[], options?: PackCommandOptions): Promise<void> {
-        const { targetVersion, verbose, noPack, noPackageJson } = options ?? {}
+        const { targetVersion, verbose, noPack, noPackageJson, dropUpdateHelpers } = options ?? {}
 
         if (verbose) {
             this.logger.setLogLevel('verbose')
@@ -105,6 +116,12 @@ export class PackCommand extends CommandRunner {
             await this.buildWorkflow()
             await this.updateWorkflowVersion(parsedTargetVersion, noPackageJson)
 
+            if (!dropUpdateHelpers) {
+                await this.includeUpdatesHelpers()
+            } else {
+                await this.dropUpdateHelpers()
+            }
+
             if (noPack) {
                 return
             }
@@ -129,6 +146,24 @@ export class PackCommand extends CommandRunner {
             await Promise.all(prms)
         } catch (error) {
             this.logger.verbose(`Failed to update Alfred Workflow version - ${error.stack}`)
+            throw error
+        }
+    }
+
+    private async includeUpdatesHelpers(): Promise<void> {
+        try {
+            await includeUpdatesHelpers()
+        } catch (error) {
+            this.logger.verbose(`Failed to include updates helpers - ${error.stack}`)
+            throw error
+        }
+    }
+
+    private async dropUpdateHelpers(): Promise<void> {
+        try {
+            await dropUpdateHelpers()
+        } catch (error) {
+            this.logger.verbose(`Failed to drop update helpers - ${error.stack}`)
             throw error
         }
     }
