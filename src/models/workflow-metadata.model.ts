@@ -7,7 +7,7 @@ export interface WorkflowMetadata {
     readme: string
     bundleid: string
     disabled: boolean
-    objects: object[]
+    objects: WorkflowObject[]
     createdby: string
     uidata: { [key: string]: Uidatum }
     name: string
@@ -21,9 +21,10 @@ export interface Connection {
     modifiers: number
     modifiersubtext: string
     vitoclose: boolean
+    sourceoutputuid?: string
 }
 
-export interface Object {
+export interface WorkflowObject {
     config: ObjectConfig
     uid: string
     type: string
@@ -52,11 +53,24 @@ export interface ObjectConfig {
     queuedelaycustom?: number
     withspace?: boolean
     text?: string
+    conditions?: Condition[]
+    elselabel?: string
+    hideelse?: boolean
+}
+
+export interface Condition {
+    inputstring: string
+    matchcasesensitive: boolean
+    matchmode: number
+    matchstring: string
+    outputlabel: string
+    uid: string
 }
 
 export interface Uidatum {
     xpos: number
     ypos: number
+    note?: string
 }
 
 export interface UserConfigurationConfig {
