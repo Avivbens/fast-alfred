@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/Avivbens/fast-alfred/compare/v2.4.0...v2.4.1) (2025-06-28)
+
+
+### Bug Fixes
+
+* **updates:** validate workflow version & metadata version macthes, lock fetch to avoid multi-calls ([18fb2ad](https://github.com/Avivbens/fast-alfred/commit/18fb2ad2707d7fd2a63d5521e83b494f1ed012d0))
+
 # [2.4.0](https://github.com/Avivbens/fast-alfred/compare/v2.3.2...v2.4.0) (2025-06-28)
 
 
