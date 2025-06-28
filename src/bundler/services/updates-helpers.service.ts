@@ -95,8 +95,7 @@ async function getTargetUids(
 
         const targetedFile = `${baseName}.js`
         const targetDirName = basename(targetDir)
-        const resolvedFileName = join(targetDirName, targetedFile)
-        return resolvedFileName
+        return join(targetDirName, targetedFile)
     })
 
     const targetUids: string[] = workflow?.objects
@@ -110,13 +109,24 @@ async function getTargetUids(
                 return false
             }
 
-            const scriptPath: string | undefined = script.split(' ')?.at(1)
+            const scriptParts = script.split(' ')
+            const scriptPath = scriptParts[1] ?? scriptParts[0]
+
             if (!scriptPath) {
                 return false
             }
 
-            const scriptName = basename(scriptPath, extname(scriptPath))
-            return mainScriptPaths.includes(scriptPath) && !exclude.includes(scriptName)
+            const normalizedScriptPath = scriptPath.replace(/\.js$/, '')
+
+            const scriptIsExcluded = exclude.includes(normalizedScriptPath)
+            if (scriptIsExcluded) {
+                return false
+            }
+
+            return mainScriptPaths.some((mainPath) => {
+                const normalizedMainPath = mainPath.replace(/\.js$/, '')
+                return normalizedMainPath === normalizedScriptPath
+            })
         })
         .map((obj) => obj.uid)
 
