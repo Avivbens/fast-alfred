@@ -9,6 +9,10 @@ export interface FastAlfredConfig {
         'readme' | 'createdby' | 'name' | 'category' | 'description' | 'webaddress'
     >
 
+    /**
+     * @description
+     * Build-time configuration for automated updates feature.
+     */
     updates?: UpdatesConfig
 
     /**

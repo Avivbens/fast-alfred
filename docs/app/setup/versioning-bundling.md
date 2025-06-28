@@ -23,9 +23,9 @@ You can find more details in the [Semantic Release](../ci/semantic-release.md) s
 
 ## Options
 
--   `-t` or `--target-version`: Set the version to use
--   `--no-pack`: Skip the packing process
--   `--no-package-json`: Skip updating the package.json & package-lock.json files
+- `-t` or `--target-version`: Set the version to use
+- `--no-pack`: Skip the packing process
+- `--no-package-json`: Skip updating the package.json & package-lock.json files
 
--   `-h` or `--help`: Display help message
--   `--verbose`: Display verbose output
+- `-h` or `--help`: Display help message
+- `--verbose`: Display verbose output

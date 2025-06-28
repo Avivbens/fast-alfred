@@ -23,6 +23,10 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
                 text: 'Versioning & Bundling 📦',
                 link: 'versioning-bundling',
             },
+            {
+                text: 'Automated Updates 🔄',
+                link: 'updates',
+            },
         ],
     },
     {

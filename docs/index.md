@@ -39,8 +39,8 @@ features:
       link: '/app/setup/bundler-options'
       details: Automatically bundle your workflow into a `.alfredworkflow` file.
       icon: '👨‍💻'
-    - title: Workflow Management
-      link: 'app/setup/workflow-metadata'
-      details: Automatically generate Alfred workflow metadata.
-      icon: '🔨'
+    - title: Automated Updates
+      link: '/app/setup/updates'
+      details: Built-in, build-time helpers for seamless workflow updates, including automated installation and update checks.
+      icon: '🔄'
 ---
