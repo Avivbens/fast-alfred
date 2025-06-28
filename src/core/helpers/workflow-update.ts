@@ -1,4 +1,4 @@
-import { tmpdir } from 'node:os'
+import { homedir } from 'node:os'
 import { resolve } from 'node:path'
 import { execPromise } from '@common/utils'
 import type { UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
@@ -39,9 +39,8 @@ import { FastAlfred } from '../fast-alfred.client'
      */
     const sanitizedVersion = latestVersion.replace(/\//g, '-')
 
-    const tempDir = tmpdir()
-    const fileName = `fast-alfred-update-${sanitizedVersion}_${Date.now()}.alfredworkflow`
-    const downloadPath = resolve(tempDir, fileName)
+    const fileName = `${sanitizedVersion}_update_${Date.now()}.alfredworkflow`
+    const downloadPath = resolve(homedir(), fileName)
 
     await execPromise(`curl -L ${downloadUrl} -o ${downloadPath}`, { timeout: 10_000 })
 

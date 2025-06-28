@@ -2,12 +2,34 @@ import type { UpdatesFetcher, UpdatesFetcherResponse } from '@models/client-upda
 import type { Asset, GitHubRelease } from '@models/github-release.model'
 
 export interface GitHubPolyRepoConfig {
+    /**
+     * @description
+     * The GitHub repository owner (username or organization).
+     */
     owner: string
+
+    /**
+     * @description
+     * The repository name.
+     */
     repo: string
+
+    /**
+     * @description
+     * Whether to automatically install the update if a direct download URL is available.
+     */
     autoInstall?: boolean
 }
 
 export interface GitHubMonoRepoConfig extends GitHubPolyRepoConfig {
+    /**
+     * @description
+     * Regular expression to match the release tag name.
+     * This will extract the version part from the tag name = `1.0.0`
+     *
+     * @example
+     * Example: `/release\/workflow-name\/(.*)/` to match versions like `release/workflow-name/1.0.0` - `1.0.0`
+     */
     releasePattern: RegExp
 }
 
@@ -79,10 +101,12 @@ export const gitHubMonoRepoFetcher = (config: GitHubMonoRepoConfig): UpdatesFetc
         const [latestRelease] = matchingReleases
 
         const { html_url, assets, tag_name: tagName } = latestRelease
+        const parsedVersion = tagName.match(releasePattern)?.at(1) || tagName
+
         const { downloadUrl } = findWorkflowAsset(assets)
 
         return {
-            latestVersion: tagName,
+            latestVersion: parsedVersion,
             downloadUrl: downloadUrl || html_url,
             isDirectDownload: Boolean(downloadUrl),
             autoInstall: autoInstall && Boolean(downloadUrl),
