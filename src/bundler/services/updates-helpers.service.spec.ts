@@ -78,7 +78,7 @@ describe('includeUpdatesHelpers', () => {
                 destinationuid: conditionalUid,
                 modifiers: 0,
                 modifiersubtext: '',
-                vitoclose: false,
+                vitoclose: true,
             },
         ])
 
