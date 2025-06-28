@@ -12,6 +12,7 @@ import { FastAlfred } from '../fast-alfred.client'
 
     const action = alfredClient.input
     if (action !== UpdaterAction.UPDATE) {
+        alfredClient.log(`Action "${action}" not matching expected "${UpdaterAction.UPDATE}"`)
         return
     }
 
@@ -36,8 +37,10 @@ import { FastAlfred } from '../fast-alfred.client'
     /**
      * Direct download, no need to open a URL
      */
+    const sanitizedVersion = latestVersion.replace(/\//g, '-')
+
     const tempDir = tmpdir()
-    const fileName = `fast-alfred-update-${latestVersion}_${Date.now()}.zip`
+    const fileName = `fast-alfred-update-${sanitizedVersion}_${Date.now()}.alfredworkflow`
     const downloadPath = resolve(tempDir, fileName)
 
     await execPromise(`curl -L ${downloadUrl} -o ${downloadPath}`, { timeout: 10_000 })
@@ -49,8 +52,5 @@ import { FastAlfred } from '../fast-alfred.client'
     /**
      * Install the new workflow version
      */
-    await execPromise(`unzip -o ${downloadPath}`)
-
-    const workflowFile = resolve(tempDir, '*.alfredworkflow')
-    await execPromise(`open ${workflowFile}`)
+    await execPromise(`open ${downloadPath}`)
 })()

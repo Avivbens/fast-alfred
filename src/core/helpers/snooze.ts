@@ -8,6 +8,7 @@ import { FastAlfred } from '../fast-alfred.client'
 
     const action = alfredClient.input
     if (action !== UpdaterAction.SNOOZE) {
+        alfredClient.log(`Action "${action}" not matching expected "${UpdaterAction.SNOOZE}"`)
         return
     }
 
