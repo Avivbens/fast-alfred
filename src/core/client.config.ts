@@ -54,9 +54,9 @@ export const UPDATE_ITEM = (metadata: UpdatesConfigSavedMetadata, currentVersion
 
     const downloadAvailable = Boolean(downloadUrl)
 
-    const subtitle = `Current version: ${currentVersion} | Latest version: ${latestVersion}`
+    const subtitle = `New version ${latestVersion} is available. ⌘+↵ to update, ⌥+↵ to snooze.`
     const updateItem: AlfredListItem = {
-        title: `Update available: ${latestVersion}`,
+        title: `Update available (current: ${currentVersion})`,
         subtitle,
         arg: UpdaterAction.NONE,
         icon: {
