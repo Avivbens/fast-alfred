@@ -7,6 +7,7 @@ import {
     updateWorkflowMetadataVersion,
     updateWorkflowPackageJsonVersion,
 } from '@bundler/services/update-workflow-version.service'
+import { includeUpdatesHelpers } from '@bundler/services/updates-helpers.service'
 import { InjectLogger, LoggerService } from '../../core/logger'
 import { PackCommandOptions } from './models/pack-command-options.model'
 
@@ -104,6 +105,7 @@ export class PackCommand extends CommandRunner {
         try {
             await this.buildWorkflow()
             await this.updateWorkflowVersion(parsedTargetVersion, noPackageJson)
+            await this.includeUpdatesHelpers()
 
             if (noPack) {
                 return
@@ -129,6 +131,15 @@ export class PackCommand extends CommandRunner {
             await Promise.all(prms)
         } catch (error) {
             this.logger.verbose(`Failed to update Alfred Workflow version - ${error.stack}`)
+            throw error
+        }
+    }
+
+    private async includeUpdatesHelpers(): Promise<void> {
+        try {
+            await includeUpdatesHelpers()
+        } catch (error) {
+            this.logger.verbose(`Failed to include updates helpers - ${error.stack}`)
             throw error
         }
     }

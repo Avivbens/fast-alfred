@@ -130,7 +130,12 @@ export class FastAlfred {
         const parsedConfig = merge({}, DEFAULT_UPDATES_CONFIG, config)
 
         const savedMetadata = this.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
-        if (!savedMetadata) {
+        if (
+            !savedMetadata ||
+            savedMetadata.config.checkInterval !== parsedConfig.checkInterval ||
+            savedMetadata.config.snoozeTime !== parsedConfig.snoozeTime ||
+            this.isDebuggerOpen
+        ) {
             this.fetchUpdatesData(parsedConfig)
         }
     }
@@ -164,7 +169,7 @@ export class FastAlfred {
             return scriptFilterOutput
         }
 
-        const updateItem = UPDATE_ITEM(updatesMetadata)
+        const updateItem = UPDATE_ITEM(updatesMetadata, this.alfredInfo.workflowVersion())
 
         /**
          * Add the update item to the top of the script filter output

@@ -98,9 +98,22 @@ export interface UpdatesConfigSavedMetadata {
     lastSnooze: number | null
 }
 
-export type UpdateScriptArgs = UpdatesFetcherResponse
+export enum UpdaterAction {
+    /**
+     * @description
+     * Used as a placeholder for no action.
+     */
+    NONE = '__fast-alfred_managed_no-action-callback',
 
-export interface SnoozeScriptArgs {
-    snoozeTime: number
-    lastSnooze: number
+    /**
+     * @description
+     * Update the workflow to the latest version.
+     */
+    UPDATE = '__fast-alfred_managed_update-callback',
+
+    /**
+     * @description
+     * Snooze the update for a while.
+     */
+    SNOOZE = '__fast-alfred_managed_snooze-callback',
 }
