@@ -1,7 +1,7 @@
 import AlfredConfigService from 'alfred-config'
 import Conf from 'conf'
 import merge from 'lodash.merge'
-import { argv } from 'node:process'
+import { argv, env } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
 import type { ClientUpdatesConfig, UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
@@ -58,6 +58,12 @@ export class FastAlfred {
      * All Workflow user configuration would be injected in here
      */
     public readonly env = new EnvService()
+
+    /**
+     * @description
+     * Whether the debugger is open or not
+     */
+    public readonly isDebuggerOpen: boolean = env.alfred_debug === '1'
 
     /**
      * @description
