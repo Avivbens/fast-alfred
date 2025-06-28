@@ -192,6 +192,56 @@ function upsertWorkflowConnection(
     workflow.connections[from].push(connectionObject)
 }
 
+export async function dropUpdateHelpers(): Promise<void> {
+    const workflow = await readWorkflowMetadata()
+
+    const conditionalObjectUids = workflow.objects
+        .map((obj) => obj.uid)
+        .filter((uid) => uid.startsWith(CONDITIONAL_OBJECT_UID('')))
+
+    for (const conditionalUid of conditionalObjectUids) {
+        const originalUid = conditionalUid.replace(CONDITIONAL_OBJECT_UID(''), '')
+
+        const originalConnections = (workflow.connections[conditionalUid] || [])
+            // else case
+            .filter((conn) => conn.sourceoutputuid === undefined)
+
+        for (const conn of originalConnections) {
+            upsertWorkflowConnection(workflow, conn.destinationuid, originalUid, conn)
+        }
+    }
+
+    /**
+     * Remove all helpers objects.
+     */
+    workflow.objects = workflow.objects.filter((obj) => !obj.uid.startsWith('__fast-alfred_managed__'))
+
+    /**
+     * Remove all helpers connections.
+     */
+    for (const uid of Object.keys(workflow.connections)) {
+        if (uid.startsWith('__fast-alfred_managed__')) {
+            delete workflow.connections[uid]
+            continue
+        }
+
+        workflow.connections[uid] = workflow.connections[uid].filter(
+            (conn) => !conn.destinationuid.startsWith('__fast-alfred_managed__'),
+        )
+    }
+
+    /**
+     * Remove all helpers UI data.
+     */
+    for (const uid of Object.keys(workflow.uidata)) {
+        if (uid.startsWith('__fast-alfred_managed__')) {
+            delete workflow.uidata[uid]
+        }
+    }
+
+    await writeWorkflowMetadata(workflow)
+}
+
 export async function includeUpdatesHelpers(): Promise<void> {
     const [workflow, bundlerOptions, { updates }] = await Promise.all([
         readWorkflowMetadata(),
