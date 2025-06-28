@@ -1,3 +1,19 @@
+# [2.4.0](https://github.com/Avivbens/fast-alfred/compare/v2.3.2...v2.4.0) (2025-06-28)
+
+
+### Bug Fixes
+
+* **update-helpers:** drop unzip action ([e977bbf](https://github.com/Avivbens/fast-alfred/commit/e977bbfb7cbc889fe7db2ca19808fd572812b113))
+
+
+### Features
+
+* **client:** add new `isDebuggerOpen` property ([cc6ddb7](https://github.com/Avivbens/fast-alfred/commit/cc6ddb713ea58fdece730faa4f03e503e3c91321))
+* support `updates` client function for auto-handling of workflow updates ([20cd21f](https://github.com/Avivbens/fast-alfred/commit/20cd21f6a3caed849c98e93548ade0ab99c88824))
+* **updates:** add support for new helpers to check updates, including interactive options ([a5a716c](https://github.com/Avivbens/fast-alfred/commit/a5a716c92d09ddd43226a27f2fed0268a59ffa26))
+* **updates:** support `--drop-update-helpers` for easy development without updates system ([97183e7](https://github.com/Avivbens/fast-alfred/commit/97183e7d1ad4a226ee7f97c075c57996efa01bae))
+* **updates:** support out-of-the-box fetchers for github poly and mono repos ([51dd38d](https://github.com/Avivbens/fast-alfred/commit/51dd38d3cbae779c465370d70363b7b9d43a3968))
+
 ## [2.3.2](https://github.com/Avivbens/fast-alfred/compare/v2.3.1...v2.3.2) (2025-06-27)
 
 
