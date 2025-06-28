@@ -7,8 +7,17 @@ import type { Connection, WorkflowMetadata, WorkflowObject } from '@models/workf
 import type { BundlerOptions } from '../models'
 import { buildOptions } from '../utils/bundler.utils'
 
-const UPDATER_WORKFLOW_UPDATE_UID = '__fast-alfred_managed__updater_workflow-update'
-const UPDATER_SNOOZE_UID = '__fast-alfred_managed__updater_snooze'
+const MANAGED_BY_FAST_ALFRED_PREFIX = '__fast-alfred_managed__'
+
+const NOTE_WORKFLOW_UPDATE_HELPER = 'Workflow Update Helper'
+const NOTE_SNOOZE_HELPER = 'Snooze Updates Helper'
+const NOTE_CONDITIONAL_HELPER = 'Conditional Updates Helper'
+
+const CONDITIONAL_ELSE_LABEL = 'Default Behavior'
+const CONDITIONAL_OUTPUT_LABEL = 'Managed versions updates'
+
+const UPDATER_WORKFLOW_UPDATE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}updater_workflow-update`
+const UPDATER_SNOOZE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}updater_snooze`
 
 const MODIFIERS = {
     NONE: 0,
@@ -20,8 +29,8 @@ const XPOS_BASE = 1_500
 const XPOS_DIFF = 150
 const YPOS_BASE = 0
 
-const CONDITIONAL_OBJECT_UID = (from: string) => `__fast-alfred_managed__conditional_${from}`
-const CONDITIONAL_CONDITION_UID = (from: string) => `__fast-alfred_managed__condition_${from}`
+const CONDITIONAL_OBJECT_UID = (from: string) => `${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_${from}`
+const CONDITIONAL_CONDITION_UID = (from: string) => `${MANAGED_BY_FAST_ALFRED_PREFIX}condition_${from}`
 
 const CONDITIONAL_OBJECT = (from: string): WorkflowObject => ({
     type: 'alfred.workflow.utility.conditional',
@@ -33,12 +42,12 @@ const CONDITIONAL_OBJECT = (from: string): WorkflowObject => ({
                 inputstring: '{query}',
                 matchcasesensitive: false,
                 matchmode: 4,
-                matchstring: '__fast-alfred_managed_',
-                outputlabel: 'Managed versions updates',
+                matchstring: MANAGED_BY_FAST_ALFRED_PREFIX,
+                outputlabel: CONDITIONAL_OUTPUT_LABEL,
                 uid: CONDITIONAL_CONDITION_UID(from),
             },
         ],
-        elselabel: 'else',
+        elselabel: CONDITIONAL_ELSE_LABEL,
         hideelse: false,
     },
 })
@@ -216,20 +225,20 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
      * Remove all helpers objects.
      */
     newWorkflow.objects = newWorkflow.objects.filter(
-        (obj: WorkflowObject) => !obj.uid.startsWith('__fast-alfred_managed__'),
+        (obj: WorkflowObject) => !obj.uid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX),
     )
 
     /**
      * Remove all helpers connections.
      */
     for (const uid of Object.keys(newWorkflow.connections)) {
-        if (uid.startsWith('__fast-alfred_managed__')) {
+        if (uid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX)) {
             delete newWorkflow.connections[uid]
             continue
         }
 
         newWorkflow.connections[uid] = newWorkflow.connections[uid].filter(
-            (conn: Connection) => !conn.destinationuid.startsWith('__fast-alfred_managed__'),
+            (conn: Connection) => !conn.destinationuid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX),
         )
     }
 
@@ -237,7 +246,7 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
      * Remove all helpers UI data.
      */
     for (const uid of Object.keys(newWorkflow.uidata)) {
-        if (uid.startsWith('__fast-alfred_managed__')) {
+        if (uid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX)) {
             delete newWorkflow.uidata[uid]
         }
     }
@@ -276,12 +285,12 @@ export async function includeUpdatesHelpers(): Promise<void> {
 
     const targetUidsCount = targetUids.length
     upsertWorkflowObject(workflow, WORKFLOW_UPDATE_OBJECT(targetDirName, assetsDirName), {
-        note: 'Workflow Update Helper',
+        note: NOTE_WORKFLOW_UPDATE_HELPER,
         xpos: XPOS_BASE + XPOS_DIFF * 2,
         ypos: YPOS_BASE + targetUidsCount * XPOS_DIFF,
     })
     upsertWorkflowObject(workflow, SNOOZE_OBJECT(targetDirName, assetsDirName), {
-        note: 'Snooze Updates Helper',
+        note: NOTE_SNOOZE_HELPER,
         xpos: XPOS_BASE + XPOS_DIFF * 2,
         ypos: YPOS_BASE + targetUidsCount * XPOS_DIFF + XPOS_DIFF,
     })
@@ -299,7 +308,7 @@ export async function includeUpdatesHelpers(): Promise<void> {
          */
         const originalObjectUiData = workflow.uidata[uid]
         upsertWorkflowObject(workflow, conditionalObject, {
-            note: 'Conditional Updates Helper',
+            note: NOTE_CONDITIONAL_HELPER,
             xpos: originalObjectUiData.xpos + XPOS_DIFF,
             ypos: originalObjectUiData.ypos,
         })
