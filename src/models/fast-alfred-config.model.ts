@@ -1,4 +1,5 @@
 import type { BundlerOptions } from '@bundler/models'
+import type { UpdatesConfig } from './updates-config.model'
 import type { WorkflowMetadata } from './workflow-metadata.model'
 
 export interface FastAlfredConfig {
@@ -7,6 +8,8 @@ export interface FastAlfredConfig {
         WorkflowMetadata,
         'readme' | 'createdby' | 'name' | 'category' | 'description' | 'webaddress'
     >
+
+    updates?: UpdatesConfig
 
     /**
      * @description
