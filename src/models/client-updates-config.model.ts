@@ -87,6 +87,13 @@ export interface UpdatesConfigSavedMetadata {
 
     /**
      * @description
+     * Current version of the workflow.
+     * Used to determine if the metadata is still valid.
+     */
+    currentVersion: string
+
+    /**
+     * @description
      * Last time the updates were checked, in milliseconds since epoch.
      */
     lastCheck: number

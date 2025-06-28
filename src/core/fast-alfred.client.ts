@@ -5,7 +5,13 @@ import { argv, env } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
 import type { ClientUpdatesConfig, UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
-import { DEFAULT_UPDATES_CONFIG, ERROR_MESSAGE, METADATA_CACHE_KEY, UPDATE_ITEM } from './client.config'
+import {
+    DEFAULT_UPDATES_CONFIG,
+    ERROR_MESSAGE,
+    UPDATES_FETCH_LOCK_KEY,
+    UPDATES_METADATA_KEY,
+    UPDATE_ITEM,
+} from './client.config'
 import { AlfredInfoService } from './services/alfred-info.service'
 import { CacheConfigService } from './services/cache-config.service'
 import { EnvService } from './services/env.service'
@@ -101,21 +107,27 @@ export class FastAlfred {
         this.log('Fetching updates data...')
         const { checkInterval, fetcher } = config
 
-        const data = await fetcher()
-        if (!data) {
-            this.log('No updates data found, exiting.')
-            return null
-        }
+        try {
+            const data = await fetcher()
+            if (!data) {
+                this.log('No updates data found, exiting.')
+                return null
+            }
 
-        const metadata: UpdatesConfigSavedMetadata = {
-            config,
-            fetcherResponse: data,
-            lastCheck: Date.now(),
-            lastSnooze: null,
-        }
+            const currentVersion = this.alfredInfo.workflowVersion()
+            const metadata: UpdatesConfigSavedMetadata = {
+                config,
+                currentVersion,
+                fetcherResponse: data,
+                lastCheck: Date.now(),
+                lastSnooze: null,
+            }
 
-        this.cache.setWithTTL(METADATA_CACHE_KEY, metadata, { maxAge: checkInterval * 60 * 1000 })
-        return metadata
+            this.cache.setWithTTL(UPDATES_METADATA_KEY, metadata, { maxAge: checkInterval * 60 * 1000 })
+            return metadata
+        } finally {
+            this.cache.delete(UPDATES_FETCH_LOCK_KEY)
+        }
     }
 
     /**
@@ -127,15 +139,24 @@ export class FastAlfred {
      * @experimental
      */
     public updates(config: ClientUpdatesConfig): void {
+        if (this.cache.get(UPDATES_FETCH_LOCK_KEY)) {
+            return
+        }
+
         const parsedConfig = merge({}, DEFAULT_UPDATES_CONFIG, config)
 
-        const savedMetadata = this.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
-        if (
+        const currentVersion = this.alfredInfo.workflowVersion()
+        const savedMetadata = this.cache.get<UpdatesConfigSavedMetadata>(UPDATES_METADATA_KEY)
+
+        const needsFetch =
             !savedMetadata ||
+            currentVersion !== savedMetadata.currentVersion ||
             savedMetadata.config.checkInterval !== parsedConfig.checkInterval ||
             savedMetadata.config.snoozeTime !== parsedConfig.snoozeTime ||
             this.isDebuggerOpen
-        ) {
+
+        if (needsFetch) {
+            this.cache.setWithTTL(UPDATES_FETCH_LOCK_KEY, true, { maxAge: 60 * 1000 }) // 1 minute lock
             this.fetchUpdatesData(parsedConfig)
         }
     }
@@ -145,7 +166,7 @@ export class FastAlfred {
             return scriptFilterOutput
         }
 
-        const updatesMetadata = this.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
+        const updatesMetadata = this.cache.get<UpdatesConfigSavedMetadata>(UPDATES_METADATA_KEY)
         if (!updatesMetadata) {
             return scriptFilterOutput
         }

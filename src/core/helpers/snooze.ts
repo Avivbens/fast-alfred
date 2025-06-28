@@ -1,5 +1,5 @@
 import { UpdaterAction, type UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
-import { METADATA_CACHE_KEY } from '../client.config'
+import { UPDATES_METADATA_KEY } from '../client.config'
 import { FastAlfred } from '../fast-alfred.client'
 
 ;(async () => {
@@ -12,7 +12,7 @@ import { FastAlfred } from '../fast-alfred.client'
         return
     }
 
-    const currentMetadata = alfredClient.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
+    const currentMetadata = alfredClient.cache.get<UpdatesConfigSavedMetadata>(UPDATES_METADATA_KEY)
     if (!currentMetadata) {
         alfredClient.log('No metadata found in cache, cannot snooze updates.')
         return
@@ -34,7 +34,7 @@ import { FastAlfred } from '../fast-alfred.client'
         lastSnooze: Date.now(),
     }
 
-    alfredClient.cache.setWithTTL(METADATA_CACHE_KEY, metadata, {
+    alfredClient.cache.setWithTTL(UPDATES_METADATA_KEY, metadata, {
         maxAge: currentMetadata.config.checkInterval * 60 * 1000,
     })
 })()

@@ -39,7 +39,8 @@ ${version()}
  * Updates mechanism configuration
  */
 
-export const METADATA_CACHE_KEY = `__fast-alfred__updates-config-metadata__`
+export const UPDATES_METADATA_KEY = `__fast-alfred__updates-config-metadata__`
+export const UPDATES_FETCH_LOCK_KEY = `__fast-alfred__updates-fetch-lock__`
 
 export const DEFAULT_UPDATES_CONFIG: Required<Omit<ClientUpdatesConfig, 'fetcher'>> = {
     checkInterval: 60 * 24, // 24 hours

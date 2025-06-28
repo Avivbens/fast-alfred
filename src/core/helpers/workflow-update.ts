@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import { execPromise } from '@common/utils'
 import type { UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
 import { UpdaterAction } from '@models/client-updates-config.model'
-import { METADATA_CACHE_KEY } from '../client.config'
+import { UPDATES_METADATA_KEY } from '../client.config'
 import { FastAlfred } from '../fast-alfred.client'
 
 function getDesktopPath(): string {
@@ -20,7 +20,7 @@ function getDesktopPath(): string {
         return
     }
 
-    const currentMetadata = alfredClient.cache.get<UpdatesConfigSavedMetadata>(METADATA_CACHE_KEY)
+    const currentMetadata = alfredClient.cache.get<UpdatesConfigSavedMetadata>(UPDATES_METADATA_KEY)
     if (!currentMetadata) {
         alfredClient.log('No metadata found in cache, cannot snooze updates.')
         return
