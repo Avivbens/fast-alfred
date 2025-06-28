@@ -16,9 +16,9 @@ const MODIFIERS = {
     OPT: 524288,
 }
 
-const XPOS_BASE = 0
+const XPOS_BASE = 1_500
 const XPOS_DIFF = 150
-const YPOS_BASE = 1_100
+const YPOS_BASE = 0
 
 const CONDITIONAL_OBJECT_UID = (from: string) => `__fast-alfred_managed__conditional_${from}`
 const CONDITIONAL_CONDITION_UID = (from: string) => `__fast-alfred_managed__condition_${from}`
@@ -216,19 +216,19 @@ export async function includeUpdatesHelpers(): Promise<void> {
     const targetUidsCount = targetUids.length
     upsertWorkflowObject(workflow, WORKFLOW_UPDATE_OBJECT(targetDirName, assetsDirName), {
         note: 'Workflow Update Helper',
-        xpos: XPOS_BASE,
+        xpos: XPOS_BASE + XPOS_DIFF * 2,
         ypos: YPOS_BASE + targetUidsCount * XPOS_DIFF,
     })
     upsertWorkflowObject(workflow, SNOOZE_OBJECT(targetDirName, assetsDirName), {
-        note: 'Snooze Helper',
-        xpos: XPOS_BASE,
+        note: 'Snooze Updates Helper',
+        xpos: XPOS_BASE + XPOS_DIFF * 2,
         ypos: YPOS_BASE + targetUidsCount * XPOS_DIFF + XPOS_DIFF,
     })
 
     /**
      * Add connections for the new objects to all target UIDs.
      */
-    for (const [index, uid] of targetUids.entries()) {
+    for (const uid of targetUids) {
         const conditionalObject = CONDITIONAL_OBJECT(uid)
         const conditionalUid = conditionalObject.uid
         const conditionUid = conditionalObject.config.conditions?.[0].uid
@@ -236,11 +236,11 @@ export async function includeUpdatesHelpers(): Promise<void> {
         /**
          * Upsert the conditional object to the workflow.
          */
-        const ypos = YPOS_BASE + index * XPOS_DIFF
+        const originalObjectUiData = workflow.uidata[uid]
         upsertWorkflowObject(workflow, conditionalObject, {
-            note: 'Conditional Helper',
-            xpos: XPOS_BASE,
-            ypos,
+            note: 'Conditional Updates Helper',
+            xpos: originalObjectUiData.xpos + XPOS_DIFF,
+            ypos: originalObjectUiData.ypos,
         })
 
         const originalConnections = [...(workflow.connections[uid] || [])].filter(
