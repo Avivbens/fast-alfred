@@ -42,8 +42,8 @@ ${version()}
 export const METADATA_CACHE_KEY = `__fast-alfred__updates-config-metadata__`
 
 export const DEFAULT_UPDATES_CONFIG: Required<Omit<ClientUpdatesConfig, 'fetcher'>> = {
-    checkInterval: 60, // 60 minutes
-    snoozeTime: 60, // 60 minutes
+    checkInterval: 60 * 24, // 24 hours
+    snoozeTime: 60 * 24 * 3, // 3 days
 }
 
 export const UPDATE_ITEM = (metadata: UpdatesConfigSavedMetadata, currentVersion: string): AlfredListItem => {
