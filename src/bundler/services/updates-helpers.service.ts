@@ -170,11 +170,12 @@ function upsertWorkflowConnection(
     }
 
     const connectionObject: Connection = {
-        destinationuid: newObjectUid,
         modifiers: MODIFIERS.NONE,
         modifiersubtext: '',
         vitoclose: false,
         ...options,
+        // Ensure the destination is the new one
+        destinationuid: newObjectUid,
     }
 
     if (connectionObject.sourceoutputuid === undefined) {
@@ -192,58 +193,66 @@ function upsertWorkflowConnection(
     workflow.connections[from].push(connectionObject)
 }
 
-export async function dropUpdateHelpers(): Promise<void> {
-    const workflow = await readWorkflowMetadata()
+function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMetadata {
+    const newWorkflow = JSON.parse(JSON.stringify(workflow))
 
-    const conditionalObjectUids = workflow.objects
-        .map((obj) => obj.uid)
-        .filter((uid) => uid.startsWith(CONDITIONAL_OBJECT_UID('')))
+    const conditionalObjectUids = newWorkflow.objects
+        .map((obj: WorkflowObject) => obj.uid)
+        .filter((uid: string) => uid.startsWith(CONDITIONAL_OBJECT_UID('')))
 
     for (const conditionalUid of conditionalObjectUids) {
         const originalUid = conditionalUid.replace(CONDITIONAL_OBJECT_UID(''), '')
 
-        const originalConnections = (workflow.connections[conditionalUid] || [])
+        const originalConnections = (newWorkflow.connections[conditionalUid] || [])
             // else case
-            .filter((conn) => conn.sourceoutputuid === undefined)
+            .filter((conn: Connection) => conn.sourceoutputuid === undefined)
 
         for (const conn of originalConnections) {
-            upsertWorkflowConnection(workflow, conn.destinationuid, originalUid, conn)
+            upsertWorkflowConnection(newWorkflow, conn.destinationuid, originalUid, conn)
         }
     }
 
     /**
      * Remove all helpers objects.
      */
-    workflow.objects = workflow.objects.filter((obj) => !obj.uid.startsWith('__fast-alfred_managed__'))
+    newWorkflow.objects = newWorkflow.objects.filter(
+        (obj: WorkflowObject) => !obj.uid.startsWith('__fast-alfred_managed__'),
+    )
 
     /**
      * Remove all helpers connections.
      */
-    for (const uid of Object.keys(workflow.connections)) {
+    for (const uid of Object.keys(newWorkflow.connections)) {
         if (uid.startsWith('__fast-alfred_managed__')) {
-            delete workflow.connections[uid]
+            delete newWorkflow.connections[uid]
             continue
         }
 
-        workflow.connections[uid] = workflow.connections[uid].filter(
-            (conn) => !conn.destinationuid.startsWith('__fast-alfred_managed__'),
+        newWorkflow.connections[uid] = newWorkflow.connections[uid].filter(
+            (conn: Connection) => !conn.destinationuid.startsWith('__fast-alfred_managed__'),
         )
     }
 
     /**
      * Remove all helpers UI data.
      */
-    for (const uid of Object.keys(workflow.uidata)) {
+    for (const uid of Object.keys(newWorkflow.uidata)) {
         if (uid.startsWith('__fast-alfred_managed__')) {
-            delete workflow.uidata[uid]
+            delete newWorkflow.uidata[uid]
         }
     }
 
-    await writeWorkflowMetadata(workflow)
+    return newWorkflow
+}
+
+export async function dropUpdateHelpers(): Promise<void> {
+    const workflow = await readWorkflowMetadata()
+    const updatedWorkflow = getWorkflowWithDroppedHelpers(workflow)
+    await writeWorkflowMetadata(updatedWorkflow)
 }
 
 export async function includeUpdatesHelpers(): Promise<void> {
-    const [workflow, bundlerOptions, { updates }] = await Promise.all([
+    const [initialWorkflow, bundlerOptions, { updates }] = await Promise.all([
         readWorkflowMetadata(),
         buildOptions(),
         readConfigFile(),
@@ -254,10 +263,12 @@ export async function includeUpdatesHelpers(): Promise<void> {
         return
     }
 
-    const targetUids = await getTargetUids(updates, bundlerOptions, workflow)
+    const targetUids = await getTargetUids(updates, bundlerOptions, initialWorkflow)
     if (!targetUids.length) {
         return
     }
+
+    const workflow = getWorkflowWithDroppedHelpers(initialWorkflow)
 
     const { targetDir, assetsDir } = bundlerOptions
     const targetDirName = basename(targetDir)
@@ -298,24 +309,25 @@ export async function includeUpdatesHelpers(): Promise<void> {
         )
         workflow.connections[uid] = []
 
-        // Connect the script filter to the conditional object
-        upsertWorkflowConnection(workflow, conditionalUid, uid)
+        // For each original connection, create a new one that goes through the conditional object
+        for (const conn of originalConnections) {
+            // Connect the script filter to the conditional object, preserving original connection config
+            upsertWorkflowConnection(workflow, conditionalUid, uid, conn)
 
-        // Connect the conditional object to the update helpers
+            // Re-connect the original destination from the conditional object (else case)
+            upsertWorkflowConnection(workflow, conn.destinationuid, conditionalUid, {
+                ...conn,
+                sourceoutputuid: undefined, // This is the 'else' case
+            })
+        }
+
+        // Connect the conditional object to the update helpers (if case)
         upsertWorkflowConnection(workflow, UPDATER_WORKFLOW_UPDATE_UID, conditionalUid, {
             ...(conditionUid ? { sourceoutputuid: conditionUid } : {}),
         })
         upsertWorkflowConnection(workflow, UPDATER_SNOOZE_UID, conditionalUid, {
             ...(conditionUid ? { sourceoutputuid: conditionUid } : {}),
         })
-
-        // Re-connect the original connections from the conditional object (else case)
-        for (const conn of originalConnections) {
-            upsertWorkflowConnection(workflow, conn.destinationuid, conditionalUid, {
-                ...conn,
-                sourceoutputuid: undefined,
-            })
-        }
     }
 
     await writeWorkflowMetadata(workflow)
