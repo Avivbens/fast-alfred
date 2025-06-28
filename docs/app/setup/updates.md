@@ -13,6 +13,10 @@ This feature is new and subject to change. Please use with caution and report an
 
 The process is reversible and preserves all your existing workflow connections, including those with modifier keys.
 
+#### DEMO
+
+![Runtime Example](/updater-example.gif)
+
 ## Build-Time Configuration
 
 To enable the feature, change the configuration file `.fast-alfred.config.cjs` at the root of your project to include `updates`.
