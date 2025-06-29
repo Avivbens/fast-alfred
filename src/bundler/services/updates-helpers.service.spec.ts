@@ -3,7 +3,15 @@ import { glob } from 'glob'
 import { readConfigFile } from '@common/user-config.service'
 import { readWorkflowMetadata, writeWorkflowMetadata } from '@common/workflow-metadata.service'
 import { workflowMock } from './mocks/workflow.mock'
-import { dropUpdateHelpers, includeUpdatesHelpers } from './updates-helpers.service'
+import {
+    CONDITIONAL_CONDITION_UID,
+    CONDITIONAL_OBJECT_UID,
+    DEPRECATED_CONDITIONAL_OBJECT_UID,
+    MANAGED_BY_FAST_ALFRED_PREFIX,
+    UPDATER_WORKFLOW_UPDATE_UID,
+    dropUpdateHelpers,
+    includeUpdatesHelpers,
+} from './updates-helpers.service'
 
 jest.mock('glob')
 jest.mock('@common/user-config.service')
@@ -74,7 +82,7 @@ describe('includeUpdatesHelpers', () => {
 
         expect(writeWorkflowMetadataMock).toHaveBeenCalledTimes(1)
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
-        const conditionalUid = `__fast-alfred_managed__conditional_from_${scriptFilterWithArgsUid}_to_${originalDestinationUid}`
+        const conditionalUid = CONDITIONAL_OBJECT_UID(scriptFilterWithArgsUid, originalDestinationUid)
         // Check that the connection was correctly re-wired from the script filter with args
         expect(finalWorkflow.connections[scriptFilterWithArgsUid][0].destinationuid).toBe(conditionalUid)
     })
@@ -93,7 +101,7 @@ describe('includeUpdatesHelpers', () => {
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
 
         expect(finalWorkflow.objects).toHaveLength(7)
-        expect(finalWorkflow.objects.some((o: any) => o.uid.includes('__fast-alfred_managed__'))).toBe(true)
+        expect(finalWorkflow.objects.some((o: any) => o.uid.includes(MANAGED_BY_FAST_ALFRED_PREFIX))).toBe(true)
     })
 
     it('should correctly re-wire connections', async () => {
@@ -109,8 +117,8 @@ describe('includeUpdatesHelpers', () => {
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
         const originalScriptFilterUid = 'CE84ED38-CD11-4B81-9E07-91C9D10EEE3C'
         const originalDestinationUid = 'FD52D6DE-838E-4CEF-9D97-F47BAC0D8F71'
-        const conditionalUid = `__fast-alfred_managed__conditional_from_${originalScriptFilterUid}_to_${originalDestinationUid}`
-        const conditionUid = `__fast-alfred_managed__condition_from_${originalScriptFilterUid}_to_${originalDestinationUid}`
+        const conditionalUid = CONDITIONAL_OBJECT_UID(originalScriptFilterUid, originalDestinationUid)
+        const conditionUid = CONDITIONAL_CONDITION_UID(originalScriptFilterUid, originalDestinationUid)
 
         // Original script filter now connects to the conditional object
         expect(finalWorkflow.connections[originalScriptFilterUid]).toEqual([
@@ -128,7 +136,7 @@ describe('includeUpdatesHelpers', () => {
         // Conditional object connects to update helpers
         expect(conditionalConnections).toContainEqual(
             expect.objectContaining({
-                destinationuid: '__fast-alfred_managed__updater_workflow-update',
+                destinationuid: UPDATER_WORKFLOW_UPDATE_UID,
                 sourceoutputuid: conditionUid,
             }),
         )
@@ -166,8 +174,8 @@ describe('includeUpdatesHelpers', () => {
         await includeUpdatesHelpers()
 
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
-        const conditionalUid1 = `__fast-alfred_managed__conditional_from_${originalScriptFilterUid}_to_${originalDestination1}`
-        const conditionalUid2 = `__fast-alfred_managed__conditional_from_${originalScriptFilterUid}_to_${originalDestination2}`
+        const conditionalUid1 = CONDITIONAL_OBJECT_UID(originalScriptFilterUid, originalDestination1)
+        const conditionalUid2 = CONDITIONAL_OBJECT_UID(originalScriptFilterUid, originalDestination2)
 
         // Original script filter now has two connections, one for each new conditional object
         expect(finalWorkflow.connections[originalScriptFilterUid]).toHaveLength(2)
@@ -206,7 +214,7 @@ describe('includeUpdatesHelpers', () => {
         await includeUpdatesHelpers()
 
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
-        const conditionalUid = `__fast-alfred_managed__conditional_from_${originalScriptFilterUid}_to_${originalDestinationUid}`
+        const conditionalUid = CONDITIONAL_OBJECT_UID(originalScriptFilterUid, originalDestinationUid)
 
         // Connection to conditional preserves modifiers
         const toConditionalConnection = finalWorkflow.connections[originalScriptFilterUid][0]
@@ -335,7 +343,7 @@ describe('dropUpdateHelpers', () => {
         // Break it: remove a connection but leave the objects
         const brokenWorkflow = JSON.parse(JSON.stringify(modifiedWorkflow))
         const originalScriptFilterUid = 'CE84ED38-CD11-4B81-9E07-91C9D10EEE3C'
-        delete brokenWorkflow.connections[`__fast-alfred_managed__conditional_${originalScriptFilterUid}`]
+        delete brokenWorkflow.connections[DEPRECATED_CONDITIONAL_OBJECT_UID(originalScriptFilterUid)]
 
         readWorkflowMetadataMock.mockResolvedValue(brokenWorkflow)
         await dropUpdateHelpers()
@@ -343,8 +351,10 @@ describe('dropUpdateHelpers', () => {
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
 
         // Should be back to the original state
-        expect(finalWorkflow.objects.some((o: any) => o.uid.includes('__fast-alfred_managed__'))).toBe(false)
-        expect(Object.keys(finalWorkflow.connections).every((k) => !k.includes('__fast-alfred_managed__'))).toBe(true)
-        expect(Object.keys(finalWorkflow.uidata).every((k) => !k.includes('__fast-alfred_managed__'))).toBe(true)
+        expect(finalWorkflow.objects.some((o: any) => o.uid.includes(MANAGED_BY_FAST_ALFRED_PREFIX))).toBe(false)
+        expect(Object.keys(finalWorkflow.connections).every((k) => !k.includes(MANAGED_BY_FAST_ALFRED_PREFIX))).toBe(
+            true,
+        )
+        expect(Object.keys(finalWorkflow.uidata).every((k) => !k.includes(MANAGED_BY_FAST_ALFRED_PREFIX))).toBe(true)
     })
 })

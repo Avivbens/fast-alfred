@@ -7,38 +7,39 @@ import type { Connection, WorkflowMetadata, WorkflowObject } from '@models/workf
 import type { BundlerOptions } from '../models'
 import { buildOptions } from '../utils/bundler.utils'
 
-const MANAGED_BY_FAST_ALFRED_PREFIX = '__fast-alfred_managed__'
+export const MANAGED_BY_FAST_ALFRED_PREFIX = '__fast-alfred_managed__'
+export const HELPER_UID_VERSION = 'v2'
 
-const NOTE_WORKFLOW_UPDATE_HELPER = 'Workflow Update Helper'
-const NOTE_SNOOZE_HELPER = 'Snooze Updates Helper'
-const NOTE_CONDITIONAL_HELPER = 'Conditional Updates Helper'
+export const NOTE_WORKFLOW_UPDATE_HELPER = 'Workflow Update Helper'
+export const NOTE_SNOOZE_HELPER = 'Snooze Updates Helper'
+export const NOTE_CONDITIONAL_HELPER = 'Conditional Updates Helper'
 
-const CONDITIONAL_ELSE_LABEL = 'Default Behavior'
-const CONDITIONAL_OUTPUT_LABEL = 'Managed versions updates'
+export const CONDITIONAL_ELSE_LABEL = 'Default Behavior'
+export const CONDITIONAL_OUTPUT_LABEL = 'Managed versions updates'
 
-const UPDATER_WORKFLOW_UPDATE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}updater_workflow-update`
-const UPDATER_SNOOZE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}updater_snooze`
+export const UPDATER_WORKFLOW_UPDATE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_updater_workflow-update`
+export const UPDATER_SNOOZE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_updater_snooze`
 
-const MODIFIERS = {
+export const MODIFIERS = {
     NONE: 0,
     CMD: 1048576,
     OPT: 524288,
 }
 
-const XPOS_BASE = 1_500
-const XPOS_DIFF = 220
-const YPOS_BASE = 0
+export const XPOS_BASE = 1_500
+export const XPOS_DIFF = 220
+export const YPOS_BASE = 0
 
 /**
  * @deprecated Use ${@link CONDITIONAL_OBJECT_UID} instead. This is kept for backward compatibility during cleanup.
  */
-const DEPRECATED_CONDITIONAL_OBJECT_UID = (from: string) => `${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_${from}`
+export const DEPRECATED_CONDITIONAL_OBJECT_UID = (from: string) => `${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_${from}`
 
-const CONDITIONAL_OBJECT_UID = (from: string, to: string) =>
-    `${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_from_${from}_to_${to}`
+export const CONDITIONAL_OBJECT_UID = (from: string, to: string) =>
+    `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_conditional_from_${from}_to_${to}`
 
-const CONDITIONAL_CONDITION_UID = (from: string, to: string) =>
-    `${MANAGED_BY_FAST_ALFRED_PREFIX}condition_from_${from}_to_${to}`
+export const CONDITIONAL_CONDITION_UID = (from: string, to: string) =>
+    `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_condition_from_${from}_to_${to}`
 
 const CONDITIONAL_OBJECT = (from: string, to: string): WorkflowObject => ({
     type: 'alfred.workflow.utility.conditional',
@@ -213,51 +214,42 @@ function upsertWorkflowConnection(
 function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMetadata {
     const newWorkflow = JSON.parse(JSON.stringify(workflow))
 
-    // --- Handle new UID format (one conditional per connection) ---
-    const newFormatUids = newWorkflow.objects
-        .map((obj: WorkflowObject) => obj.uid)
-        .filter((uid: string) => uid.startsWith(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_from_`))
+    const managedObjects = newWorkflow.objects.filter((obj: WorkflowObject) =>
+        obj.uid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX),
+    )
 
-    const uidParser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_from_(.+)_to_(.+)`)
+    const v1Parser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_from_(.+)_to_(.+)`)
+    const v2Parser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_conditional_from_(.+)_to_(.+)`)
 
-    for (const conditionalUid of newFormatUids) {
-        const match = conditionalUid.match(uidParser)
-        if (!match) {
-            continue
-        }
+    for (const managedObj of managedObjects) {
+        const conditionalUid = managedObj.uid
+        const match = conditionalUid.match(v2Parser) || conditionalUid.match(v1Parser)
 
-        const originalFromUid = match[1]
-        const originalConnection = (newWorkflow.connections[conditionalUid] || []).find(
-            (conn: Connection) => conn.sourceoutputuid === undefined,
-        )
-
-        if (originalConnection) {
-            upsertWorkflowConnection(
-                newWorkflow,
-                originalConnection.destinationuid,
-                originalFromUid,
-                originalConnection,
+        if (match) {
+            // Handles v1 and v2 (per-connection conditional objects)
+            const originalFromUid = match[1]
+            const originalConnection = (newWorkflow.connections[conditionalUid] || []).find(
+                (conn: Connection) => conn.sourceoutputuid === undefined, // This is the 'else' case
             )
-        }
-    }
 
-    // --- Handle old UID format (one conditional for all connections) for backward compatibility ---
-    const oldFormatUids = newWorkflow.objects
-        .map((obj: WorkflowObject) => obj.uid)
-        .filter(
-            (uid: string) =>
-                uid.startsWith(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_`) &&
-                !uid.startsWith(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_from_`),
-        )
+            if (originalConnection) {
+                upsertWorkflowConnection(
+                    newWorkflow,
+                    originalConnection.destinationuid,
+                    originalFromUid,
+                    originalConnection,
+                )
+            }
+        } else if (conditionalUid.startsWith(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_`)) {
+            // Handles legacy v0 (one conditional for all of a script filter's connections)
+            const originalUid = conditionalUid.replace(DEPRECATED_CONDITIONAL_OBJECT_UID(''), '')
+            const originalConnections = (newWorkflow.connections[conditionalUid] || []).filter(
+                (conn: Connection) => conn.sourceoutputuid === undefined, // else case
+            )
 
-    for (const conditionalUid of oldFormatUids) {
-        const originalUid = conditionalUid.replace(DEPRECATED_CONDITIONAL_OBJECT_UID(''), '')
-        const originalConnections = (newWorkflow.connections[conditionalUid] || []).filter(
-            (conn: Connection) => conn.sourceoutputuid === undefined, // else case
-        )
-
-        for (const conn of originalConnections) {
-            upsertWorkflowConnection(newWorkflow, conn.destinationuid, originalUid, conn)
+            for (const conn of originalConnections) {
+                upsertWorkflowConnection(newWorkflow, conn.destinationuid, originalUid, conn)
+            }
         }
     }
 
