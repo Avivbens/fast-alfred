@@ -324,6 +324,70 @@ describe('dropUpdateHelpers', () => {
         expect(finalWorkflow.connections[originalScriptFilterUid]).toHaveLength(originalConnections.length)
     })
 
+    it('should correctly restore connections from a legacy (v0) helper setup', async () => {
+        const mockWithLegacyHelpers = JSON.parse(JSON.stringify(workflowMock))
+        const originalScriptFilterUid = 'CE84ED38-CD11-4B81-9E07-91C9D10EEE3C'
+        const originalDestinationUid = 'FD52D6DE-838E-4CEF-9D97-F47BAC0D8F71'
+
+        // This is the shape of the old, v0 helper object
+        const legacyConditionalUid = DEPRECATED_CONDITIONAL_OBJECT_UID(originalScriptFilterUid)
+        const legacyConditionalObject = {
+            type: 'alfred.workflow.utility.conditional',
+            uid: legacyConditionalUid,
+            version: 1,
+            config: {},
+        }
+
+        // 1. Add the legacy object
+        mockWithLegacyHelpers.objects.push(legacyConditionalObject)
+
+        // 2. Rewire the connections to simulate a v0 setup
+        mockWithLegacyHelpers.connections[originalScriptFilterUid] = [
+            {
+                destinationuid: legacyConditionalUid, // from script filter to v0 helper
+                modifiers: 0,
+                modifiersubtext: '',
+                vitoclose: true,
+            },
+        ]
+        mockWithLegacyHelpers.connections[legacyConditionalUid] = [
+            {
+                destinationuid: originalDestinationUid, // from v0 helper ('else') to original destination
+                modifiers: 0,
+                modifiersubtext: '',
+                vitoclose: true,
+                sourceoutputuid: undefined, // Important for 'else' case
+            },
+            {
+                destinationuid: UPDATER_WORKFLOW_UPDATE_UID, // from v0 helper ('if') to updater
+                modifiers: 0,
+                modifiersubtext: '',
+                vitoclose: false,
+                sourceoutputuid: 'some-if-uid',
+            },
+        ]
+
+        readWorkflowMetadataMock.mockResolvedValue(mockWithLegacyHelpers)
+
+        await dropUpdateHelpers()
+
+        const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
+
+        // 3. Assert that the connection is restored to its original state
+        expect(finalWorkflow.connections[originalScriptFilterUid]).toEqual([
+            {
+                destinationuid: originalDestinationUid,
+                modifiers: 0,
+                modifiersubtext: '',
+                vitoclose: true,
+            },
+        ])
+
+        // 4. Assert all helpers are gone
+        expect(finalWorkflow.objects.some((o: any) => o.uid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX))).toBe(false)
+        expect(finalWorkflow.connections[legacyConditionalUid]).toBeUndefined()
+    })
+
     it('should be idempotent', async () => {
         const cleanWorkflow = JSON.parse(JSON.stringify(workflowMock))
         readWorkflowMetadataMock.mockResolvedValue(cleanWorkflow)
