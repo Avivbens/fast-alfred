@@ -32,6 +32,11 @@ function getDesktopPath(): string {
         return
     }
 
+    /**
+     * Cleanup metadata
+     */
+    alfredClient.cache.delete(UPDATES_METADATA_KEY)
+
     if (!isDirectDownload) {
         // Open the download URL in the default browser
         await execPromise(`open ${downloadUrl}`)
