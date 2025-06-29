@@ -8,6 +8,7 @@ import {
     CONDITIONAL_OBJECT_UID,
     DEPRECATED_CONDITIONAL_OBJECT_UID,
     MANAGED_BY_FAST_ALFRED_PREFIX,
+    UPDATER_SNOOZE_UID,
     UPDATER_WORKFLOW_UPDATE_UID,
     dropUpdateHelpers,
     includeUpdatesHelpers,
@@ -131,12 +132,20 @@ describe('includeUpdatesHelpers', () => {
         ])
 
         const conditionalConnections = finalWorkflow.connections[conditionalUid]
-        expect(conditionalConnections).toHaveLength(2)
+        expect(conditionalConnections).toHaveLength(3)
 
         // Conditional object connects to update helpers
         expect(conditionalConnections).toContainEqual(
             expect.objectContaining({
                 destinationuid: UPDATER_WORKFLOW_UPDATE_UID,
+                sourceoutputuid: conditionUid,
+            }),
+        )
+
+        // Conditional object connects to snooze helper
+        expect(conditionalConnections).toContainEqual(
+            expect.objectContaining({
+                destinationuid: UPDATER_SNOOZE_UID,
                 sourceoutputuid: conditionUid,
             }),
         )

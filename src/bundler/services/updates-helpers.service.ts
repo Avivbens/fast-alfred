@@ -376,12 +376,12 @@ export async function includeUpdatesHelpers(): Promise<void> {
                 upsertWorkflowConnection(workflow, UPDATER_WORKFLOW_UPDATE_UID, conditionalUid, {
                     sourceoutputuid: conditionUid,
                 })
+                upsertWorkflowConnection(workflow, UPDATER_SNOOZE_UID, conditionalUid, {
+                    sourceoutputuid: conditionUid,
+                })
             }
         }
     }
-
-    // Connect the main update helper to the snooze helper
-    upsertWorkflowConnection(workflow, UPDATER_SNOOZE_UID, UPDATER_WORKFLOW_UPDATE_UID)
 
     await writeWorkflowMetadata(workflow)
 }
