@@ -218,16 +218,40 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
         obj.uid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX),
     )
 
-    const v1Parser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_from_(.+)_to_(.+)`)
+    const v0Parser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_(.+)`)
     const v2Parser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_conditional_from_(.+)_to_(.+)`)
 
     for (const managedObj of managedObjects) {
         const conditionalUid = managedObj.uid
-        const match = conditionalUid.match(v2Parser) || conditionalUid.match(v1Parser)
 
-        if (match) {
-            // Handles v1 and v2 (per-connection conditional objects)
-            const originalFromUid = match[1]
+        /**
+         * Handles v0 (single conditional object per source)
+         * Migrate to v2 if the object is not already using the v2 format.
+         */
+        const v0Match = conditionalUid.match(v0Parser)
+        if (v0Match && !v0Match[0].includes(HELPER_UID_VERSION)) {
+            const originalFromUid = v0Match[1]
+            const originalConnections = (newWorkflow.connections[conditionalUid] || []).filter(
+                (conn: Connection) => conn.sourceoutputuid === undefined, // This is the 'else' case
+            )
+
+            for (const originalConnection of originalConnections) {
+                upsertWorkflowConnection(
+                    newWorkflow,
+                    originalConnection.destinationuid,
+                    originalFromUid,
+                    originalConnection,
+                )
+            }
+            continue
+        }
+
+        /**
+         * Handles v2 (per-connection conditional objects)
+         */
+        const v2Match = conditionalUid.match(v2Parser)
+        if (v2Match) {
+            const originalFromUid = v2Match[1]
             const originalConnection = (newWorkflow.connections[conditionalUid] || []).find(
                 (conn: Connection) => conn.sourceoutputuid === undefined, // This is the 'else' case
             )
@@ -239,16 +263,6 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
                     originalFromUid,
                     originalConnection,
                 )
-            }
-        } else if (conditionalUid.startsWith(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_`)) {
-            // Handles legacy v0 (one conditional for all of a script filter's connections)
-            const originalUid = conditionalUid.replace(DEPRECATED_CONDITIONAL_OBJECT_UID(''), '')
-            const originalConnections = (newWorkflow.connections[conditionalUid] || []).filter(
-                (conn: Connection) => conn.sourceoutputuid === undefined, // else case
-            )
-
-            for (const conn of originalConnections) {
-                upsertWorkflowConnection(newWorkflow, conn.destinationuid, originalUid, conn)
             }
         }
     }
