@@ -1,3 +1,10 @@
+## [2.4.3](https://github.com/Avivbens/fast-alfred/compare/v2.4.2...v2.4.3) (2025-06-29)
+
+
+### Bug Fixes
+
+* cleanup metadata in update workflow ([24ca7a0](https://github.com/Avivbens/fast-alfred/commit/24ca7a05ab25903c86263ad380590f5d0b7b0aa2))
+
 ## [2.4.2](https://github.com/Avivbens/fast-alfred/compare/v2.4.1...v2.4.2) (2025-06-29)
 
 
