@@ -1,3 +1,11 @@
+## [2.4.2](https://github.com/Avivbens/fast-alfred/compare/v2.4.1...v2.4.2) (2025-06-29)
+
+
+### Bug Fixes
+
+* **updates:** add version prefix for connections - `v2` ([eaeff06](https://github.com/Avivbens/fast-alfred/commit/eaeff069737d37ac864ea212a47490127364983e))
+* **updates:** re-wire multi connections logic with one-to-one if blocks ([cb56cea](https://github.com/Avivbens/fast-alfred/commit/cb56ceada0ce5e82d80aeafef601a9c45f7a71be))
+
 ## [2.4.1](https://github.com/Avivbens/fast-alfred/compare/v2.4.0...v2.4.1) (2025-06-28)
 
 
