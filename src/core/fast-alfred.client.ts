@@ -4,7 +4,11 @@ import merge from 'lodash.merge'
 import { argv, env } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
-import type { ClientUpdatesConfig, UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
+import {
+    type ClientUpdatesConfig,
+    type UpdatesConfigSavedMetadata,
+    UserConfigVariables,
+} from '@models/client-updates-config.model'
 import {
     DEFAULT_UPDATES_CONFIG,
     ERROR_MESSAGE,
@@ -25,6 +29,14 @@ export class FastAlfred {
      * You can find all Alfred & Workflow metadata in here
      */
     public readonly alfredInfo: AlfredInfoService = new AlfredInfoService()
+
+    /**
+     * @deprecated - please use the {@link FastAlfred.env} property instead
+     *
+     * @note
+     *
+     * Deprecation date: 1 Jul 2025
+     */
     public readonly userConfig: AlfredConfigService = new AlfredConfigService({})
 
     /**
@@ -108,11 +120,15 @@ export class FastAlfred {
         const { checkInterval, fetcher } = config
 
         try {
+            this.cache.setWithTTL(UPDATES_FETCH_LOCK_KEY, true, { maxAge: 60 * 1000 }) // 1 minute lock
+
             const data = await fetcher()
             if (!data) {
                 this.log('No updates data found, exiting.')
                 return null
             }
+
+            this.log(`Updates data fetched successfully: ${JSON.stringify(data, null, 2)}`)
 
             const currentVersion = this.alfredInfo.workflowVersion()
             const metadata: UpdatesConfigSavedMetadata = {
@@ -143,6 +159,16 @@ export class FastAlfred {
             return
         }
 
+        const shouldCheckUpdates = this.env.getEnv(UserConfigVariables.CHECK_UPDATES, {
+            defaultValue: true,
+            parser: (value) => (value as '0' | '1') === '1',
+        })
+
+        if (!shouldCheckUpdates) {
+            this.log('Updates check is disabled by user configuration.')
+            return
+        }
+
         const parsedConfig = merge({}, DEFAULT_UPDATES_CONFIG, config)
 
         const currentVersion = this.alfredInfo.workflowVersion()
@@ -156,7 +182,6 @@ export class FastAlfred {
             this.isDebuggerOpen
 
         if (needsFetch) {
-            this.cache.setWithTTL(UPDATES_FETCH_LOCK_KEY, true, { maxAge: 60 * 1000 }) // 1 minute lock
             this.fetchUpdatesData(parsedConfig)
         }
     }

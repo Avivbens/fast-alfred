@@ -60,6 +60,11 @@ Service to get Alfred's environment variables. You can find all Alfred & Workflo
 
 ## `userConfig`
 
+::: warning Deprecated :warning:
+This property is deprecated and will be removed in a future version.
+Please use the `env` property instead.
+:::
+
 Get and set dedicated configuration for the Workflow.
 You can use it to store and retrieve data saved about the user.
 

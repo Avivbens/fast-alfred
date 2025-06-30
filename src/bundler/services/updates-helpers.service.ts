@@ -2,8 +2,14 @@ import { glob } from 'glob'
 import { basename, extname, join } from 'node:path'
 import { readConfigFile } from '@common/user-config.service'
 import { readWorkflowMetadata, writeWorkflowMetadata } from '@common/workflow-metadata.service'
+import { UserConfigVariables } from '@models/client-updates-config.model'
 import type { UpdatesConfig } from '@models/updates-config.model'
-import type { Connection, WorkflowMetadata, WorkflowObject } from '@models/workflow-metadata.model'
+import type {
+    Connection,
+    UserConfigurationConfig,
+    WorkflowMetadata,
+    WorkflowObject,
+} from '@models/workflow-metadata.model'
 import type { BundlerOptions } from '../models'
 import { buildOptions } from '../utils/bundler.utils'
 
@@ -16,6 +22,18 @@ export const NOTE_CONDITIONAL_HELPER = 'Conditional Updates Helper'
 
 export const CONDITIONAL_ELSE_LABEL = 'Default Behavior'
 export const CONDITIONAL_OUTPUT_LABEL = 'Managed versions updates'
+
+export const USER_CONFIG_CHECK_UPDATES_CHECKBOX: UserConfigurationConfig = {
+    config: {
+        default: true,
+        required: false,
+        text: 'Check for workflow updates ✨',
+    },
+    description: "Uncheck this checkbox if you'd like to ignore updates",
+    label: '',
+    type: 'checkbox',
+    variable: UserConfigVariables.CHECK_UPDATES,
+}
 
 export const UPDATER_WORKFLOW_UPDATE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_updater_workflow-update`
 export const UPDATER_SNOOZE_UID = `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_updater_snooze`
@@ -300,6 +318,18 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
     return newWorkflow
 }
 
+function upsertUserConfigurationConfig(workflow: WorkflowMetadata, userConfiguration: UserConfigurationConfig): void {
+    const existingConfigIndex = workflow.userconfigurationconfig.findIndex(
+        (config) => config.variable === userConfiguration.variable,
+    )
+
+    if (existingConfigIndex > -1) {
+        workflow.userconfigurationconfig[existingConfigIndex] = userConfiguration
+    } else {
+        workflow.userconfigurationconfig.push(userConfiguration)
+    }
+}
+
 export async function dropUpdateHelpers(): Promise<void> {
     const workflow = await readWorkflowMetadata()
     const updatedWorkflow = getWorkflowWithDroppedHelpers(workflow)
@@ -314,7 +344,7 @@ export async function includeUpdatesHelpers(): Promise<void> {
     ])
 
     const isEnabled = await isExperimentalUpdatesHelpersEnabled(updates)
-    if (!isEnabled) {
+    if (!isEnabled || !updates) {
         return
     }
 
@@ -324,6 +354,13 @@ export async function includeUpdatesHelpers(): Promise<void> {
     }
 
     const workflow = getWorkflowWithDroppedHelpers(initialWorkflow)
+
+    const { userConfiguration } = updates
+    const { checkUpdatesCheckbox } = userConfiguration || {}
+
+    if (checkUpdatesCheckbox) {
+        upsertUserConfigurationConfig(workflow, USER_CONFIG_CHECK_UPDATES_CHECKBOX)
+    }
 
     const { targetDir, assetsDir } = bundlerOptions
     const targetDirName = basename(targetDir)

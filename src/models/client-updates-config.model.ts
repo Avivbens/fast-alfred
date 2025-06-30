@@ -124,3 +124,11 @@ export enum UpdaterAction {
      */
     SNOOZE = '__fast-alfred_managed__snooze-callback',
 }
+
+export enum UserConfigVariables {
+    /**
+     * @description
+     * Variable for the updates checkbox.
+     */
+    CHECK_UPDATES = '__fastalfred_managed__checkupdates',
+}

@@ -83,7 +83,8 @@ export interface UserConfigurationConfig {
 
 export interface UserconfigurationconfigConfig {
     trim?: boolean
-    default?: string
+    default?: string | boolean
+    text?: string
     placeholder?: string
     required?: boolean
     minvalue?: number
