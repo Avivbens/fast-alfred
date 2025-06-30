@@ -112,11 +112,15 @@ export class FastAlfred {
         const { checkInterval, fetcher } = config
 
         try {
+            this.cache.setWithTTL(UPDATES_FETCH_LOCK_KEY, true, { maxAge: 60 * 1000 }) // 1 minute lock
+
             const data = await fetcher()
             if (!data) {
                 this.log('No updates data found, exiting.')
                 return null
             }
+
+            this.log(`Updates data fetched successfully: ${JSON.stringify(data, null, 2)}`)
 
             const currentVersion = this.alfredInfo.workflowVersion()
             const metadata: UpdatesConfigSavedMetadata = {
@@ -170,7 +174,6 @@ export class FastAlfred {
             this.isDebuggerOpen
 
         if (needsFetch) {
-            this.cache.setWithTTL(UPDATES_FETCH_LOCK_KEY, true, { maxAge: 60 * 1000 }) // 1 minute lock
             this.fetchUpdatesData(parsedConfig)
         }
     }
