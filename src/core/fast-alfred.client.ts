@@ -29,6 +29,14 @@ export class FastAlfred {
      * You can find all Alfred & Workflow metadata in here
      */
     public readonly alfredInfo: AlfredInfoService = new AlfredInfoService()
+
+    /**
+     * @deprecated - please use the {@link FastAlfred.env} property instead
+     *
+     * @note
+     *
+     * Deprecation date: 1 Jul 2025
+     */
     public readonly userConfig: AlfredConfigService = new AlfredConfigService({})
 
     /**
