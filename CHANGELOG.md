@@ -1,3 +1,16 @@
+# [2.5.0](https://github.com/Avivbens/fast-alfred/compare/v2.4.3...v2.5.0) (2025-06-30)
+
+
+### Bug Fixes
+
+* deprecation note - `userConfig` property ⚠️ ([00b7a0b](https://github.com/Avivbens/fast-alfred/commit/00b7a0b3a9f5a05050083e8d8b17d83fa32b1ef6))
+* **updates:** improve locking and observability when fetching data ([f403960](https://github.com/Avivbens/fast-alfred/commit/f4039602e51ee9bec15ff1a75dc39be4a2a08de3))
+
+
+### Features
+
+* **updates:** support user configuration for checking updates disabling ([b74dd72](https://github.com/Avivbens/fast-alfred/commit/b74dd72c72ec906ddfa736c83ff0eff2434758d7))
+
 ## [2.4.3](https://github.com/Avivbens/fast-alfred/compare/v2.4.2...v2.4.3) (2025-06-29)
 
 
