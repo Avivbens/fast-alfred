@@ -4,7 +4,11 @@ import merge from 'lodash.merge'
 import { argv, env } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
-import type { ClientUpdatesConfig, UpdatesConfigSavedMetadata } from '@models/client-updates-config.model'
+import {
+    type ClientUpdatesConfig,
+    type UpdatesConfigSavedMetadata,
+    UserConfigVariables,
+} from '@models/client-updates-config.model'
 import {
     DEFAULT_UPDATES_CONFIG,
     ERROR_MESSAGE,
@@ -140,6 +144,16 @@ export class FastAlfred {
      */
     public updates(config: ClientUpdatesConfig): void {
         if (this.cache.get(UPDATES_FETCH_LOCK_KEY)) {
+            return
+        }
+
+        const shouldCheckUpdates = this.env.getEnv(UserConfigVariables.CHECK_UPDATES, {
+            defaultValue: true,
+            parser: (value) => (value as '0' | '1') === '1',
+        })
+
+        if (!shouldCheckUpdates) {
+            this.log('Updates check is disabled by user configuration.')
             return
         }
 
