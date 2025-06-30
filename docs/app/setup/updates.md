@@ -24,18 +24,23 @@ This instructs the bundler to inject the necessary helper objects into the workf
 
 ```javascript
 /**
- * @type {import('fast-alfred').FastAlfredConfig}
+ * @type {import('fast-alfred').FastAlfredConfig}ı
  */
 module.exports = {
     updates: {
         bundleHelpers: true, // Enable the injection of update helpers
         exclude: ['esbuild/excluded-script'], // Optional, exclude specific scripts from this feature
+        userConfiguration: {
+            checkUpdatesCheckbox: true, // Optional, add a user-facing checkbox to enable/disable updates
+        },
     },
 }
 ```
 
 - `bundleHelpers`: Set to `true` to enable the injection.
 - `exclude`: An array of script paths to exclude from this feature.
+- `userConfiguration`: An object to configure user-facing settings.
+    - `checkUpdatesCheckbox`: Set to `true` to add a checkbox in the workflow's configuration sheet that allows users to enable or disable automatic update checks.
 
 ## Runtime Configuration
 
