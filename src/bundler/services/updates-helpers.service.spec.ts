@@ -35,7 +35,7 @@ describe('includeUpdatesHelpers', () => {
             productionScripts: ['src/bookmarks.ts'],
         })
 
-        globMock.mockResolvedValue(['src/bookmarks.ts'])
+        globMock.mockResolvedValue(['esbuild/bookmarks.js'])
     })
 
     it('should not do anything if not enabled', async () => {
@@ -429,5 +429,88 @@ describe('dropUpdateHelpers', () => {
             true,
         )
         expect(Object.keys(finalWorkflow.uidata).every((k) => !k.includes(MANAGED_BY_FAST_ALFRED_PREFIX))).toBe(true)
+    })
+})
+
+describe('Nested directory handling', () => {
+    const globMock = glob as unknown as jest.Mock
+    const readConfigFileMock = readConfigFile as jest.Mock
+    const readWorkflowMetadataMock = readWorkflowMetadata as jest.Mock
+    const writeWorkflowMetadataMock = writeWorkflowMetadata as jest.Mock
+    const buildOptionsMock = require('../utils/bundler.utils').buildOptions as jest.Mock
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+        readConfigFileMock.mockResolvedValue({
+            updates: {
+                bundleHelpers: true,
+            },
+        })
+    })
+
+    it('should match nested script paths with ** glob pattern', async () => {
+        buildOptionsMock.mockResolvedValue({
+            targetDir: 'esbuild',
+            assetsDir: 'assets',
+            productionScripts: ['src/main/**/*.ts'],
+        })
+
+        globMock.mockResolvedValue([
+            'esbuild/translate/translate.js',
+            'esbuild/translate/select-language.js',
+            'esbuild/tones.js',
+        ])
+
+        const mockWorkflow = JSON.parse(JSON.stringify(workflowMock))
+        mockWorkflow.objects.push({
+            type: 'alfred.workflow.input.scriptfilter',
+            uid: 'NESTED-UID',
+            config: {
+                script: 'esbuild/translate/translate.js',
+            },
+        })
+        mockWorkflow.connections['NESTED-UID'] = [{ destinationuid: 'ACTION-UID', modifiers: 0 }]
+        mockWorkflow.uidata['NESTED-UID'] = { xpos: 100, ypos: 100 }
+
+        readWorkflowMetadataMock.mockResolvedValue(mockWorkflow)
+
+        await includeUpdatesHelpers()
+
+        expect(writeWorkflowMetadataMock).toHaveBeenCalledTimes(1)
+        const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
+        const conditionalUid = CONDITIONAL_OBJECT_UID('NESTED-UID', 'ACTION-UID')
+
+        expect(finalWorkflow.connections['NESTED-UID'][0].destinationuid).toBe(conditionalUid)
+    })
+
+    it('should match flat script paths with single-level glob', async () => {
+        buildOptionsMock.mockResolvedValue({
+            targetDir: 'esbuild',
+            assetsDir: 'assets',
+            productionScripts: ['src/main/*.ts'],
+        })
+
+        globMock.mockResolvedValue(['esbuild/tones.js'])
+
+        const mockWorkflow = JSON.parse(JSON.stringify(workflowMock))
+        mockWorkflow.objects.push({
+            type: 'alfred.workflow.input.scriptfilter',
+            uid: 'FLAT-UID',
+            config: {
+                script: 'esbuild/tones.js',
+            },
+        })
+        mockWorkflow.connections['FLAT-UID'] = [{ destinationuid: 'ACTION-UID', modifiers: 0 }]
+        mockWorkflow.uidata['FLAT-UID'] = { xpos: 100, ypos: 100 }
+
+        readWorkflowMetadataMock.mockResolvedValue(mockWorkflow)
+
+        await includeUpdatesHelpers()
+
+        expect(writeWorkflowMetadataMock).toHaveBeenCalledTimes(1)
+        const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
+        const conditionalUid = CONDITIONAL_OBJECT_UID('FLAT-UID', 'ACTION-UID')
+
+        expect(finalWorkflow.connections['FLAT-UID'][0].destinationuid).toBe(conditionalUid)
     })
 })
