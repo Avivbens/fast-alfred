@@ -55,7 +55,9 @@
         "moduleNameMapper": {
             "^@db/(.*)$": "<rootDir>/common/db/$1",
             "^@common/(.*)$": "<rootDir>/common/$1",
-            "^@auth/(.*)$": "<rootDir>/auth/$1"
+            "^@auth/(.*)$": "<rootDir>/auth/$1",
+            "^@models/(.*)$": "<rootDir>/models/$1",
+            "^@bundler/(.*)$": "<rootDir>/bundler/$1"
         },
         "rootDir": "src",
         "testEnvironment": "node",

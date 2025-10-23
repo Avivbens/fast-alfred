@@ -1,5 +1,5 @@
 import { glob } from 'glob'
-import { basename, extname, join } from 'node:path'
+import { basename, join, relative } from 'node:path'
 import { readConfigFile } from '@common/user-config.service'
 import { readWorkflowMetadata, writeWorkflowMetadata } from '@common/workflow-metadata.service'
 import { UserConfigVariables } from '@models/client-updates-config.model'
@@ -123,15 +123,12 @@ async function getTargetUids(
         return []
     }
 
-    const sourceFiles = await glob(productionScripts)
+    const builtJsFiles = await glob(`${targetDir}/**/*.js`)
 
-    const mainScriptPaths = sourceFiles.map((file) => {
-        const suffix = extname(file)
-        const baseName = basename(file, suffix)
-
-        const targetedFile = `${baseName}.js`
+    const mainScriptPaths = builtJsFiles.map((filePath) => {
+        const relativePath = relative(targetDir, filePath)
         const targetDirName = basename(targetDir)
-        return join(targetDirName, targetedFile)
+        return join(targetDirName, relativePath)
     })
 
     const targetUids: string[] = workflow?.objects
