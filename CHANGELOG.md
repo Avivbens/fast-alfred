@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/Avivbens/fast-alfred/compare/v2.5.0...v2.5.1) (2025-10-23)
+
+
+### Bug Fixes
+
+* **update-helpers:** manage nested directories paths ([ea1b76d](https://github.com/Avivbens/fast-alfred/commit/ea1b76d6d7778d68fb2ec56f0f38d72b83210c62))
+
 # [2.5.0](https://github.com/Avivbens/fast-alfred/compare/v2.4.3...v2.5.0) (2025-06-30)
 
 
