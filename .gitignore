@@ -5,4 +5,5 @@ coverage
 .eslintcache
 
 # Exclude helpers builds
-/src/bundler/assets/*.js
+/src/bundler/assets/*.js.vscode
+.vscode
