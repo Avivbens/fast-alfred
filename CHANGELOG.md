@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/Avivbens/fast-alfred/compare/v2.5.1...v2.5.2) (2026-04-24)
+
+
+### Bug Fixes
+
+* **update-helpers:** reset modifiers on the managed conditional's inner hop - allow custom modifiers ([efc4ae4](https://github.com/Avivbens/fast-alfred/commit/efc4ae485e37db8ff362eb471282eca54af69630))
+
 ## [2.5.1](https://github.com/Avivbens/fast-alfred/compare/v2.5.0...v2.5.1) (2025-10-23)
 
 
