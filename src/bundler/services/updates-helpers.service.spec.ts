@@ -203,7 +203,7 @@ describe('includeUpdatesHelpers', () => {
         expect(elseConnection2.destinationuid).toBe(originalDestination2)
     })
 
-    it('should preserve modifier keys on re-wired connections', async () => {
+    it('should preserve modifier keys on hop 1 and reset them on hop 2', async () => {
         readConfigFileMock.mockResolvedValue({
             updates: {
                 bundleHelpers: true,
@@ -225,17 +225,18 @@ describe('includeUpdatesHelpers', () => {
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
         const conditionalUid = CONDITIONAL_OBJECT_UID(originalScriptFilterUid, originalDestinationUid)
 
-        // Connection to conditional preserves modifiers
+        // Hop 1 (scriptFilter → conditional) preserves modifiers — Alfred dispatches on this hop.
         const toConditionalConnection = finalWorkflow.connections[originalScriptFilterUid][0]
         expect(toConditionalConnection.modifiers).toBe(1048576)
         expect(toConditionalConnection.modifiersubtext).toBe('Open in browser')
 
-        // 'Else' connection from conditional preserves modifiers
+        // Hop 2 (conditional → originalDestination, 'else') resets modifiers — a non-zero
+        // value on this inner hop breaks modifier-gated flows (alt/cmd+Enter).
         const fromConditionalConnection = finalWorkflow.connections[conditionalUid].find(
             (c: any) => c.destinationuid === originalDestinationUid,
         )
-        expect(fromConditionalConnection.modifiers).toBe(1048576)
-        expect(fromConditionalConnection.modifiersubtext).toBe('Open in browser')
+        expect(fromConditionalConnection.modifiers).toBe(0)
+        expect(fromConditionalConnection.modifiersubtext).toBe('')
     })
 
     it('should be idempotent', async () => {

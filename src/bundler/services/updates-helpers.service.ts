@@ -262,16 +262,28 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
         }
 
         /**
-         * Handles v2 (per-connection conditional objects)
+         * Handles v2 (per-connection conditional objects).
+         * Hop 1 (source → conditional) carries the real modifier properties;
+         * hop 2 (conditional → originalDestination, 'else') only carries the destination.
+         * Merge them to reconstruct the pre-wrap connection.
          */
         const v2Match = conditionalUid.match(v2Parser)
         if (v2Match) {
             const originalFromUid = v2Match[1]
-            const originalConnection = (newWorkflow.connections[conditionalUid] || []).find(
+            const elseHop = (newWorkflow.connections[conditionalUid] || []).find(
                 (conn: Connection) => conn.sourceoutputuid === undefined, // This is the 'else' case
             )
 
-            if (originalConnection) {
+            if (elseHop) {
+                const sourceHop = (newWorkflow.connections[originalFromUid] || []).find(
+                    (conn: Connection) => conn.destinationuid === conditionalUid,
+                )
+
+                const originalConnection: Connection = {
+                    ...(sourceHop ?? elseHop),
+                    destinationuid: elseHop.destinationuid,
+                }
+
                 upsertWorkflowConnection(
                     newWorkflow,
                     originalConnection.destinationuid,
@@ -399,9 +411,16 @@ export async function includeUpdatesHelpers(): Promise<void> {
             // 1. Re-route original connection to its new dedicated conditional object, preserving all properties (modifiers, etc.)
             upsertWorkflowConnection(workflow, conditionalUid, scriptFilterUid, originalConnection)
 
-            // 2. Connect the conditional's 'else' case back to the original destination
+            /**
+             * 2. Connect the conditional's 'else' case back to the original destination.
+             * Modifiers must only live on hop 1 (scriptFilter → conditional); Alfred dispatches
+             * on that hop. Leaving a non-zero `modifiers` on this inner hop breaks modifier-gated
+             * flows (alt/cmd+Enter) for the original destination.
+             */
             upsertWorkflowConnection(workflow, originalDestinationUid, conditionalUid, {
                 ...originalConnection,
+                modifiers: MODIFIERS.NONE,
+                modifiersubtext: '',
                 sourceoutputuid: undefined, // This is the 'else' case
             })
 
