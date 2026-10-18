@@ -6,7 +6,8 @@ Thank you for your interest in contributing to ``! We welcome contributions from
 
 To get started, follow these steps:
 
-1. Install dependencies with `npm ci`
+1. Enable pnpm (pinned in `package.json`) with `corepack enable`
+1. Install dependencies with `pnpm install --frozen-lockfile`
 1. Make changes
 1. Test your changes
 1. Add tests if needed
@@ -18,7 +19,7 @@ To get started, follow these steps:
 You can use the following command, in order to trigger build for each save :sparkles:
 
 ```bash
-find ./src -type f -name "*.ts" -o -name "*.sh" | entr -s "npm run build"
+find ./src -type f -name "*.ts" -o -name "*.sh" | entr -s "pnpm build"
 ```
 
 ## Commit Message Guidelines

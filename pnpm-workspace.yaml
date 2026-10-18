@@ -1,0 +1,6 @@
+allowBuilds:
+    esbuild: true
+    # postinstall is only an opencollective donation banner
+    '@nestjs/core': false
+    # ships a prebuilt binary, no compile needed
+    fsevents: false

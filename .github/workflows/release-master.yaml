@@ -62,7 +62,7 @@ jobs:
               uses: ./.github/workflows/install
 
             - name: Build
-              run: npm run build
+              run: pnpm build
 
             - name: Setup NPM
               run: |
@@ -76,4 +76,4 @@ jobs:
                   GIT_COMMITTER_NAME: github-bot
                   GIT_COMMITTER_EMAIL: github-bot@gmail.com
               run: |
-                  npx semantic-release
+                  pnpm exec semantic-release
