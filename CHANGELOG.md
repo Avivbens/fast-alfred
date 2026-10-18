@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/Avivbens/fast-alfred/compare/v2.5.3...v2.6.0) (2026-10-18)
+
+
+### Features
+
+* **deps:** bump all versions, use vitest and new eslint ([f5a4106](https://github.com/Avivbens/fast-alfred/commit/f5a41067e980dd6877453ba879a1d0c4e9b397d7))
+
 ## [2.5.3](https://github.com/Avivbens/fast-alfred/compare/v2.5.2...v2.5.3) (2026-10-18)
 
 
