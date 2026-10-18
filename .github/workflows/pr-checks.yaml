@@ -17,11 +17,9 @@ jobs:
         name: PR Health Checks 🐛
         steps:
             - name: 📀 Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
               with:
                   fetch-depth: 1
 
             - name: 🧪 Check out repository code
               uses: ./.github/workflows/health-check
-              with:
-                  run-tests: false
