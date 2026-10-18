@@ -1,7 +1,6 @@
 {
     "compilerOptions": {
         "allowSyntheticDefaultImports": true,
-        "baseUrl": "./",
         "declaration": true,
         "declarationMap": true,
         "emitDecoratorMetadata": true,
@@ -25,11 +24,11 @@
         "strictPropertyInitialization": false,
         "target": "ES2022",
         "useUnknownInCatchVariables": false,
-        "typeRoots": ["./node_modules/@types", "./src/types"],
+        "types": ["node"],
         "paths": {
-            "@common/*": ["src/common/*"],
-            "@bundler/*": ["src/bundler/*"],
-            "@models/*": ["src/models/*"]
+            "@common/*": ["./src/common/*"],
+            "@bundler/*": ["./src/bundler/*"],
+            "@models/*": ["./src/models/*"]
         }
     },
     "exclude": ["node_modules"],

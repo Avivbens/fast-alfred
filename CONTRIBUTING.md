@@ -6,6 +6,7 @@ Thank you for your interest in contributing to ``! We welcome contributions from
 
 To get started, follow these steps:
 
+1. Use Node 24 (the dev tooling needs Node 22.22+ or 24.15+)
 1. Enable pnpm (pinned in `package.json`) with `corepack enable`
 1. Install dependencies with `pnpm install --frozen-lockfile`
 1. Make changes
