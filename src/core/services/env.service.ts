@@ -1,4 +1,3 @@
-/* eslint-disable no-dupe-class-members */
 import { env } from 'node:process'
 import type { GetEnvOptions } from '@models/get-env-options.model'
 

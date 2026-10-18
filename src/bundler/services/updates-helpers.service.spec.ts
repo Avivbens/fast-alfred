@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { glob } from 'glob'
+import type { Mock } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { readConfigFile } from '@common/user-config.service'
 import { readWorkflowMetadata, writeWorkflowMetadata } from '@common/workflow-metadata.service'
+import { buildOptions } from '../utils/bundler.utils'
 import { workflowMock } from './mocks/workflow.mock'
 import {
     CONDITIONAL_CONDITION_UID,
@@ -14,20 +16,20 @@ import {
     includeUpdatesHelpers,
 } from './updates-helpers.service'
 
-jest.mock('glob')
-jest.mock('@common/user-config.service')
-jest.mock('@common/workflow-metadata.service')
-jest.mock('../utils/bundler.utils')
+vi.mock('glob')
+vi.mock('@common/user-config.service')
+vi.mock('@common/workflow-metadata.service')
+vi.mock('../utils/bundler.utils')
 
 describe('includeUpdatesHelpers', () => {
-    const globMock = glob as unknown as jest.Mock
-    const readConfigFileMock = readConfigFile as jest.Mock
-    const readWorkflowMetadataMock = readWorkflowMetadata as jest.Mock
-    const writeWorkflowMetadataMock = writeWorkflowMetadata as jest.Mock
-    const buildOptionsMock = require('../utils/bundler.utils').buildOptions as jest.Mock
+    const globMock = glob as unknown as Mock
+    const readConfigFileMock = readConfigFile as Mock
+    const readWorkflowMetadataMock = readWorkflowMetadata as Mock
+    const writeWorkflowMetadataMock = writeWorkflowMetadata as Mock
+    const buildOptionsMock = buildOptions as Mock
 
     beforeEach(() => {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
 
         buildOptionsMock.mockResolvedValue({
             targetDir: 'esbuild',
@@ -264,12 +266,12 @@ describe('includeUpdatesHelpers', () => {
 })
 
 describe('dropUpdateHelpers', () => {
-    const readConfigFileMock = readConfigFile as jest.Mock
-    const readWorkflowMetadataMock = readWorkflowMetadata as jest.Mock
-    const writeWorkflowMetadataMock = writeWorkflowMetadata as jest.Mock
+    const readConfigFileMock = readConfigFile as Mock
+    const readWorkflowMetadataMock = readWorkflowMetadata as Mock
+    const writeWorkflowMetadataMock = writeWorkflowMetadata as Mock
 
     beforeEach(() => {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
         readConfigFileMock.mockResolvedValue({
             updates: {
                 bundleHelpers: true,
@@ -434,14 +436,14 @@ describe('dropUpdateHelpers', () => {
 })
 
 describe('Nested directory handling', () => {
-    const globMock = glob as unknown as jest.Mock
-    const readConfigFileMock = readConfigFile as jest.Mock
-    const readWorkflowMetadataMock = readWorkflowMetadata as jest.Mock
-    const writeWorkflowMetadataMock = writeWorkflowMetadata as jest.Mock
-    const buildOptionsMock = require('../utils/bundler.utils').buildOptions as jest.Mock
+    const globMock = glob as unknown as Mock
+    const readConfigFileMock = readConfigFile as Mock
+    const readWorkflowMetadataMock = readWorkflowMetadata as Mock
+    const writeWorkflowMetadataMock = writeWorkflowMetadata as Mock
+    const buildOptionsMock = buildOptions as Mock
 
     beforeEach(() => {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
         readConfigFileMock.mockResolvedValue({
             updates: {
                 bundleHelpers: true,

@@ -4,8 +4,7 @@ interface ModPayload {
     valid?: boolean
 }
 
-const AVAILABLE_MODES = ['cmd', 'alt', 'ctrl', 'fn'] as const
-type AvailableModes = (typeof AVAILABLE_MODES)[number]
+type AvailableModes = 'cmd' | 'alt' | 'ctrl' | 'fn'
 type AvailableModesCombination = `${AvailableModes}+${AvailableModes}` | AvailableModes
 
 type Mods = Partial<Record<AvailableModesCombination, ModPayload>>
