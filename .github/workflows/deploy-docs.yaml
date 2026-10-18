@@ -1,9 +1,14 @@
 name: Deploy VitePress Docs 📚
 
 on:
-    release:
+    # Releases are created with the built-in token, and those events can't trigger other workflows
+    workflow_run:
+        workflows:
+            - '📦 Create New Release'
         types:
-            - released
+            - completed
+        branches:
+            - master
     push:
         branches:
             - master
@@ -25,6 +30,7 @@ jobs:
     checks:
         name: Checks 🧪
         runs-on: ubuntu-latest
+        if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
         steps:
             - name: Checkout
               uses: actions/checkout@v7
