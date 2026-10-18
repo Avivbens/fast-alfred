@@ -11,6 +11,7 @@ permissions:
     pull-requests: write
     issues: write
     deployments: write
+    id-token: write
 
 concurrency:
     group: release-master-${{ github.workflow }}-${{ github.ref }}
@@ -63,10 +64,6 @@ jobs:
 
             - name: Build
               run: pnpm build
-
-            - name: Setup NPM
-              run: |
-                  npm config -L user set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
 
             - name: Release
               env:
