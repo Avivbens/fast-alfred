@@ -55,7 +55,7 @@ jobs:
               uses: actions/checkout@v7
               with:
                   fetch-depth: 0
-                  persist-credentials: false
+                  ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
 
             - name: Git Config
               run: |
@@ -70,10 +70,11 @@ jobs:
 
             - name: Release
               env:
-                  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   GIT_AUTHOR_NAME: github-bot
                   GIT_AUTHOR_EMAIL: github-bot@gmail.com
                   GIT_COMMITTER_NAME: github-bot
                   GIT_COMMITTER_EMAIL: github-bot@gmail.com
+              # Push over SSH so the release commit and tag go through the deploy key, the only ruleset bypass actor
               run: |
-                  pnpm exec semantic-release
+                  pnpm exec semantic-release --repository-url git@github.com:Avivbens/fast-alfred.git
