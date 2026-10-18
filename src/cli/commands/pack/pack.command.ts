@@ -1,6 +1,6 @@
 import { Command, CommandRunner, Option } from 'nest-commander'
 import { exit } from 'node:process'
-import ora, { Ora } from 'ora'
+import ora from 'ora'
 import { coerce, valid } from 'semver'
 import { buildWorkflow, packWorkflow } from '@bundler/services/build-workflow.service'
 import {
@@ -104,13 +104,13 @@ export class PackCommand extends CommandRunner {
             exit(1)
         }
 
-        let spinner: Ora | null = ora({
+        const spinner = ora({
             text: `Alfred Workflow pack - version: ${parsedTargetVersion}`,
             hideCursor: false,
             discardStdin: false,
         })
 
-        spinner?.start()
+        spinner.start()
 
         try {
             await this.buildWorkflow()
@@ -129,11 +129,11 @@ export class PackCommand extends CommandRunner {
             await this.packWorkflow()
         } catch (error) {
             this.logger.error(`Failed to pack Alfred Workflow - ${error.message}`)
-            spinner?.fail()
+            spinner.fail()
 
-            spinner = null
+            exit(1)
         } finally {
-            spinner?.succeed()
+            spinner.succeed()
         }
     }
 
