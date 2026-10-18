@@ -1,3 +1,10 @@
+## [2.5.3](https://github.com/Avivbens/fast-alfred/compare/v2.5.2...v2.5.3) (2026-10-18)
+
+
+### Bug Fixes
+
+* **pack:** exit on failed build ([5f0d8b5](https://github.com/Avivbens/fast-alfred/commit/5f0d8b510c41d937aab81b278be1e5af3533fc41))
+
 ## [2.5.2](https://github.com/Avivbens/fast-alfred/compare/v2.5.1...v2.5.2) (2026-04-24)
 
 
