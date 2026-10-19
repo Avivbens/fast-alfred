@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/Avivbens/fast-alfred/compare/v2.6.0...v2.6.1) (2026-10-19)
+
+
+### Bug Fixes
+
+* **deps:** fix via `pnpm audit` ([7bc590a](https://github.com/Avivbens/fast-alfred/commit/7bc590a4a41e86cc119debb5ccf438786c339e7c))
+
 # [2.6.0](https://github.com/Avivbens/fast-alfred/compare/v2.5.3...v2.6.0) (2026-10-18)
 
 
