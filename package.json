@@ -19,8 +19,20 @@
             "email": "avivbens87@gmail.com"
         }
     ],
+    "exports": {
+        ".": "./lib/index.js",
+        "./schemas": "./lib/schemas/index.js",
+        "./package.json": "./package.json"
+    },
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "typesVersions": {
+        "*": {
+            "schemas": [
+                "lib/schemas/index.d.ts"
+            ]
+        }
+    },
     "bin": {
         "fast-alfred": "lib/bin/index.js"
     },
