@@ -1,3 +1,11 @@
+# [2.7.0](https://github.com/Avivbens/fast-alfred/compare/v2.6.1...v2.7.0) (2026-10-25)
+
+
+### Features
+
+* **client:** export the client's service classes ([f37df31](https://github.com/Avivbens/fast-alfred/commit/f37df314abba0fe33d0db40f20caffb7fae75542))
+* **utils:** export `matches` as a standalone function ([9c26154](https://github.com/Avivbens/fast-alfred/commit/9c26154611c542aceb86d2446daf39dcc7bc25d8))
+
 ## [2.6.1](https://github.com/Avivbens/fast-alfred/compare/v2.6.0...v2.6.1) (2026-10-19)
 
 
