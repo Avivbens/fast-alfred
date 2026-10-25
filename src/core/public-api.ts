@@ -1,1 +1,5 @@
 export * from './fast-alfred.client'
+export * from './services/alfred-info.service'
+export * from './services/cache-config.service'
+export * from './services/env.service'
+export * from './services/icon.service'
