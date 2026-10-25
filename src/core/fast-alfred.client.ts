@@ -9,11 +9,13 @@ import {
     type UpdatesConfigSavedMetadata,
     UserConfigVariables,
 } from '@models/client-updates-config.model'
+import type { Routes } from '@models/router.model'
 import { matches } from '../utils/matches.utils'
 import {
     CHECK_UPDATES_SCHEMA,
     DEFAULT_UPDATES_CONFIG,
     ERROR_MESSAGE,
+    ROUTES_VARIABLE,
     UPDATES_FETCH_LOCK_KEY,
     UPDATES_METADATA_KEY,
     UPDATE_ITEM,
@@ -22,6 +24,7 @@ import { AlfredInfoService } from './services/alfred-info.service'
 import { CacheConfigService } from './services/cache-config.service'
 import { EnvService } from './services/env.service'
 import { IconService } from './services/icon.service'
+import { RouterService, withRouterVariables } from './services/router.service'
 
 export class FastAlfred {
     /**
@@ -116,6 +119,44 @@ export class FastAlfred {
      * If you're passing only one input, you can use the `input` property
      */
     public readonly inputs: string[] = argv.slice(2)
+
+    private activeRouter: Pick<RouterService<Routes>, 'toVariables'> | null = null
+
+    /**
+     * @description
+     * Route Alfred's input into typed routes, e.g. a row that opens a list of its own, filtered by what the user types next
+     *
+     * @note
+     * Call it once per script - `alfredClient.output` keeps its routes open on the next run
+     *
+     * @example
+     * ```typescript
+     *  const router = alfredClient.router({ checkouts: { schema: z.object({ repo: z.string() }) } })
+     *
+     *  const route = router.match()
+     *  if (route?.name === 'checkouts') {
+     *      const items = await listCheckouts(route.state.repo)
+     *      alfredClient.output({ items: alfredClient.matches(route.filter, items, (item) => item.title) })
+     *      return
+     *  }
+     *
+     *  alfredClient.output({
+     *      items: repos.map((repo) =>
+     *          router.link('checkouts', { label: repo.name, state: { repo: repo.path }, title: repo.name }),
+     *      ),
+     *  })
+     * ```
+     */
+    public router<R extends Routes>(routes: R): RouterService<R> {
+        if (this.activeRouter) {
+            throw new Error('alfredClient.router() can only be called once per script')
+        }
+
+        const router = new RouterService(routes, this.input, env[ROUTES_VARIABLE])
+        this.activeRouter = router
+
+        return router
+    }
 
     private async fetchUpdatesData(config: Required<ClientUpdatesConfig>): Promise<UpdatesConfigSavedMetadata | null> {
         this.log('Fetching updates data...')
@@ -229,8 +270,9 @@ export class FastAlfred {
      */
     public output(scriptFilterOutput: AlfredScriptFilter) {
         const outputWithUpdate = this.outputWithUpdate(scriptFilterOutput)
+        const outputWithRoutes = withRouterVariables(outputWithUpdate, this.activeRouter?.toVariables())
 
-        const output = JSON.stringify(outputWithUpdate, null, '\t')
+        const output = JSON.stringify(outputWithRoutes, null, '\t')
         console.log(output)
     }
 

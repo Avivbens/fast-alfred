@@ -87,3 +87,10 @@ export const UPDATE_ITEM = (metadata: UpdatesConfigSavedMetadata, currentVersion
 
     return updateItem
 }
+
+/**
+ * Router configuration
+ */
+
+export const ROUTES_VARIABLE = 'fast_alfred_routes'
+export const ROUTE_MARKER = '›'
