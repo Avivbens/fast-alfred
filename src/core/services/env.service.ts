@@ -12,6 +12,13 @@ import type { Schema } from '@models/schema.model'
 export class EnvService {
     getEnv<T = unknown>(key: string): T | undefined
     getEnv<T>(key: string, options: { schema: Schema<T> }): T
+    /**
+     * @deprecated - please use the `{ schema }` option instead
+     *
+     * @note
+     *
+     * Deprecation date: 25 Oct 2026
+     */
     getEnv<T = unknown>(key: string, options: GetEnvOptions<T>): T
     getEnv<T = unknown>(key: string, options?: GetEnvOptions<T> | { schema: Schema<T> }): T | undefined {
         if (options && 'schema' in options) {

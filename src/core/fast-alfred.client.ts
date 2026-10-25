@@ -11,6 +11,7 @@ import {
 } from '@models/client-updates-config.model'
 import { matches } from '../utils/matches.utils'
 import {
+    CHECK_UPDATES_SCHEMA,
     DEFAULT_UPDATES_CONFIG,
     ERROR_MESSAGE,
     UPDATES_FETCH_LOCK_KEY,
@@ -160,10 +161,7 @@ export class FastAlfred {
             return
         }
 
-        const shouldCheckUpdates = this.env.getEnv(UserConfigVariables.CHECK_UPDATES, {
-            defaultValue: true,
-            parser: (value) => (value as '0' | '1') === '1',
-        })
+        const shouldCheckUpdates = this.env.getEnv(UserConfigVariables.CHECK_UPDATES, { schema: CHECK_UPDATES_SCHEMA })
 
         if (!shouldCheckUpdates) {
             this.log('Updates check is disabled by user configuration.')
