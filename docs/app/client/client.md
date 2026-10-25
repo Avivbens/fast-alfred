@@ -210,6 +210,13 @@ Configures the automated workflow updates feature. This method should be called 
 
 For more details, see the [Automated Workflow Updates](/app/setup/updates.md) documentation.
 
+## `router`
+
+Routes Alfred's input into typed routes, e.g. a row that opens a list of its own, filtered by what the user types next.
+Declare the routes with `alfredClient.router(routes)`, open one with `router.link()`, and read the open one with `router.match()`.
+
+For a worked example, see [Routing](/app/client/routing.md).
+
 ## `isDebuggerOpen`
 
 A boolean that indicates whether the Alfred debugger is currently open.
