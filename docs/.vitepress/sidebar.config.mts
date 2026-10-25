@@ -54,6 +54,10 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
                 text: 'Workflow Configuration ⚙️',
                 link: 'configuration',
             },
+            {
+                text: 'Routing 🧭',
+                link: 'routing',
+            },
         ],
     },
     {
