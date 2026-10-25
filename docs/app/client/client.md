@@ -153,8 +153,24 @@ When inserting data into the `Configure Workflow...` on Alfred UI, it will be av
 #### Example
 
 ```typescript
-const someVariable: number = alfredClient.env.getEnv(Variables.SOME_VARIABLE, { defaultValue: 10, parser: Number })
+import { z } from 'zod'
+
+const sliceAmount = alfredClient.env.getEnv(Variables.SLICE_AMOUNT, { schema: z.coerce.number().default(10) })
+
+const config = alfredClient.env.parse(
+    z.object({
+        slice_amount: z.coerce.number().default(10),
+        show_hidden: z.stringbool().default(false),
+    }),
+)
 ```
+
+See [Workflow Configuration](/app/client/configuration.md) for parsing your whole configuration with a schema, with a recipe for every Alfred field.
+
+::: warning Deprecated :warning:
+The `defaultValue` and `parser` options of `getEnv` are deprecated and will be removed in a future version.
+Please use the `schema` option instead.
+:::
 
 ## `cache`
 
