@@ -82,7 +82,16 @@
         "typescript-eslint": "^8.71.2",
         "vite": "^8.3.4",
         "vitepress": "^1.6.4",
-        "vitest": "^5.0.5"
+        "vitest": "^5.0.5",
+        "zod": "^4.6.7"
+    },
+    "peerDependencies": {
+        "zod": "^4.0.0"
+    },
+    "peerDependenciesMeta": {
+        "zod": {
+            "optional": true
+        }
     },
     "packageManager": "pnpm@12.11.2",
     "engines": {
