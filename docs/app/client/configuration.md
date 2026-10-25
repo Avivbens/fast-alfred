@@ -55,7 +55,37 @@ A missing variable reaches the schema as `undefined`, so `.default()` or `.optio
 Without either, a missing or invalid variable throws a `ZodError`. Pass it to `alfredClient.error` to show it in Alfred.
 :::
 
+## Presets
+
+`fast-alfred/schemas` ships zod schemas for the values Alfred passes. Each one returns a zod schema, so `.default()` and `.optional()` chain on as usual:
+
+```typescript
+import { alfredSchemas } from 'fast-alfred/schemas'
+import { z } from 'zod'
+
+const ConfigSchema = z.object({
+    show_hidden: alfredSchemas.checkbox().default(false),
+    slice_amount: alfredSchemas.number().default(10),
+    search_paths: alfredSchemas.paths().default([]),
+    aliases: alfredSchemas.json(z.record(z.string(), z.string())).default({}),
+})
+```
+
+| Preset         | Parses                                                                      |
+| -------------- | --------------------------------------------------------------------------- |
+| `checkbox()`   | `'1'` or `'0'` into a boolean                                               |
+| `number()`     | a slider or text field into a number                                        |
+| `lines()`      | a text area into trimmed lines, without the blank ones                      |
+| `paths()`      | like `lines()`, with a leading `~` expanded to the home directory           |
+| `json(schema)` | a JSON string, then validates it with `schema`. Invalid JSON is a zod issue |
+
+::: info NOTE 📝
+`fast-alfred/schemas` is the only entry point that imports `zod`, so workflows that don't use it never need `zod` installed.
+:::
+
 ## Recipes per Alfred field
+
+The presets cover the common cases. For anything else, or to skip the presets, write the schema yourself:
 
 | Alfred field | Value Alfred passes       | Schema                               |
 | ------------ | ------------------------- | ------------------------------------ |
