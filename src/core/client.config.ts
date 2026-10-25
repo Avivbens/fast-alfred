@@ -6,6 +6,7 @@ import {
     UpdaterAction,
     type UpdatesConfigSavedMetadata,
 } from '@models/client-updates-config.model'
+import type { Schema } from '@models/schema.model'
 import { IconService } from './services/icon.service'
 
 export const ERROR_MESSAGE = ({
@@ -45,6 +46,13 @@ export const UPDATES_FETCH_LOCK_KEY = `__fast-alfred__updates-fetch-lock__`
 export const DEFAULT_UPDATES_CONFIG: Required<Omit<ClientUpdatesConfig, 'fetcher'>> = {
     checkInterval: 60 * 24, // 24 hours
     snoozeTime: 60 * 24 * 3, // 3 days
+}
+
+/**
+ * Updates are checked unless the user unchecks the checkbox, so a missing variable means enabled
+ */
+export const CHECK_UPDATES_SCHEMA: Schema<boolean> = {
+    parse: (value) => value === undefined || value === '1',
 }
 
 export const UPDATE_ITEM = (metadata: UpdatesConfigSavedMetadata, currentVersion: string): AlfredListItem => {

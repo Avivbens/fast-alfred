@@ -39,6 +39,19 @@ describe('EnvService', () => {
 
             expect(() => envService.getEnv('show_hidden', { schema: z.stringbool() })).toThrow(ZodError)
         })
+
+        it('should keep the deprecated defaultValue and parser options working, as existing workflows rely on them', () => {
+            vi.stubEnv('slice_amount', '15')
+            vi.stubEnv('sort_by', undefined)
+
+            // eslint-disable-next-line @typescript-eslint/no-deprecated -- regression guard for the deprecated options
+            const sliceAmount = envService.getEnv('slice_amount', { defaultValue: 10, parser: Number })
+            // eslint-disable-next-line @typescript-eslint/no-deprecated -- regression guard for the deprecated options
+            const sortBy = envService.getEnv('sort_by', { defaultValue: 'name', parser: (value) => value.trim() })
+
+            expect(sliceAmount).toBe(15)
+            expect(sortBy).toBe('name')
+        })
     })
 
     describe('parse', () => {
