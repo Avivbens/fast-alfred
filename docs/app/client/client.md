@@ -40,15 +40,63 @@ Logs errors for debugging purposes.
 
 ## `matches`
 
-Searches for a query in a list of items. The search can be case sensitive or not, default is false.
+```typescript
+matches<K = AlfredListItem>(
+    input: string,
+    list: K[],
+    compareBy: (item: K, searchTerm: string) => string,
+    options?: { caseSensitive: boolean },
+): K[]
+```
+
+Searches a list of items for `input`, and returns the items that contain it.
+The search is case insensitive by default, pass `{ caseSensitive: true }` to change that.
+Both sides are Unicode normalized, and a list of plain strings is compared directly, without calling `compareBy`.
+
+#### Example
+
+```typescript
+const items: AlfredListItem[] = repos.map((repo) => ({ title: repo.name, arg: repo.path }))
+
+alfredClient.output({
+    items: alfredClient.matches(alfredClient.input, items, (item) => item.title),
+})
+```
+
+::: tip TIP :zap:
+`matches` is also exported as a standalone function, so your services can filter without holding the client:
+
+```typescript
+import { matches } from 'fast-alfred'
+
+export function filterRepos(query: string, repos: Repo[]): Repo[] {
+    return matches(query, repos, (repo) => repo.name)
+}
+```
+
+:::
 
 ## `inputMatches`
 
-Searches for a query in the workflow input. The search can be case sensitive or not, default is false.
+```typescript
+inputMatches<K = any>(
+    list: K[],
+    compareBy: (item: K, searchTerm: string) => string,
+    options?: { caseSensitive: boolean },
+): K[]
+```
+
+Searches a list of items for the workflow input. The search can be case sensitive or not, default is false.
 
 ::: info NOTE 📝
-This function has the same behavior as `matches`, but it searches in the input.
+This function has the same behavior as `matches`, with `input` set to the workflow input.
 :::
+
+#### Example
+
+```typescript
+alfredClient.output({ items: alfredClient.inputMatches(items, (item) => item.title) })
+```
 
 ## `error`
 
@@ -150,3 +198,38 @@ For more details, see the [Automated Workflow Updates](/app/setup/updates.md) do
 
 A boolean that indicates whether the Alfred debugger is currently open.
 This is useful for changing the behavior of your workflow during debugging (e.g., disabling caching or showing more verbose logging).
+
+# Service Types
+
+The services behind the client's properties are exported as classes.
+Use them to type your own services, and create real instances of them in tests.
+
+| Property     | Class                |
+| ------------ | -------------------- |
+| `alfredInfo` | `AlfredInfoService`  |
+| `cache`      | `CacheConfigService` |
+| `env`        | `EnvService`         |
+| `icons`      | `IconService`        |
+
+#### Example
+
+```typescript
+import type { AlfredListItem, IconService } from 'fast-alfred'
+
+export function toErrorItem(error: Error, icons: IconService): AlfredListItem {
+    return { title: error.message, valid: false, icon: { path: icons.getIcon('error') } }
+}
+```
+
+Pass the client's own instance at runtime, and a real one in tests:
+
+```typescript
+import { IconService } from 'fast-alfred'
+
+toErrorItem(error, alfredClient.icons) // in your script
+toErrorItem(new Error('Boom'), new IconService()) // in your spec
+```
+
+::: info NOTE 📝
+`CacheConfigService` stores its data on disk, so give it a temporary `cwd` in tests.
+:::
