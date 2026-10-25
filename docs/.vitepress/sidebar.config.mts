@@ -48,6 +48,13 @@ export const SIDEBAR: DefaultTheme.Sidebar = [
         text: 'Client',
         base: 'app/client/',
         link: 'client',
+        collapsed: false,
+        items: [
+            {
+                text: 'Workflow Configuration ⚙️',
+                link: 'configuration',
+            },
+        ],
     },
     {
         text: 'Troubleshooting',
