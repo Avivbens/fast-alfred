@@ -9,6 +9,7 @@ import {
     type UpdatesConfigSavedMetadata,
     UserConfigVariables,
 } from '@models/client-updates-config.model'
+import { matches } from '../utils/matches.utils'
 import {
     DEFAULT_UPDATES_CONFIG,
     ERROR_MESSAGE,
@@ -258,16 +259,7 @@ export class FastAlfred {
         compareBy: (item: K, searchTerm: string) => string,
         options: { caseSensitive: boolean } = { caseSensitive: false },
     ): K[] {
-        const { caseSensitive } = options
-        const normal = (str: string) => (caseSensitive ? str.normalize() : str.toLowerCase().normalize())
-
-        const filtered = list.filter((listItem) => {
-            const targetedTerm = typeof listItem === 'string' ? listItem : compareBy(listItem, input)
-
-            return normal(targetedTerm).includes(normal(input))
-        })
-
-        return filtered
+        return matches(input, list, compareBy, options)
     }
 
     /**
@@ -280,10 +272,10 @@ export class FastAlfred {
      */
     public inputMatches<K = any>(
         list: K[],
-        item: (item: K, searchTerm: string) => string,
+        compareBy: (item: K, searchTerm: string) => string,
         options?: { caseSensitive: boolean },
     ) {
-        return this.matches(this.input, list, item, options)
+        return this.matches(this.input, list, compareBy, options)
     }
 
     /**
