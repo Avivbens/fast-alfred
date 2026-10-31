@@ -31,6 +31,16 @@ describe('alfredSchemas', () => {
         })
     })
 
+    describe('list', () => {
+        it('should split on commas, trim the items and drop the blank ones', () => {
+            expect(alfredSchemas.list().parse(' English, Hebrew ,, ')).toEqual(['English', 'Hebrew'])
+        })
+
+        it('should split on the given separator', () => {
+            expect(alfredSchemas.list(';').parse('a; b;;c')).toEqual(['a', 'b', 'c'])
+        })
+    })
+
     describe('lines', () => {
         it('should trim the lines and drop the blank ones', () => {
             expect(alfredSchemas.lines().parse('  first \n\n \nsecond')).toEqual(['first', 'second'])

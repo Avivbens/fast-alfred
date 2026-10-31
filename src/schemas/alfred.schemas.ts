@@ -1,13 +1,17 @@
 import { homedir } from 'node:os'
 import { z } from 'zod'
 
-function lines(): z.ZodType<string[], string> {
+function list(separator = ','): z.ZodType<string[], string> {
     return z.string().transform((value) =>
         value
-            .split('\n')
-            .map((line) => line.trim())
+            .split(separator)
+            .map((item) => item.trim())
             .filter(Boolean),
     )
+}
+
+function lines(): z.ZodType<string[], string> {
+    return list('\n')
 }
 
 function paths(): z.ZodType<string[], string> {
@@ -56,6 +60,14 @@ export const alfredSchemas = {
      * A number, from a slider or a text field
      */
     number: (): z.ZodType<number, unknown> => z.coerce.number(),
+
+    /**
+     * @description
+     * A text field holding a list, as trimmed items without the blank ones
+     *
+     * @param separator - What separates the items, a comma by default
+     */
+    list,
 
     /**
      * @description
