@@ -1,3 +1,10 @@
+# [2.9.0](https://github.com/Avivbens/fast-alfred/compare/v2.8.0...v2.9.0) (2026-10-31)
+
+
+### Features
+
+* **schemas:** add a `list` preset for separated text fields ([dac5909](https://github.com/Avivbens/fast-alfred/commit/dac590938388942565cf77210c582ec292dde89c))
+
 # [2.8.0](https://github.com/Avivbens/fast-alfred/compare/v2.7.0...v2.8.0) (2026-10-31)
 
 
