@@ -66,18 +66,20 @@ import { z } from 'zod'
 const ConfigSchema = z.object({
     show_hidden: alfredSchemas.checkbox().default(false),
     slice_amount: alfredSchemas.number().default(10),
+    languages: alfredSchemas.list().default([]),
     search_paths: alfredSchemas.paths().default([]),
     aliases: alfredSchemas.json(z.record(z.string(), z.string())).default({}),
 })
 ```
 
-| Preset         | Parses                                                                      |
-| -------------- | --------------------------------------------------------------------------- |
-| `checkbox()`   | `'1'` or `'0'` into a boolean                                               |
-| `number()`     | a slider or text field into a number                                        |
-| `lines()`      | a text area into trimmed lines, without the blank ones                      |
-| `paths()`      | like `lines()`, with a leading `~` expanded to the home directory           |
-| `json(schema)` | a JSON string, then validates it with `schema`. Invalid JSON is a zod issue |
+| Preset            | Parses                                                                                        |
+| ----------------- | --------------------------------------------------------------------------------------------- |
+| `checkbox()`      | `'1'` or `'0'` into a boolean                                                                 |
+| `number()`        | a slider or text field into a number                                                          |
+| `list(separator)` | a text field into trimmed items split on `separator` (`,` by default), without the blank ones |
+| `lines()`         | a text area into trimmed lines, without the blank ones                                        |
+| `paths()`         | like `lines()`, with a leading `~` expanded to the home directory                             |
+| `json(schema)`    | a JSON string, then validates it with `schema`. Invalid JSON is a zod issue                   |
 
 ::: info NOTE 📝
 `fast-alfred/schemas` is the only entry point that imports `zod`, so workflows that don't use it never need `zod` installed.
