@@ -1,3 +1,17 @@
+# [2.8.0](https://github.com/Avivbens/fast-alfred/compare/v2.7.0...v2.8.0) (2026-10-31)
+
+
+### Bug Fixes
+
+* **env:** deprecate `getEnv`'s `defaultValue` and `parser` options ([b034c1f](https://github.com/Avivbens/fast-alfred/commit/b034c1f42633b0c2a8e6969e7487369ad76814c9))
+
+
+### Features
+
+* **client:** add a typed router that drills into filtered lists ([3034e74](https://github.com/Avivbens/fast-alfred/commit/3034e74f3d15994c2553ad38096d396c1f0b9e94))
+* **env:** parse variables and the whole configuration with a schema ([24b517e](https://github.com/Avivbens/fast-alfred/commit/24b517e9a41abe676cdcf002ec6ce8cbccf2ba3d))
+* **schemas:** add zod presets for Alfred configuration fields ([bcbc837](https://github.com/Avivbens/fast-alfred/commit/bcbc837559f79a8a96d3adb5e21a389188e01f48))
+
 # [2.7.0](https://github.com/Avivbens/fast-alfred/compare/v2.6.1...v2.7.0) (2026-10-25)
 
 
