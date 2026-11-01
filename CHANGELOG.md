@@ -1,3 +1,10 @@
+## [2.9.1](https://github.com/Avivbens/fast-alfred/compare/v2.9.0...v2.9.1) (2026-11-01)
+
+
+### Bug Fixes
+
+* **deps:** audit fix ([390c7e3](https://github.com/Avivbens/fast-alfred/commit/390c7e3e6423a945199d7f3e8dd7fd52904db075))
+
 # [2.9.0](https://github.com/Avivbens/fast-alfred/compare/v2.8.0...v2.9.0) (2026-10-31)
 
 
