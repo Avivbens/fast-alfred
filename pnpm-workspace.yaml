@@ -4,3 +4,10 @@ allowBuilds:
     '@nestjs/core': false
     # ships a prebuilt binary, no compile needed
     fsevents: false
+overrides:
+    '@vue/server-renderer@<3.5.42': ^3.5.42
+    esbuild@<=0.24.2: ^0.25.0
+    fast-uri@>=3.0.0 <3.1.9: ^3.1.9
+    glob@>=9.0.0 <=14.0.1: ^14.0.2
+    minimatch@<11.0.1: ^11.0.1
+    vite@<=6.4.3: ^6.4.4
