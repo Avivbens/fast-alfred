@@ -3,7 +3,9 @@ import type { Mock } from 'vitest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { readConfigFile } from '@common/user-config.service'
 import { readWorkflowMetadata, writeWorkflowMetadata } from '@common/workflow-metadata.service'
+import type { Connection, WorkflowMetadata } from '@models/workflow-metadata.model'
 import { buildOptions } from '../utils/bundler.utils'
+import { workflowWithV2HelpersMock } from './mocks/workflow-with-v2-helpers.mock'
 import { workflowMock } from './mocks/workflow.mock'
 import {
     CONDITIONAL_CONDITION_UID,
@@ -225,7 +227,7 @@ describe('includeUpdatesHelpers', () => {
         await includeUpdatesHelpers()
 
         const finalWorkflow = writeWorkflowMetadataMock.mock.calls[0][0]
-        const conditionalUid = CONDITIONAL_OBJECT_UID(originalScriptFilterUid, originalDestinationUid)
+        const conditionalUid = CONDITIONAL_OBJECT_UID(originalScriptFilterUid, originalDestinationUid, 1048576)
 
         // Hop 1 (scriptFilter → conditional) preserves modifiers — Alfred dispatches on this hop.
         const toConditionalConnection = finalWorkflow.connections[originalScriptFilterUid][0]
@@ -515,5 +517,177 @@ describe('Nested directory handling', () => {
         const conditionalUid = CONDITIONAL_OBJECT_UID('FLAT-UID', 'ACTION-UID')
 
         expect(finalWorkflow.connections['FLAT-UID'][0].destinationuid).toBe(conditionalUid)
+    })
+})
+
+describe('Connections that differ only by modifier', () => {
+    const globMock = glob as unknown as Mock
+    const readConfigFileMock = readConfigFile as Mock
+    const readWorkflowMetadataMock = readWorkflowMetadata as Mock
+    const writeWorkflowMetadataMock = writeWorkflowMetadata as Mock
+    const buildOptionsMock = buildOptions as Mock
+
+    const SCRIPT_FILTER_UID = 'CE84ED38-CD11-4B81-9E07-91C9D10EEE3C'
+    const RUN_SCRIPT_UID = 'FD52D6DE-838E-4CEF-9D97-F47BAC0D8F71'
+    const OTHER_DESTINATION_UID = 'ANOTHER-DESTINATION-UID'
+    const MODIFIER_KEYS = { RETURN: 0, CMD: 1048576, OPT: 524288, SHIFT: 131072 }
+
+    function toConnection(destinationuid: string, modifiers: number): Connection {
+        return {
+            destinationuid,
+            modifiers,
+            modifiersubtext: modifiers ? `Modifier ${modifiers}` : '',
+            vitoclose: modifiers !== MODIFIER_KEYS.OPT,
+        }
+    }
+
+    function withScriptFilterConnections(connections: Connection[]): WorkflowMetadata {
+        const workflow = JSON.parse(JSON.stringify(workflowMock))
+        workflow.connections[SCRIPT_FILTER_UID] = connections
+        return workflow
+    }
+
+    async function runInclude(workflow: unknown): Promise<WorkflowMetadata> {
+        writeWorkflowMetadataMock.mockClear()
+        readWorkflowMetadataMock.mockResolvedValue(JSON.parse(JSON.stringify(workflow)))
+        await includeUpdatesHelpers()
+        return writeWorkflowMetadataMock.mock.calls[0][0]
+    }
+
+    async function runDrop(workflow: unknown): Promise<WorkflowMetadata> {
+        writeWorkflowMetadataMock.mockClear()
+        readWorkflowMetadataMock.mockResolvedValue(JSON.parse(JSON.stringify(workflow)))
+        await dropUpdateHelpers()
+        return writeWorkflowMetadataMock.mock.calls[0][0]
+    }
+
+    function resolveThroughConditionals(workflow: WorkflowMetadata, from: string): Connection[] {
+        return workflow.connections[from].map((connection) => {
+            if (!connection.destinationuid.startsWith(MANAGED_BY_FAST_ALFRED_PREFIX)) {
+                return connection
+            }
+
+            const elseHop = workflow.connections[connection.destinationuid]?.find(
+                ({ sourceoutputuid }) => sourceoutputuid === undefined,
+            )
+            return { ...connection, destinationuid: elseHop?.destinationuid ?? connection.destinationuid }
+        })
+    }
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+        readConfigFileMock.mockResolvedValue({
+            updates: {
+                bundleHelpers: true,
+            },
+        })
+        buildOptionsMock.mockResolvedValue({
+            targetDir: 'esbuild',
+            assetsDir: 'assets',
+            productionScripts: ['src/bookmarks.ts'],
+        })
+        globMock.mockResolvedValue(['esbuild/bookmarks.js'])
+    })
+
+    describe.each([
+        {
+            shape: 'one destination',
+            connections: [
+                toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.RETURN),
+                toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.CMD),
+                toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.OPT),
+                toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.SHIFT),
+            ],
+        },
+        {
+            shape: 'two destinations',
+            connections: [
+                toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.RETURN),
+                toConnection(OTHER_DESTINATION_UID, MODIFIER_KEYS.CMD),
+                toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.OPT),
+                toConnection(OTHER_DESTINATION_UID, MODIFIER_KEYS.RETURN),
+                toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.CMD),
+                toConnection(OTHER_DESTINATION_UID, MODIFIER_KEYS.SHIFT),
+            ],
+        },
+    ])('to $shape', ({ connections }) => {
+        it('should keep every modifier after including the helpers', async () => {
+            const included = await runInclude(withScriptFilterConnections(connections))
+
+            const conditionalUids = included.connections[SCRIPT_FILTER_UID].map(({ destinationuid }) => destinationuid)
+            expect(new Set(conditionalUids).size).toBe(connections.length)
+            expect(resolveThroughConditionals(included, SCRIPT_FILTER_UID)).toEqual(connections)
+        })
+
+        it('should restore every connection after dropping the helpers', async () => {
+            const included = await runInclude(withScriptFilterConnections(connections))
+
+            const dropped = await runDrop(included)
+
+            expect(dropped.connections[SCRIPT_FILTER_UID]).toEqual(connections)
+        })
+
+        it('should be idempotent across drop and include, with no duplicates', async () => {
+            const included = await runInclude(withScriptFilterConnections(connections))
+
+            const reincluded = await runInclude(await runDrop(included))
+
+            expect(reincluded).toEqual(included)
+            expect(await runInclude(included)).toEqual(included)
+            expect(resolveThroughConditionals(reincluded, SCRIPT_FILTER_UID)).toEqual(connections)
+        })
+    })
+
+    it('should restore the modifier from the conditional uid when its source hop is missing', async () => {
+        const connections = [
+            toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.RETURN),
+            toConnection(RUN_SCRIPT_UID, MODIFIER_KEYS.CMD),
+        ]
+        const included = await runInclude(withScriptFilterConnections(connections))
+        included.connections[SCRIPT_FILTER_UID] = included.connections[SCRIPT_FILTER_UID].filter(
+            ({ modifiers }) => modifiers !== MODIFIER_KEYS.CMD,
+        )
+
+        const dropped = await runDrop(included)
+
+        expect(dropped.connections[SCRIPT_FILTER_UID]).toEqual([
+            connections[0],
+            { ...connections[1], modifiersubtext: '' },
+        ])
+    })
+
+    /**
+     * Regression guard: plists committed with fast-alfred 2.9.1 must strip and rebuild without churn,
+     * so the modifier stays out of the uid when it is 0.
+     */
+    describe('with helpers written before modifiers were part of the uid', () => {
+        it('should strip them back to the original workflow', async () => {
+            expect(await runDrop(workflowWithV2HelpersMock)).toEqual(workflowMock)
+        })
+
+        it('should write them again unchanged', async () => {
+            expect(await runInclude(workflowWithV2HelpersMock)).toEqual(workflowWithV2HelpersMock)
+        })
+
+        it('should move a modifier connection to its own conditional', async () => {
+            const released = JSON.parse(JSON.stringify(workflowWithV2HelpersMock))
+            released.connections[SCRIPT_FILTER_UID][0].modifiers = MODIFIER_KEYS.CMD
+            const conditionalUid = `${MANAGED_BY_FAST_ALFRED_PREFIX}v2_conditional_from_${SCRIPT_FILTER_UID}_to_${RUN_SCRIPT_UID}_mod_${MODIFIER_KEYS.CMD}`
+
+            const dropped = await runDrop(released)
+            const included = await runInclude(released)
+
+            expect(dropped.connections[SCRIPT_FILTER_UID]).toEqual([
+                { ...workflowMock.connections[SCRIPT_FILTER_UID][0], modifiers: MODIFIER_KEYS.CMD },
+            ])
+            expect(included.connections[SCRIPT_FILTER_UID].map(({ destinationuid }) => destinationuid)).toEqual([
+                conditionalUid,
+            ])
+            expect(
+                included.objects
+                    .filter(({ type }) => type === 'alfred.workflow.utility.conditional')
+                    .map(({ uid }) => uid),
+            ).toEqual([conditionalUid])
+        })
     })
 })
