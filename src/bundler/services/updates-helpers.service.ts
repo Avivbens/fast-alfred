@@ -53,15 +53,23 @@ export const YPOS_BASE = 0
  */
 export const DEPRECATED_CONDITIONAL_OBJECT_UID = (from: string) => `${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_${from}`
 
-export const CONDITIONAL_OBJECT_UID = (from: string, to: string) =>
-    `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_conditional_from_${from}_to_${to}`
+/**
+ * Connections that differ only by modifier each need their own conditional.
+ * Modifier 0 adds no suffix, so uids written before modifiers were part of them stay unchanged.
+ */
+function modifiersUidSuffix(modifiers: number): string {
+    return modifiers ? `_mod_${modifiers}` : ''
+}
 
-export const CONDITIONAL_CONDITION_UID = (from: string, to: string) =>
-    `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_condition_from_${from}_to_${to}`
+export const CONDITIONAL_OBJECT_UID = (from: string, to: string, modifiers = MODIFIERS.NONE): string =>
+    `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_conditional_from_${from}_to_${to}${modifiersUidSuffix(modifiers)}`
 
-const CONDITIONAL_OBJECT = (from: string, to: string): WorkflowObject => ({
+export const CONDITIONAL_CONDITION_UID = (from: string, to: string, modifiers = MODIFIERS.NONE): string =>
+    `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_condition_from_${from}_to_${to}${modifiersUidSuffix(modifiers)}`
+
+const CONDITIONAL_OBJECT = (from: string, to: string, modifiers: number): WorkflowObject => ({
     type: 'alfred.workflow.utility.conditional',
-    uid: CONDITIONAL_OBJECT_UID(from, to),
+    uid: CONDITIONAL_OBJECT_UID(from, to, modifiers),
     version: 1,
     config: {
         conditions: [
@@ -71,7 +79,7 @@ const CONDITIONAL_OBJECT = (from: string, to: string): WorkflowObject => ({
                 matchmode: 4,
                 matchstring: MANAGED_BY_FAST_ALFRED_PREFIX,
                 outputlabel: CONDITIONAL_OUTPUT_LABEL,
-                uid: CONDITIONAL_CONDITION_UID(from, to),
+                uid: CONDITIONAL_CONDITION_UID(from, to, modifiers),
             },
         ],
         elselabel: CONDITIONAL_ELSE_LABEL,
@@ -216,7 +224,10 @@ function upsertWorkflowConnection(
     }
 
     const currentConnectionIndex = workflow.connections[from].findIndex(
-        (conn) => conn.destinationuid === newObjectUid && conn.sourceoutputuid === options.sourceoutputuid,
+        (conn) =>
+            conn.destinationuid === newObjectUid &&
+            conn.sourceoutputuid === options.sourceoutputuid &&
+            conn.modifiers === connectionObject.modifiers,
     )
     if (currentConnectionIndex > -1) {
         workflow.connections[from][currentConnectionIndex] = connectionObject
@@ -234,7 +245,9 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
     )
 
     const v0Parser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}conditional_(.+)`)
-    const v2Parser = new RegExp(`${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_conditional_from_(.+)_to_(.+)`)
+    const v2Parser = new RegExp(
+        `${MANAGED_BY_FAST_ALFRED_PREFIX}${HELPER_UID_VERSION}_conditional_from_(.+)_to_(.+?)(?:_mod_(\\d+))?$`,
+    )
 
     for (const managedObj of managedObjects) {
         const conditionalUid = managedObj.uid
@@ -270,6 +283,7 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
         const v2Match = conditionalUid.match(v2Parser)
         if (v2Match) {
             const originalFromUid = v2Match[1]
+            const modifiers = Number(v2Match[3] ?? MODIFIERS.NONE)
             const elseHop = (newWorkflow.connections[conditionalUid] || []).find(
                 (conn: Connection) => conn.sourceoutputuid === undefined, // This is the 'else' case
             )
@@ -280,7 +294,7 @@ function getWorkflowWithDroppedHelpers(workflow: WorkflowMetadata): WorkflowMeta
                 )
 
                 const originalConnection: Connection = {
-                    ...(sourceHop ?? elseHop),
+                    ...(sourceHop ?? { ...elseHop, modifiers }),
                     destinationuid: elseHop.destinationuid,
                 }
 
@@ -397,7 +411,11 @@ export async function includeUpdatesHelpers(): Promise<void> {
             const originalDestinationUid = originalConnection.destinationuid
 
             // Create a new conditional object dedicated to this specific connection
-            const conditionalObject = CONDITIONAL_OBJECT(scriptFilterUid, originalDestinationUid)
+            const conditionalObject = CONDITIONAL_OBJECT(
+                scriptFilterUid,
+                originalDestinationUid,
+                originalConnection.modifiers,
+            )
             const conditionalUid = conditionalObject.uid
             const conditionUid = conditionalObject.config.conditions?.[0].uid
 
