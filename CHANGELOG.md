@@ -1,3 +1,10 @@
+## [2.9.2](https://github.com/Avivbens/fast-alfred/compare/v2.9.1...v2.9.2) (2026-11-02)
+
+
+### Bug Fixes
+
+* **update-helpers:** keep connections that differ only by modifier ([c4bc6cd](https://github.com/Avivbens/fast-alfred/commit/c4bc6cdfd30d2ca0c39eccc88deb55c9aea40e0a))
+
 ## [2.9.1](https://github.com/Avivbens/fast-alfred/compare/v2.9.0...v2.9.1) (2026-11-01)
 
 
