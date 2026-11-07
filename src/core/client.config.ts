@@ -94,3 +94,9 @@ export const UPDATE_ITEM = (metadata: UpdatesConfigSavedMetadata, currentVersion
 
 export const ROUTES_VARIABLE = 'fast_alfred_routes'
 export const ROUTE_MARKER = '›'
+
+/**
+ * Runtime configuration, shared with `run-node.sh`
+ */
+
+export const ARGS_STDIN_VARIABLE = 'fast_alfred_args_stdin'

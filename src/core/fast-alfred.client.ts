@@ -1,7 +1,7 @@
 import AlfredConfigService from 'alfred-config'
 import Conf from 'conf'
 import merge from 'lodash.merge'
-import { argv, env } from 'node:process'
+import { env } from 'node:process'
 import type { AlfredListItem } from '@models/alfred-list-item.model'
 import type { AlfredScriptFilter } from '@models/alfred-script-filter.model'
 import {
@@ -25,6 +25,7 @@ import { CacheConfigService } from './services/cache-config.service'
 import { EnvService } from './services/env.service'
 import { IconService } from './services/icon.service'
 import { RouterService, withRouterVariables } from './services/router.service'
+import { readWorkflowInputs } from './services/workflow-inputs.service'
 
 export class FastAlfred {
     /**
@@ -109,7 +110,7 @@ export class FastAlfred {
      * @note
      * If you're passing multiple inputs, you can use the `inputs` property
      */
-    public readonly input: string = argv[2]
+    public readonly input: string = readWorkflowInputs()[0]
 
     /**
      * @description
@@ -118,7 +119,7 @@ export class FastAlfred {
      * @note
      * If you're passing only one input, you can use the `input` property
      */
-    public readonly inputs: string[] = argv.slice(2)
+    public readonly inputs: string[] = readWorkflowInputs()
 
     private activeRouter: Pick<RouterService<Routes>, 'toVariables'> | null = null
 
