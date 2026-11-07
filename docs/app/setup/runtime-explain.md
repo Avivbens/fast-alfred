@@ -18,6 +18,8 @@ In order to use `fast-alfred` runtime in ESM format, you need to configure these
 At build time, an additional asset, named `run-node.sh` would be attached to the workflow, under the `assets` directory.
 This script is responsible for executing the bundled Node.js script.
 
+It hands the script's arguments to Node.js over stdin rather than its command line, since some endpoint security agents kill `node` when long text sits there. Read them with [`input`](../client/client#input-string) and [`inputs`](../client/client#inputs-string), not `process.argv`.
+
 ### Example
 
 ::: tip TIP :zap:
