@@ -1,3 +1,10 @@
+# [2.10.0](https://github.com/Avivbens/fast-alfred/compare/v2.9.2...v2.10.0) (2026-11-07)
+
+
+### Features
+
+* **runtime:** hand workflow arguments to node over stdin ([2846821](https://github.com/Avivbens/fast-alfred/commit/2846821873356339be9c8024fa201307449a8caf))
+
 ## [2.9.2](https://github.com/Avivbens/fast-alfred/compare/v2.9.1...v2.9.2) (2026-11-02)
 
 
